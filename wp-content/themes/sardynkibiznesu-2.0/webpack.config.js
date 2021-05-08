@@ -8,15 +8,16 @@ const PATHS = {
   src: path.join(__dirname, '')
 }
 
-module.exports = function(env = {}, argv) {
+module.exports = function (env = {}, argv) {
   const config = {
-    mode: 'development',
+    mode: argv.mode,
     entry: {
       main: path.resolve(__dirname, './src/js/index.js')
     },
     output: {
       path: path.resolve(__dirname, './assets'),
-      filename: 'js/index.js'
+      filename: 'index.js',
+      clean: true
     },
 
     module: {
@@ -42,21 +43,30 @@ module.exports = function(env = {}, argv) {
             'css-loader',
             'sass-loader'
           ]
-        }
+        },
+
+
+        {
+          test: /\.(woff|woff2|eot|ttf|oft|svg)(\?.*$|$)$/,
+          type: 'asset/resource',
+        },
       ]
     },
 
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: "css/main.css",
-      }),
-      /*new PurgecssPlugin({
-        paths: glob.sync(`${PATHS.src}/!**!/!*`, {
-          nodir: true,
-          ignore: [`${PATHS.src}/node_modules/!**!/!*`]
-        })
-      })*/
+      new MiniCssExtractPlugin()
     ]
+  }
+
+  if (config.mode !== 'development') {
+    config.plugins.push(
+      new PurgecssPlugin({
+        paths: glob.sync(`${PATHS.src}/**/*`, {
+          nodir: true,
+          ignore: [`${PATHS.src}/node_modules/**/*`]
+        })
+      })
+    )
   }
 
   return config

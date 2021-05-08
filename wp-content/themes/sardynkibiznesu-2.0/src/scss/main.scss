@@ -1,7 +1,14 @@
-body {
-  color: red;
-}
+@import "~bootstrap/scss/functions";
+@import "vendors/bootstrap";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/bootstrap-grid";
+@import "~bootstrap/scss/bootstrap-reboot";
+@import "~bootstrap/scss/bootstrap-utilities";
+@import "~bootstrap/scss/buttons";
 
-.class {
-  color: green;
-}
+@import "global/fonts";
+
+@import "objects/page";
+
+@import "components/header";
+@import "components/navigation";
