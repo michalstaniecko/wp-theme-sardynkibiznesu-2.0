@@ -10813,3 +10813,29 @@ img {
     display: flex;
   }
 }
+
+.button {
+  padding: 9px 22px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  border-radius: 0;
+  background-color: #c00;
+  color: #fff;
+  border-color: #a00;
+  border-width: 0;
+}
+.button:hover {
+  background-color: #88bbc8;
+  color: #fff;
+  border-color: #6699a6;
+}
+
+input {
+  border: 1px solid #e1e1e1;
+  background-color: #fcfcfc;
+  color: #919191;
+  outline: 0;
+}
+input:focus {
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
+}
