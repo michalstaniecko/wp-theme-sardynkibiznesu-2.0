@@ -10692,6 +10692,24 @@ img {
   position: fixed;
   width: 100%;
   background-color: #fff;
+  z-index: 100;
+}
+
+.footer__main {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  background-color: #222;
+  color: #ddd;
+}
+.footer__main a {
+  color: inherit;
+}
+
+.footer__bottom {
+  background-color: #333;
+  color: #eee;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .navigation {
