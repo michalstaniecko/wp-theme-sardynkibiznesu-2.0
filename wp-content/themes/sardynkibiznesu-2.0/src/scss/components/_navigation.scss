@@ -52,6 +52,17 @@
     }
   }
 
+  .menu-item {
+    &.current-menu-ancestor,
+    &.current-menu-parent {
+      a {
+        color: #333;
+      }
+    }
+  }
+
+
+
   @include media-breakpoint-up(lg) {
     .sub-menu {
       display: none;

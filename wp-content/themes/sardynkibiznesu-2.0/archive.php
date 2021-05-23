@@ -4,6 +4,11 @@
       <div class="row">
         <main class="col-12 col-md-8 col-lg-9 main" itemprop="mainContentOfPage" itemscope="itemscope"
               itemtype="https://schema.org/Blog">
+          <?php if (is_category()): ?>
+            <div class="category-term-description">
+              <?php echo category_description(); ?>
+            </div>
+          <?php endif; ?>
           <?php if (have_posts()): while (have_posts()): the_post(); ?>
             <article class="article article--listing" itemscope="itemscope" itemtype="https://schema.org/BlogPosting"
                      itemprop="blogPost">
@@ -35,12 +40,14 @@
                       <time class="date-container minor-meta updated"><?php echo get_the_date(); ?></time>
                       <span class="text-sep text-sep-date">/</span><span class="comment-container minor-meta"><a
                           href="https://sardynkibiznesu.pl/podcasty/51-jak-byc-dobrym-szefem-2/#respond"
-                          class="comments-link"><?php printf( _n( '%s comment', '%s comments', get_comments_number(), 'sb' ), number_format_i18n( get_comments_number() ) ); ?></a></span><span
-                        class="text-sep text-sep-comment">/</span><span class="blog-categories minor-meta"><?php _e('in', 'sb'); ?> <?php the_category(', '); ?></span><span
-                        class="text-sep text-sep-cat">/</span><span class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
+                          class="comments-link"><?php printf(_n('%s comment', '%s comments', get_comments_number(), 'sb'), number_format_i18n(get_comments_number())); ?></a></span><span
+                        class="text-sep text-sep-comment">/</span><span
+                        class="blog-categories minor-meta"><?php _e('in', 'sb'); ?><?php the_category(', '); ?></span><span
+                        class="text-sep text-sep-cat">/</span><span
+                        class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
                           class="entry-author-link"><span class="vcard author"><span class="fn"><a
                                 href="<?php echo get_author_posts_url($post->post_author); ?>"
-                                title="<?php _e('Posts by','sb'); ?> <?php the_author(); ?>"
+                                title="<?php _e('Posts by', 'sb'); ?> <?php the_author(); ?>"
                                 rel="author"><?php the_author(); ?></a></span></span></span></span></div>
                   </header>
                   <div class="entry-content" itemprop="text">
@@ -53,7 +60,8 @@
                 </div>
               </div>
             </article>
-          <?php endwhile; endif; ?>
+          <?php endwhile;
+          endif; ?>
         </main>
         <?php get_sidebar(); ?>
       </div>

@@ -5063,12 +5063,7 @@ h2 {
 }
 
 h3 {
-  font-size: calc(1.3rem + 0.6vw);
-}
-@media (min-width: 1200px) {
-  h3 {
-    font-size: 1.75rem;
-  }
+  font-size: 1.25rem;
 }
 
 h4 {
@@ -5140,7 +5135,7 @@ blockquote {
 
 b,
 strong {
-  font-weight: bolder;
+  font-weight: 700;
 }
 
 small {
@@ -6551,7 +6546,7 @@ progress {
 }
 
 .fs-3 {
-  font-size: calc(1.3rem + 0.6vw) !important;
+  font-size: 1.25rem !important;
 }
 
 .fs-4 {
@@ -6591,7 +6586,7 @@ progress {
 }
 
 .fw-bolder {
-  font-weight: bolder !important;
+  font-weight: 700 !important;
 }
 
 .lh-1 {
@@ -10105,10 +10100,6 @@ progress {
     font-size: 1.5rem !important;
   }
 
-  .fs-3 {
-    font-size: 1.75rem !important;
-  }
-
   .fs-4 {
     font-size: 1.5rem !important;
   }
@@ -10709,6 +10700,10 @@ h6 a, h6 a:focus, h6 a:hover {
   color: inherit;
 }
 
+b, strong {
+  font-weight: 700;
+}
+
 body .alignright, .entry-content-wrapper a:hover .alignright {
   float: right;
   margin: 4px 0 0 10px;
@@ -10770,6 +10765,10 @@ p.single-newsletter-form-small {
 
 #wpdcom {
   max-width: none;
+}
+
+.category-term-description {
+  margin-bottom: 25px;
 }
 
 .header {
@@ -10842,6 +10841,9 @@ p.single-newsletter-form-small {
 }
 .navigation__nav .menu > .menu-item > a:hover::after {
   background-color: #c00;
+}
+.navigation__nav .menu-item.current-menu-ancestor a, .navigation__nav .menu-item.current-menu-parent a {
+  color: #333;
 }
 @media (min-width: 992px) {
   .navigation__nav .sub-menu {
@@ -11005,4 +11007,13 @@ input:focus {
 
 .text-sep {
   padding: 0 5px;
+}
+
+h2.ihumbak-anchor,
+h3.ihumbak-anchor {
+  color: maroon !important;
+}
+
+.article h3 {
+  margin-top: 24px;
 }

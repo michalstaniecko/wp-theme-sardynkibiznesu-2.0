@@ -10,6 +10,7 @@
   .article--listing {
     margin-top: 6px;
   }
+
   display: inline-block;
   margin-bottom: 10px;
 }
@@ -31,7 +32,7 @@
 
 .post-meta-infos {
   position: relative;
-  top:-8px;
+  top: -8px;
   font-size: 14px;
 
   &, a {
@@ -47,4 +48,19 @@
 
 .text-sep {
   padding: 0 5px;
+}
+
+h2,
+h3 {
+
+  &.ihumbak-anchor {
+    color: maroon !important;
+  }
+
+}
+
+.article {
+  h3 {
+    margin-top: 24px;
+  }
 }
