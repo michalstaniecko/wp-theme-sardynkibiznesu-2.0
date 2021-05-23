@@ -10928,9 +10928,11 @@ input:focus {
 }
 
 .article__image-wrapper {
-  margin-top: 6px;
   display: inline-block;
   margin-bottom: 10px;
+}
+.article__image-wrapper .article--listing {
+  margin-top: 6px;
 }
 
 .article__image {
@@ -10938,7 +10940,7 @@ input:focus {
   border-radius: 4px;
 }
 @media (min-width: 992px) {
-  .article__image {
+  .article--listing .article__image {
     width: 240px;
   }
 }

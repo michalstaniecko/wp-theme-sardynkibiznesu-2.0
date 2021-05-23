@@ -7,14 +7,18 @@
 }
 
 .article__image-wrapper {
-  margin-top: 6px;
+  .article--listing {
+    margin-top: 6px;
+  }
   display: inline-block;
   margin-bottom: 10px;
 }
 
 .article__image {
   @include media-breakpoint-up(lg) {
-    width: 240px;
+    .article--listing & {
+      width: 240px;
+    }
   }
   height: auto;
   border-radius: 4px;
