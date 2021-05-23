@@ -1,0 +1,18 @@
+a {
+  color: $red;
+  text-decoration: none;
+
+  &:hover {
+    color: #88bbc8;
+    text-decoration: underline;
+  }
+}
+
+@for $i from 1 through 6 {
+  h#{$i} a {
+    &, &:focus, &:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+}

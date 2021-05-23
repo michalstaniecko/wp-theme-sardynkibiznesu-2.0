@@ -7,11 +7,15 @@
 @import "~bootstrap/scss/buttons";
 
 @import "global/fonts";
+@import "global/typo";
+@import "global/aligns";
 
 @import "objects/page";
+@import "objects/sidebar";
 
 @import "components/header";
 @import "components/footer";
 @import "components/navigation";
 @import "components/buttons";
 @import "components/forms";
+@import "components/article";

@@ -1,0 +1,31 @@
+.sidebar {
+  .widget {
+    padding: 30px 0;
+    color: #919191;
+
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+
+  a {
+    color: #919191;
+
+    &:hover {
+      color: #88bbc8;
+    }
+  }
+}
+.widget-about {
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 400;
+  padding: 15px;
+  background-color: #fbfbfb;
+  border: 1px solid #e4e4e4;
+}
+
+p.single-newsletter-form-small {
+  font-size: 12px;
+  line-height: 20px;
+}
