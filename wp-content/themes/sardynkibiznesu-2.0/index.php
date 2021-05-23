@@ -39,9 +39,9 @@
                           href="https://sardynkibiznesu.pl/kategorie/podcasty/" rel="tag">Podcasty</a></span><span
                         class="text-sep text-sep-cat">/</span><span class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
                           class="entry-author-link"><span class="vcard author"><span class="fn"><a
-                                href="https://sardynkibiznesu.pl/author/rklimek/"
-                                title="Wpisy, których autorem jest Radek Klimek"
-                                rel="author">Radek Klimek</a></span></span></span></span></div>
+                                href="<?php echo get_author_posts_url($post->post_author); ?>"
+                                title="<?php _e('Posts by','sb'); ?> <?php the_author(); ?>"
+                                rel="author"><?php the_author(); ?></a></span></span></span></span></div>
                   </header>
                   <div class="entry-content" itemprop="text">
                     <?php the_excerpt(); ?>

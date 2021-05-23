@@ -5045,11 +5045,11 @@ h6, h5, h4, h3, h2, h1 {
 }
 
 h1 {
-  font-size: calc(1.375rem + 1.5vw);
+  font-size: calc(1.3rem + 0.6vw);
 }
 @media (min-width: 1200px) {
   h1 {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
   }
 }
 
@@ -6543,7 +6543,7 @@ progress {
 }
 
 .fs-1 {
-  font-size: calc(1.375rem + 1.5vw) !important;
+  font-size: calc(1.3rem + 0.6vw) !important;
 }
 
 .fs-2 {
@@ -10098,7 +10098,7 @@ progress {
 }
 @media (min-width: 1200px) {
   .fs-1 {
-    font-size: 2.5rem !important;
+    font-size: 1.75rem !important;
   }
 
   .fs-2 {
@@ -10768,6 +10768,10 @@ p.single-newsletter-form-small {
   line-height: 20px;
 }
 
+#wpdcom {
+  max-width: none;
+}
+
 .header {
   position: fixed;
   width: 100%;
@@ -10816,7 +10820,7 @@ p.single-newsletter-form-small {
 .navigation__nav li {
   display: flex;
 }
-.navigation__nav a {
+.navigation__nav .menu > .menu-item > a {
   color: #808080;
   font-weight: 600;
   text-decoration: none;
@@ -10825,7 +10829,7 @@ p.single-newsletter-form-small {
   align-items: center;
   position: relative;
 }
-.navigation__nav a::after {
+.navigation__nav .menu > .menu-item > a::after {
   content: "";
   display: block;
   position: absolute;
@@ -10836,11 +10840,13 @@ p.single-newsletter-form-small {
   background-color: transparent;
   transition: background-color 0.3s ease-in-out;
 }
-.navigation__nav a:hover::after {
+.navigation__nav .menu > .menu-item > a:hover::after {
   background-color: #c00;
 }
-.navigation__nav .sub-menu {
-  display: none;
+@media (min-width: 992px) {
+  .navigation__nav .sub-menu {
+    display: none;
+  }
 }
 @media (max-width: 991.98px) {
   .navigation__nav {
@@ -10893,6 +10899,40 @@ p.single-newsletter-form-small {
   }
 }
 
+@media (min-width: 992px) {
+  .navigation__nav .menu > .menu-item {
+    position: relative;
+  }
+  .navigation__nav .menu > .menu-item:hover .sub-menu {
+    display: flex;
+    background-color: #fff;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    border-color: #e1e1e1;
+    border-width: 1px;
+    border-style: solid;
+    border-top-width: 2px;
+    border-top-color: #c00;
+  }
+  .navigation__nav .menu > .menu-item:hover .sub-menu a {
+    padding: 8px 15px;
+    font-size: 12px;
+    line-height: 23px;
+    width: 100%;
+    color: #808080;
+    text-decoration: none;
+  }
+  .navigation__nav .menu > .menu-item:hover .sub-menu a:hover {
+    background-color: #f8f8f8;
+    color: #333;
+  }
+  .navigation__nav .sub-menu {
+    position: absolute;
+    top: 100%;
+    margin-top: -1px;
+    flex-direction: column;
+    width: 220px;
+  }
+}
 .button {
   padding: 9px 22px;
   cursor: pointer;

@@ -24,7 +24,7 @@
     display: flex;
   }
 
-  a {
+  .menu > .menu-item > a {
     color: #808080;
     font-weight: 600;
     text-decoration: none;
@@ -44,6 +44,7 @@
       background-color: transparent;
       transition: background-color 0.3s ease-in-out;
     }
+
     &:hover {
       &::after {
         background-color: #c00;
@@ -51,9 +52,12 @@
     }
   }
 
-  .sub-menu {
-    display: none;
+  @include media-breakpoint-up(lg) {
+    .sub-menu {
+      display: none;
+    }
   }
+
 
   .menu {
     @include media-breakpoint-up(lg) {
@@ -113,5 +117,51 @@
 .menu-primary-menu-container {
   @include media-breakpoint-up(lg) {
     display: flex;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+
+  .navigation__nav {
+    .menu {
+      > .menu-item {
+        position: relative;
+
+        &:hover {
+          .sub-menu {
+            display: flex;
+            background-color: #fff;
+            box-shadow: 0 8px 15px rgb(0 0 0 / 10%);
+            border-color: #e1e1e1;
+            border-width: 1px;
+            border-style: solid;
+            border-top-width: 2px;
+            border-top-color: $red;
+
+            a {
+              padding: 8px 15px;
+              font-size: 12px;
+              line-height: 23px;
+              width: 100%;
+              color: #808080;
+              text-decoration: none;
+
+              &:hover {
+                background-color: #f8f8f8;
+                color: #333;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .sub-menu {
+      position: absolute;
+      top: 100%;
+      margin-top: -1px;
+      flex-direction: column;
+      width: 220px;
+    }
   }
 }
