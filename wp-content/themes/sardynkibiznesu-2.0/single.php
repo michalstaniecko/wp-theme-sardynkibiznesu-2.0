@@ -29,14 +29,16 @@
                     </h1>
                     <div class="d-flex align-items-center border-bottom pb-3 pt-2">
                       <div class="flex-shrink-0">
-                        <img src="<?= get_avatar_url($post->post_author) ?>" class="article__header-avatar" alt="author: <?= get_user_by('id', $post->post_author)->display_name ?>" />
+                        <img src="<?= get_avatar_url($post->post_author) ?>" class="article__header-avatar"
+                             alt="author: <?= get_user_by('id', $post->post_author)->display_name ?>"/>
                       </div>
                       <div class="post-meta-infos flex-grow-1 ms-3 mt-auto">
-                        <time class="date-container minor-meta updated"><?php echo get_the_date(); ?></time><br/>
+                        <time class="date-container minor-meta updated"><?php echo get_the_date(); ?></time>
+                        <br/>
                         <span class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
                             class="entry-author-link"><span class="vcard author"><span class="fn"><a
                                   href="<?php echo get_author_posts_url($post->post_author); ?>"
-                                  title="<?php _e('Posts by','sb'); ?> <?php the_author(); ?>"
+                                  title="<?php _e('Posts by', 'sb'); ?> <?php the_author(); ?>"
                                   rel="author"><?php the_author(); ?></a></span></span></span></span></div>
                     </div>
                   </header>
@@ -47,9 +49,53 @@
               </div>
             </article>
           <?php endwhile; endif; ?>
-
-          <div>
-            related posts
+          <div class="nav-posts">
+            <div class="row ">
+              <div href="#" class="col d-flex">
+                <?php if (get_next_post()): ?>
+                  <?php $related_post = get_next_post(); ?>
+                  <a href="<?php echo the_permalink($related_post->ID); ?>"
+                     class="d-flex nav-posts__link"
+                     title="<?php _e('Article', 'sb'); ?>: <?= $related_post->post_title ?>">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="<?php echo get_the_post_thumbnail_url($related_post->ID, 'article-desktop') ?>"
+                        alt="<?php echo $related_post->post_title ?>"
+                        class="nav-posts__image"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <div class="nav-posts__label"><?php _e('Next article', 'sb'); ?></div>
+                      <div class="nav-posts__title">
+                        <?php echo $related_post->post_title ?>
+                      </div>
+                    </div>
+                  </a>
+                <?php endif; ?>
+              </div>
+              <div href="#" class="col">
+                <?php if (get_previous_post()): ?>
+                  <?php $related_post = get_previous_post(); ?>
+                  <a href="<?php the_permalink($related_post->ID); ?>"
+                     class="d-flex nav-posts__link"
+                     title="<?php _e('Article', 'sb'); ?>: <?= $related_post->post_title ?>">
+                    <div class="flex-shrink-0">
+                      <img
+                        src="<?php echo get_the_post_thumbnail_url($related_post->ID, 'article-desktop') ?>"
+                        alt="<?php echo $related_post->post_title ?>"
+                        class="nav-posts__image"
+                      />
+                    </div>
+                    <div class="flex-grow-1">
+                      <div class="nav-posts__label"><?php _e('Previous article', 'sb'); ?></div>
+                      <div class="nav-posts__title">
+                        <?php echo $related_post->post_title ?>
+                      </div>
+                    </div>
+                  </a>
+                <?php endif; ?>
+              </div>
+            </div>
           </div>
           <div>
             <?php comments_template(); ?>
