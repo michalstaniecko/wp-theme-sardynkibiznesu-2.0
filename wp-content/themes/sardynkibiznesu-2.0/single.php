@@ -50,7 +50,7 @@
                                   rel="author"><?php the_author(); ?></a></span></span></span></span></div>
                     </div>
                   </header>
-                  <div class="entry-content" itemprop="text">
+                  <div class="entry-content article__content" itemprop="text">
                     <?php the_content(); ?>
                   </div>
                 </div>

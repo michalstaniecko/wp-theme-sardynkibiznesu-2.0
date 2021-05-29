@@ -1,0 +1,41 @@
+.cmsmasters_notice[class*=" cmsmasters-icon-"], .cmsmasters_notice[class*=" cmsmasters_theme_icon_"] {
+  padding-left: 90px;
+  padding-right: 28px;
+}
+.cmsmasters_notice.cmsmasters_notice_error {
+  background-color: #fffdfd;
+  border-color: #ea5151;
+}
+
+.cmsmasters_notice {
+  display: block;
+  width: 100%;
+  padding: 0 20px;
+  margin-bottom: 30px;
+  position: relative;
+  border-width: 1px;
+  border-style: solid;
+
+  .notice_content {
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 300;
+    font-style: normal;
+    padding: 22px 0 22px;
+  }
+
+  &::before {
+    content: '\f0c3';
+    font-family: 'fontawesome';
+    font-size: 32px;
+    width: 1em;
+    height: 1em;
+    margin: auto!important;
+    position: absolute;
+    left: 28px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    color: #ea5151;
+  }
+}
