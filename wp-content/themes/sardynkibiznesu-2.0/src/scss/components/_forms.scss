@@ -8,3 +8,10 @@ input {
     box-shadow: 0 0 2px 0 rgb(0 0 0 / 20%);
   }
 }
+
+.form-control {
+  &[type=text],
+  &[type=email] {
+    margin-bottom: 20px;
+  }
+}
