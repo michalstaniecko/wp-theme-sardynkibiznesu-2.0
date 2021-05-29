@@ -27,18 +27,18 @@
                         <?php the_title(); ?>
                       </a>
                     </h1>
-                    <div class="post-meta-infos ">
-                      <time class="date-container minor-meta updated"><?php echo get_the_date(); ?></time>
-                      <span class="text-sep text-sep-date">/</span><span class="comment-container minor-meta"><a
-                          href="https://sardynkibiznesu.pl/podcasty/51-jak-byc-dobrym-szefem-2/#respond"
-                          class="comments-link"><?php printf( _n( '%s comment', '%s comments', get_comments_number(), 'sb' ), number_format_i18n( get_comments_number() ) ); ?></a></span><span
-                        class="text-sep text-sep-comment">/</span><span class="blog-categories minor-meta"><?php _e('in', 'sb'); ?> <a
-                          href="https://sardynkibiznesu.pl/kategorie/podcasty/" rel="tag">Podcasty</a></span><span
-                        class="text-sep text-sep-cat">/</span><span class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
-                          class="entry-author-link"><span class="vcard author"><span class="fn"><a
-                                href="<?php echo get_author_posts_url($post->post_author); ?>"
-                                title="<?php _e('Posts by','sb'); ?> <?php the_author(); ?>"
-                                rel="author"><?php the_author(); ?></a></span></span></span></span></div>
+                    <div class="d-flex align-items-center border-bottom pb-3 pt-2">
+                      <div class="flex-shrink-0">
+                        <img src="<?= get_avatar_url($post->post_author) ?>" class="article__header-avatar" alt="author: <?= get_user_by('id', $post->post_author)->display_name ?>" />
+                      </div>
+                      <div class="post-meta-infos flex-grow-1 ms-3 mt-auto">
+                        <time class="date-container minor-meta updated"><?php echo get_the_date(); ?></time><br/>
+                        <span class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
+                            class="entry-author-link"><span class="vcard author"><span class="fn"><a
+                                  href="<?php echo get_author_posts_url($post->post_author); ?>"
+                                  title="<?php _e('Posts by','sb'); ?> <?php the_author(); ?>"
+                                  rel="author"><?php the_author(); ?></a></span></span></span></span></div>
+                    </div>
                   </header>
                   <div class="entry-content" itemprop="text">
                     <?php the_content(); ?>
