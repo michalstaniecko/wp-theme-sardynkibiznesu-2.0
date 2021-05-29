@@ -11073,3 +11073,19 @@ h3.ihumbak-anchor {
   font-weight: 700;
   line-height: 20px;
 }
+
+.breadcrumbs {
+  background-color: #fcfcfc;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 11px;
+}
+.breadcrumbs, .breadcrumbs a {
+  color: #888;
+}
+
+.breadcrumbs__wrapper {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

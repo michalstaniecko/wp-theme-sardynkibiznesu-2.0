@@ -1,0 +1,16 @@
+.breadcrumbs {
+  background-color: #fcfcfc;
+  border-bottom: 1px solid $border-color;
+  font-size: 11px;
+
+  &, a {
+    color: #888;
+  }
+}
+
+.breadcrumbs__wrapper {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
