@@ -10932,6 +10932,7 @@ body {
 
 img {
   max-width: 100%;
+  height: auto;
 }
 
 .sidebar .widget {
@@ -11095,7 +11096,8 @@ p.single-newsletter-form-small {
 }
 
 @media (min-width: 992px) {
-  .menu-primary-menu-container {
+  .navigation__nav-container,
+.menu-primary-menu-container {
     display: flex;
   }
 }
@@ -11104,7 +11106,7 @@ p.single-newsletter-form-small {
   .navigation__nav .menu > .menu-item {
     position: relative;
   }
-  .navigation__nav .menu > .menu-item:hover .sub-menu {
+  .navigation__nav .menu > .menu-item:hover > .sub-menu {
     display: flex;
     background-color: #fff;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -11114,7 +11116,7 @@ p.single-newsletter-form-small {
     border-top-width: 2px;
     border-top-color: #c00;
   }
-  .navigation__nav .menu > .menu-item:hover .sub-menu a {
+  .navigation__nav .menu > .menu-item:hover > .sub-menu a {
     padding: 8px 15px;
     font-size: 12px;
     line-height: 23px;
@@ -11122,7 +11124,7 @@ p.single-newsletter-form-small {
     color: #808080;
     text-decoration: none;
   }
-  .navigation__nav .menu > .menu-item:hover .sub-menu a:hover {
+  .navigation__nav .menu > .menu-item:hover > .sub-menu a:hover {
     background-color: #f8f8f8;
     color: #333;
   }
@@ -11134,6 +11136,21 @@ p.single-newsletter-form-small {
     width: 220px;
   }
 }
+.menu-item .menu-item {
+  position: relative;
+}
+.menu-item .menu-item .sub-menu {
+  position: absolute;
+  right: 100%;
+  top: 0;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-right: 0;
+}
+.menu-item .menu-item:hover > .sub-menu {
+  display: flex;
+}
+
 .button {
   padding: 9px 22px;
   cursor: pointer;

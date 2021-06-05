@@ -26,7 +26,8 @@
             <div class="col-auto ms-auto navigation">
               <nav class="navigation__nav ">
                 <?php wp_nav_menu(array(
-                  "menu" => 'primary_menu'
+                  "menu" => 'primary_menu',
+                  "container_class" => "navigation__nav-container"
                 )); ?>
               </nav>
               <div class="d-lg-none">

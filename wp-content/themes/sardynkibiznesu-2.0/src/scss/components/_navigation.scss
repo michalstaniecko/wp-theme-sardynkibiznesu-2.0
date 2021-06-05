@@ -125,6 +125,7 @@
   }
 }
 
+.navigation__nav-container,
 .menu-primary-menu-container {
   @include media-breakpoint-up(lg) {
     display: flex;
@@ -139,7 +140,7 @@
         position: relative;
 
         &:hover {
-          .sub-menu {
+          > .sub-menu {
             display: flex;
             background-color: #fff;
             box-shadow: 0 8px 15px rgb(0 0 0 / 10%);
@@ -173,6 +174,26 @@
       margin-top: -1px;
       flex-direction: column;
       width: 220px;
+    }
+  }
+}
+
+.menu-item .menu-item {
+
+  position: relative;
+
+  .sub-menu {
+    position: absolute;
+    right: 100%;
+    top: 0;
+    background-color: #fff;
+    border: 1px solid $border-color;
+    border-right: 0;
+  }
+
+  &:hover {
+    > .sub-menu {
+      display: flex;
     }
   }
 }
