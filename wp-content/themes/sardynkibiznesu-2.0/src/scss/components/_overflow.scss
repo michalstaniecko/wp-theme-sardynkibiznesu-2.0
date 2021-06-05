@@ -1,0 +1,14 @@
+.overflow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.3;
+  background-color: #000000;
+  display: none;
+
+  .is-navigation--pushed & {
+    display: block;
+  }
+}

@@ -26,7 +26,7 @@
 </footer>
 
 </div>
-
+<div class="overflow"></div>
 <?php wp_footer(); ?>
 
 </body>

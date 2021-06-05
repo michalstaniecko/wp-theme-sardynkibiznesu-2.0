@@ -26,7 +26,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _scs
   \******************************/
 /***/ (() => {
 
-eval("var navigationToggler = document.querySelector('.navigation__toggle');\nvar navigation = document.querySelector('.navigation');\nnavigationToggler.addEventListener('click', function () {\n  !navigation.classList.contains('navigation--pushed') ? navigation.classList.add('navigation--pushed') : navigation.classList.remove('navigation--pushed');\n});\n\n//# sourceURL=webpack://sardynkibiznesu-2.0/./src/js/navigation.js?");
+eval("var navigationToggler = document.querySelector('.navigation__toggle');\nvar navigation = document.querySelector('.navigation');\nvar body = document.querySelector('body');\nvar navPushed = false;\n\nvar toggleMenu = function toggleMenu() {\n  !navigation.classList.contains('navigation--pushed') ? navigation.classList.add('navigation--pushed') : navigation.classList.remove('navigation--pushed');\n  !body.classList.contains('is-navigation--pushed') ? body.classList.add('is-navigation--pushed') : body.classList.remove('is-navigation--pushed');\n};\n\ndocument.addEventListener('click', function (e) {\n  if (!e.target.closest('.navigation__toggle')) {\n    navigation.classList.remove('navigation--pushed');\n    body.classList.remove('is-navigation--pushed');\n  }\n});\nnavigationToggler.addEventListener('click', function () {\n  toggleMenu();\n});\n\n//# sourceURL=webpack://sardynkibiznesu-2.0/./src/js/navigation.js?");
 
 /***/ }),
 

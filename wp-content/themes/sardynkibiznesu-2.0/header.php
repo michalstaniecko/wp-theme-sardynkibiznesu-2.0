@@ -5,7 +5,6 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
 
     <?php wp_head(); ?>
   </head>
@@ -17,7 +16,7 @@
       <header class="container-fluid border-bottom header">
         <div class="container-fluid-stop">
           <div class="row">
-            <div class="col-auto d-flex align-items-center">
+            <div class="col d-flex align-items-center">
               <a href="/">
                 <img
                   src="https://sardynkibiznesu.pl/wp-content/uploads/2020/11/logo_sardynki_biznesu-e1604254608339.png"/>
