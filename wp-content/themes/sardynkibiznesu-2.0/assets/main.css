@@ -10993,6 +10993,10 @@ p.single-newsletter-form-small {
   color: #eee;
   padding-top: 15px;
   padding-bottom: 15px;
+  font-size: 11px;
+}
+.footer__bottom a {
+  color: inherit;
 }
 
 .navigation {
@@ -11222,6 +11226,26 @@ p.single-newsletter-form-small {
   border-color: #6699a6;
 }
 
+.button_wrap {
+  padding: 10px 0;
+}
+.button_wrap a {
+  border-color: #cc0001;
+  background-color: #fff;
+  color: #cc0001;
+  transition: all 0.3s ease-in-out;
+  padding: 9px 20px;
+  border-width: 1px;
+  border-style: solid;
+  display: inline-block;
+}
+.button_wrap a:hover {
+  text-decoration: none;
+  border-color: #cc0001;
+  background-color: #cc0001;
+  color: #fff;
+}
+
 input {
   border: 1px solid #e1e1e1;
   background-color: #fcfcfc;
@@ -11306,6 +11330,10 @@ h3.ihumbak-anchor {
 }
 
 .article__content {
+  color: #666;
+}
+
+.article--listing .entry-content {
   color: #666;
 }
 
@@ -11418,4 +11446,52 @@ h3.ihumbak-anchor {
 }
 .is-navigation--pushed .overflow {
   display: block;
+}
+
+.wp-block-image figcaption {
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.pagination {
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pagination__count {
+  color: #919191;
+  font-size: 11px;
+}
+
+.pagination__nav span.current,
+.pagination__nav a {
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  line-height: 35px;
+  text-align: center;
+  padding: 0;
+  border-radius: 100px;
+  margin-right: 3px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+  font-size: 11px;
+  color: #919191;
+}
+.pagination__nav span.current {
+  background-color: #fcfcfc;
+  color: #222;
+  display: inline-block;
+  font-weight: 700;
+}
+
+#comments {
+  margin-top: 0 !important;
+}
+
+#wpdcom .wpd-form-head {
+  margin-top: 0 !important;
+}
+
+#wpdcom .wpdiscuz-subscribe-bar.wpdiscuz-hidden {
+  display: block !important;
 }

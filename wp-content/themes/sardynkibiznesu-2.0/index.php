@@ -1,4 +1,8 @@
-<?php get_header(); ?>
+<?php
+get_header();
+$paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+global $wp_query;
+?>
   <div class="page__wrapper">
     <div class="container-fluid container-fluid-stop page__content">
       <div class="row">
@@ -34,13 +38,15 @@
                     <div class="post-meta-infos ">
                       <time class="date-container minor-meta updated"><?php echo get_the_date(); ?></time>
                       <span class="text-sep text-sep-date">/</span><span class="comment-container minor-meta"><a
-                          href="https://sardynkibiznesu.pl/podcasty/51-jak-byc-dobrym-szefem-2/#respond"
-                          class="comments-link"><?php printf( _n( '%s comment', '%s comments', get_comments_number(), 'sb' ), number_format_i18n( get_comments_number() ) ); ?></a></span><span
-                        class="text-sep text-sep-comment">/</span><span class="blog-categories minor-meta"><?php _e('in', 'sb'); ?> <?php the_category(', '); ?></span><span
-                        class="text-sep text-sep-cat">/</span><span class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
+                          href="<?php the_permalink() ?>/#respond"
+                          class="comments-link"><?php printf(_n('%s comment', '%s comments', get_comments_number(), 'sb'), number_format_i18n(get_comments_number())); ?></a></span><span
+                        class="text-sep text-sep-comment">/</span><span
+                        class="blog-categories minor-meta"><?php _e('in', 'sb'); ?><?php the_category(', '); ?></span><span
+                        class="text-sep text-sep-cat">/</span><span
+                        class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
                           class="entry-author-link"><span class="vcard author"><span class="fn"><a
                                 href="<?php echo get_author_posts_url($post->post_author); ?>"
-                                title="<?php _e('Posts by','sb'); ?> <?php the_author(); ?>"
+                                title="<?php _e('Posts by', 'sb'); ?> <?php the_author(); ?>"
                                 rel="author"><?php the_author(); ?></a></span></span></span></span></div>
                   </header>
                   <div class="entry-content" itemprop="text">
@@ -53,7 +59,21 @@
                 </div>
               </div>
             </article>
-          <?php endwhile; endif; ?>
+          <?php endwhile; ?>
+          <div class="pagination">
+            <div class="pagination__count me-3">
+              <?php _e('Page', 'sb') ?> <?= $paged ?> z <?= $wp_query->max_num_pages ?>
+            </div>
+            <div class="pagination__nav">
+              <?php echo paginate_links(array(
+                'current'   => $paged,
+                'prev_next' => false,
+                'prev_text' => false,
+                'next_text' => false
+              )) ?>
+            </div>
+          </div>
+          <?php endif; ?>
         </main>
         <?php get_sidebar(); ?>
       </div>

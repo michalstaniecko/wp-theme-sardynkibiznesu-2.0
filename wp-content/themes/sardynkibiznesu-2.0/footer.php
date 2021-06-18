@@ -10,9 +10,9 @@
         </div>
         <div class="col">
           <ul>
-            <li><a href="#">O NAS</a></li>
-            <li><a href="#">FACEBOOK</a></li>
-            <li><a href="#">YOUTUBE</a></li>
+            <li><a href="/blogu/">O NAS</a></li>
+            <li><a href="https://www.facebook.com/sardynkibiznesu/" target="_blank">FACEBOOK</a></li>
+            <li><a href="https://www.youtube.com/channel/UC5W8ggvTgpY3q9g3msgC2Gg/featured" target="_blank">YOUTUBE</a></li>
           </ul>
         </div>
       </div>
@@ -20,7 +20,9 @@
   </div>
   <div class="footer__bottom">
     <div class=" container-fluid container-fluid-stop" itemscope="itemscope" itemtype="https://schema.org/WPFooter">
-      Kontakt - Polityka prywatności - Regulamin strony / SardynkiBiznesu.pl © 2020
+      <a href="/kontakt/">Kontakt</a> - <a href="/polityka-prywatnosci/">Polityka prywatności</a> - <a
+        href="/regulamin-strony/">Regulamin
+        strony</a> / SardynkiBiznesu.pl © 2021
     </div>
   </div>
 </footer>

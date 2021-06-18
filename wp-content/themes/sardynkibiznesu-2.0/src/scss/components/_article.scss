@@ -80,3 +80,9 @@ h3 {
 .article__content {
   color: #666;
 }
+
+.entry-content {
+  .article--listing & {
+    color: #666;
+  }
+}

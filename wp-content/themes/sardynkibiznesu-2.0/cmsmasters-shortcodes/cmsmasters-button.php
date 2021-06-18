@@ -42,7 +42,7 @@ function cmsmasters_button($atts, $content = null)
     <a href="%s"
        target="%s"
        class="cmsmasters_button cmsmasters_but_clear_styles cmsmasters_but_bg_hover cmsmasters-icon-download">
-      <span>%s</span>
+      <i class="fa fa-download" aria-hidden="true"></i> <span>%s</span>
     </a>
   </div>
   <?php $out = ob_get_clean();

@@ -14,3 +14,25 @@
     border-color: #6699a6;
   }
 }
+
+.button_wrap {
+  padding: 10px 0;
+
+  a {
+    border-color: #cc0001;
+    background-color: #fff;
+    color: #cc0001;
+    transition: all .3s ease-in-out;
+    padding: 9px 20px;
+    border-width: 1px;
+    border-style: solid;
+    display: inline-block;
+
+    &:hover {
+      text-decoration: none;
+      border-color: #cc0001;
+      background-color: #cc0001;
+      color: #fff;
+    }
+  }
+}
