@@ -59,7 +59,7 @@
           <?php endwhile; endif; ?>
           <div class="nav-posts">
             <div class="row ">
-              <div href="#" class="col d-flex">
+              <div href="#" class="col-12 col-sm d-flex mb-3 mb-sm-0">
                 <?php if (get_next_post()): ?>
                   <?php $related_post = get_next_post(); ?>
                   <a href="<?php echo the_permalink($related_post->ID); ?>"
@@ -81,7 +81,7 @@
                   </a>
                 <?php endif; ?>
               </div>
-              <div href="#" class="col">
+              <div href="#" class="col-12 col-sm">
                 <?php if (get_previous_post()): ?>
                   <?php $related_post = get_previous_post(); ?>
                   <a href="<?php the_permalink($related_post->ID); ?>"
