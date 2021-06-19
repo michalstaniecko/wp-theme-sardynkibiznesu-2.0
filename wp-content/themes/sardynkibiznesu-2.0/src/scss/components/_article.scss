@@ -83,11 +83,17 @@ h3 {
 
 .entry-content {
 
+  ul,
+  li,
   p {
     line-height: 1.75;
   }
 
   .article--listing & {
     color: #666;
+  }
+
+  iframe {
+    max-width: 100%;
   }
 }

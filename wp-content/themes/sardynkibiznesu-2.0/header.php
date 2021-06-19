@@ -18,7 +18,7 @@
           <div class="row">
             <div class="col d-flex align-items-center">
               <a href="/">
-                <img
+                <img alt="Sardynki Biznesu" class="header__logo"
                   src="https://sardynkibiznesu.pl/wp-content/uploads/2020/11/logo_sardynki_biznesu-e1604254608339.png"/>
               </a>
             </div>

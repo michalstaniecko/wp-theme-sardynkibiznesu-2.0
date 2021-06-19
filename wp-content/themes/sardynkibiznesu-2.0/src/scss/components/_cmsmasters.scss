@@ -2,6 +2,7 @@
   padding-left: 90px;
   padding-right: 28px;
 }
+
 .cmsmasters_notice.cmsmasters_notice_error {
   background-color: #fffdfd;
   border-color: #ea5151;
@@ -21,7 +22,15 @@
     line-height: 1.5;
     font-weight: 300;
     font-style: normal;
-    padding: 22px 0 22px;
+    padding: 38px 0 22px;
+
+    p {
+      line-height: 1.5;
+
+      &:empty {
+        display: none;
+      }
+    }
   }
 
   &::before {
@@ -30,7 +39,7 @@
     font-size: 32px;
     width: 1em;
     height: 1em;
-    margin: auto!important;
+    margin: auto !important;
     position: absolute;
     left: 28px;
     right: auto;

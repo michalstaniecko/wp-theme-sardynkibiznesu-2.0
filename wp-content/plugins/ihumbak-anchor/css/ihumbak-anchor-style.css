@@ -13,6 +13,12 @@
   margin-bottom: 0 !important;
 }
 
+
+ul.ihumbak-anchor-menu > li {
+  margin-bottom: 13px !important;
+}
+
+
 .ihumbak-anchor-menu li {
   line-height: 1;
   list-style: none !important;
@@ -59,4 +65,9 @@
 
 .ihumbak-anchor {
   color: inherit;
+}
+
+.ihumbak-anchor-menu > li > ul {
+  margin-top: 8px;
+  margin-bottom: 15px;
 }

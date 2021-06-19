@@ -23,7 +23,7 @@ function cmsmasters_notice($atts, $content = null)
   ob_start(); ?>
   <div id="cmsmasters_notice_u4nkm5fny" class="cmsmasters_notice cmsmasters_notice_error cmsmasters-icon-ghost">
     <div class="notice_content">
-      <p>%s</p>
+      %s
     </div>
   </div>
   <?php $out = ob_get_clean();

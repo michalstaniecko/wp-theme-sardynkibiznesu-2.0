@@ -105,10 +105,12 @@
               </div>
             </div>
           </div>
-          <div class="mt-5">
-            <div class="h3" style="color: #800000"><?php _e('Leave comment', 'sb'); ?></div>
-            <?php comments_template(); ?>
-          </div>
+          <?php if (comments_open()): ?>
+            <div class="mt-5">
+              <div class="h3" style="color: #800000"><?php _e('Leave comment', 'sb'); ?></div>
+              <?php comments_template(); ?>
+            </div>
+          <?php endif; ?>
         </main>
         <?php get_sidebar(); ?>
       </div>

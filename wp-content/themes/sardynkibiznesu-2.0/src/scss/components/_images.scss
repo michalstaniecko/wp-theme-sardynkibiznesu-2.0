@@ -4,3 +4,15 @@
     line-height: 18px;
   }
 }
+
+.wp-caption-text {
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.wp-caption {
+  .entry-content & {
+    width: auto !important;
+    max-width: 100%;
+  }
+}
