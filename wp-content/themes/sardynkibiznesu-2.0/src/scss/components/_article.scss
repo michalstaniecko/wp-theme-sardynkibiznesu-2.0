@@ -82,6 +82,11 @@ h3 {
 }
 
 .entry-content {
+
+  p {
+    line-height: 1.75;
+  }
+
   .article--listing & {
     color: #666;
   }
