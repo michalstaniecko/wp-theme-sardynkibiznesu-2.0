@@ -28,6 +28,19 @@
                   "menu" => 'primary_menu',
                   "container_class" => "navigation__nav-container"
                 )); ?>
+                <div class="header__search">
+                  <div class="header__search-icon">
+                    <i class="fa fa-search"></i>
+                  </div>
+                  <div class="header__search-input">
+                    <form action="/" method="get">
+                      <div class="input-group">
+                        <input type="text" placeholder="<?php _e('Search...', 'sb') ?>" class="form-control mb-0" name="s" />
+                        <button class="btn btn-danger" type="submit"><i class="fa fa-search"></i></button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </nav>
               <div class="d-lg-none">
                 <button class="navigation__toggle">

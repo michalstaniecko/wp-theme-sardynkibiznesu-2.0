@@ -8,6 +8,11 @@ global $wp_query;
       <div class="row">
         <main class="col-12 col-md-8 col-lg-9 main" itemprop="mainContentOfPage" itemscope="itemscope"
               itemtype="https://schema.org/Blog">
+          <?php if (!empty(get_search_query())): ?>
+            <div class="h3 mb-5">
+              <strong><?php _e('Search query', 'sb') ?>:</strong> <?php echo get_search_query(); ?>
+            </div>
+          <?php endif; ?>
           <?php if (have_posts()): while (have_posts()): the_post(); ?>
             <article class="article article--listing" itemscope="itemscope" itemtype="https://schema.org/BlogPosting"
                      itemprop="blogPost">
@@ -60,19 +65,19 @@ global $wp_query;
               </div>
             </article>
           <?php endwhile; ?>
-          <div class="pagination">
-            <div class="pagination__count me-3">
-              <?php _e('Page', 'sb') ?> <?= $paged ?> z <?= $wp_query->max_num_pages ?>
+            <div class="pagination">
+              <div class="pagination__count me-3">
+                <?php _e('Page', 'sb') ?> <?= $paged ?> z <?= $wp_query->max_num_pages ?>
+              </div>
+              <div class="pagination__nav">
+                <?php echo paginate_links(array(
+                  'current'   => $paged,
+                  'prev_next' => false,
+                  'prev_text' => false,
+                  'next_text' => false
+                )) ?>
+              </div>
             </div>
-            <div class="pagination__nav">
-              <?php echo paginate_links(array(
-                'current'   => $paged,
-                'prev_next' => false,
-                'prev_text' => false,
-                'next_text' => false
-              )) ?>
-            </div>
-          </div>
           <?php endif; ?>
         </main>
         <?php get_sidebar(); ?>
