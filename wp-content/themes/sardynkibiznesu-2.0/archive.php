@@ -1,4 +1,9 @@
-<?php get_header(); ?>
+<?php
+get_header();
+
+$paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+global $wp_query;
+?>
   <div class="page__wrapper">
 
     <div class="breadcrumbs">
@@ -70,8 +75,21 @@
                 </div>
               </div>
             </article>
-          <?php endwhile;
-          endif; ?>
+          <?php endwhile; ?>
+            <div class="pagination">
+              <div class="pagination__count me-3">
+                <?php _e('Page', 'sb') ?> <?= $paged ?> z <?= $wp_query->max_num_pages ?>
+              </div>
+              <div class="pagination__nav">
+                <?php echo paginate_links(array(
+                  'current'   => $paged,
+                  'prev_next' => false,
+                  'prev_text' => false,
+                  'next_text' => false
+                )) ?>
+              </div>
+            </div>
+          <?php endif; ?>
         </main>
         <?php get_sidebar(); ?>
       </div>

@@ -13,16 +13,25 @@
       <div class="row">
         <main class="col-12 col-md-8 col-lg-9 main" itemprop="mainContentOfPage" itemscope="itemscope"
               itemtype="https://schema.org/Blog">
-          <?php if (have_posts()): while (have_posts()): the_post(); ?>
+          <?php
+          if (have_posts()): while (have_posts()): the_post();
+            $post_thumbnail_id = get_post_thumbnail_id($post->ID);
+            $attachment = wp_get_attachment_image_src($post_thumbnail_id, 'single-desktop');
+            $width = $attachment[1];
+            $height = $attachment[2];
+            ?>
             <article class="article" itemscope="itemscope" itemtype="https://schema.org/BlogPosting"
                      itemprop="blogPost">
               <div class="row">
                 <div class="col-12">
-                  <a href="<?php echo get_the_post_thumbnail_url(null, 'full'); ?>" class="article__image-wrapper">
+                  <a href="<?php echo get_the_post_thumbnail_url(null, 'single-desktop'); ?>"
+                     class="article__image-wrapper">
                     <img
-                      src="<?php echo get_the_post_thumbnail_url(null, 'full'); ?>"
+                      src="<?php echo get_the_post_thumbnail_url(null, 'single-desktop'); ?>"
                       class="article__image"
-                      alt=""
+                      alt="<?php the_title(); ?>"
+                      width="<?php echo $width ?>"
+                      height="<?php echo $height ?>"
                     />
                   </a>
                 </div>
@@ -62,6 +71,12 @@
               <div href="#" class="col-12 col-sm d-flex mb-3 mb-sm-0">
                 <?php if (get_next_post()): ?>
                   <?php $related_post = get_next_post(); ?>
+                  <?php
+                  $post_thumbnail_id = get_post_thumbnail_id($related_post->ID);
+                  $attachment = wp_get_attachment_image_src($post_thumbnail_id, 'article-desktop');
+                  $width = $attachment[1];
+                  $height = $attachment[2];
+                  ?>
                   <a href="<?php echo the_permalink($related_post->ID); ?>"
                      class="d-flex nav-posts__link"
                      title="<?php _e('Article', 'sb'); ?>: <?= $related_post->post_title ?>">
@@ -70,6 +85,8 @@
                         src="<?php echo get_the_post_thumbnail_url($related_post->ID, 'article-desktop') ?>"
                         alt="<?php echo $related_post->post_title ?>"
                         class="nav-posts__image"
+                        width="<?php echo $width ?>"
+                        height="<?php echo $height ?>"
                       />
                     </div>
                     <div class="flex-grow-1">
@@ -84,6 +101,12 @@
               <div href="#" class="col-12 col-sm">
                 <?php if (get_previous_post()): ?>
                   <?php $related_post = get_previous_post(); ?>
+                  <?php
+                  $post_thumbnail_id = get_post_thumbnail_id($related_post->ID);
+                  $attachment = wp_get_attachment_image_src($post_thumbnail_id, 'article-desktop');
+                  $width = $attachment[1];
+                  $height = $attachment[2];
+                  ?>
                   <a href="<?php the_permalink($related_post->ID); ?>"
                      class="d-flex nav-posts__link"
                      title="<?php _e('Article', 'sb'); ?>: <?= $related_post->post_title ?>">
@@ -92,6 +115,8 @@
                         src="<?php echo get_the_post_thumbnail_url($related_post->ID, 'article-desktop') ?>"
                         alt="<?php echo $related_post->post_title ?>"
                         class="nav-posts__image"
+                        width="<?php echo $width ?>"
+                        height="<?php echo $height ?>"
                       />
                     </div>
                     <div class="flex-grow-1">

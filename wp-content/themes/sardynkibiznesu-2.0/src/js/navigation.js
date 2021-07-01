@@ -18,7 +18,7 @@ const toggleMenu = () => {
 }
 
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('.navigation__toggle')) {
+  if (!e.target.closest('.navigation__toggle') && !e.target.closest('.navigation')) {
     navigation.classList.remove('navigation--pushed')
     body.classList.remove('is-navigation--pushed')
   }
