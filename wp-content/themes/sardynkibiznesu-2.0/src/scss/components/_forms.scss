@@ -4,6 +4,10 @@ input {
   color: #919191;
   outline: 0;
 
+  &.form-control {
+    border-radius: 0;
+  }
+
   &:focus {
     box-shadow: 0 0 2px 0 rgb(0 0 0 / 20%);
   }
