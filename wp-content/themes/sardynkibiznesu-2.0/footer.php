@@ -29,6 +29,7 @@
 
 </div>
 <div class="overflow"></div>
+<div class="scroll-to-top"><i class="fa fa-chevron-up"></i></div>
 <?php wp_footer(); ?>
 
 </body>
