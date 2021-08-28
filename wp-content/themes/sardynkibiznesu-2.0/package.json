@@ -13,6 +13,7 @@
     "bootstrap": "^5.0.0",
     "css-loader": "^5.2.4",
     "font-awesome": "^4.7.0",
+    "jquery-validation": "^1.19.3",
     "magnific-popup": "^1.1.0",
     "mini-css-extract-plugin": "^1.6.0",
     "node-sass": "^5.0.0",

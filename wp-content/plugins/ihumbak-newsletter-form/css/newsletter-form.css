@@ -85,3 +85,7 @@ button.close {
 .single-newsletter-form--widget input {
     padding: 10px !important;
 }
+
+.single-newsletter-form input + label.error {
+    color: #c00 !important;
+}

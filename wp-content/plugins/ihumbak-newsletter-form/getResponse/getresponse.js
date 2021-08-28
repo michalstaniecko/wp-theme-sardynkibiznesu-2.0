@@ -20,6 +20,7 @@
       dataType: 'json'
     })
   }
+
   $(document).ready(function () {
     $grForm = $('form.getresponse-form');
     $grForm.on('submit', function (e) {
@@ -29,6 +30,14 @@
       data = $(this).serializeArray();
       add_contact(data);
     });
+
+    $('.single-newsletter-form form').each(function (index, elem) {
+      $(elem).validate({
+        submitHandler: function (form) {
+          form.submit();
+        }
+      })
+    })
 
   })
 

@@ -41,11 +41,11 @@ function sardynki_getresponse_form($atts, $content)
       <div class="row mb-0">
         <div class="<?= $a['type'] == 'widget' ? 'col-md-12 mb-3' : 'col-md-6' ?>">
 
-          <input type="text" name="first_name" placeholder="<?= $a['name_placeholder'] ?>" class="form-control w-100 mb-3 mb-md-0"/>
+          <input type="text" required name="first_name" placeholder="<?= $a['name_placeholder'] ?>" class="form-control w-100 mb-3 mb-md-0"/>
         </div>
         <div class="<?= $a['type'] == 'widget' ? 'col-md-12' : 'col-md-6' ?>">
 
-          <input type="text" name="email" placeholder="<?= $a['email_placeholder'] ?>" class="form-control w-100 mb-0"/>
+          <input type="email" required name="email" placeholder="<?= $a['email_placeholder'] ?>" class="form-control w-100 mb-0"/>
         </div>
         <div class="col-md-12 mt-3">
 
