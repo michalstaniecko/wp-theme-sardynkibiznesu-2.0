@@ -1,0 +1,87 @@
+.modal-backdrop {
+  z-index: 10040;
+}
+
+.single-newsletter-form {
+
+    background-color: #fbfbfb;
+    border: 1px solid #e4e4e4;
+    padding: 20px 20px;
+    padding-bottom: 20px !important;
+    margin-bottom: 30px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.single-newsletter-form a {
+    font-size: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+}
+
+.single-newsletter-form h3 {
+    line-height: 1.3;
+}
+
+.single-newsletter-form .input-text {
+	margin-bottom: 15px;
+	width: 100%;
+}
+
+.single-newsletter-form .input-text input {
+	width: 100%;
+  border-color: #993300;
+  border-left: 0;
+}
+
+.single-newsletter-form .input-text .input-group-addon {
+  border-color: #993300;
+  border-right: 0;
+}
+
+.single-newsletter-form .input-submit {
+	text-align: center;
+}
+
+.single-newsletter-form-modal .modal {
+	z-index: 100000;
+}
+
+.single-newsletter-form button:disabled {
+	opacity: 0.4;
+}
+
+button.close {
+	color: #000 !important;
+}
+
+.newsletter-privacy-policy-error {
+    color: #993300;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.newsletter-hidden {
+    display: none;
+}
+
+.single-newsletter-form label {
+    font-size: 12px;
+    line-height: 1.2;
+}
+.single-newsletter-form label a {
+    line-height: 1.2;
+}
+
+.single-newsletter-form--widget p {
+    font-size: 14px;
+}
+
+.single-newsletter-form--widget button[type=submit] {
+    text-align: center;
+}
+
+.single-newsletter-form--widget input {
+    padding: 10px !important;
+}
