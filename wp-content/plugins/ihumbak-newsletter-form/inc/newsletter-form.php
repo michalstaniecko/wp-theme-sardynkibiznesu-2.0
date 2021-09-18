@@ -45,13 +45,13 @@ function single_newsletter_form( $content ) {
           <div class="form-group mb-0">
             <div class="input input-group">
               <div class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></div>
-              <input class="form-control" type="text" name="name" id="newsletter-name" placeholder="Imię"/>
+              <input class="form-control" type="text" name="name" id="newsletter-name" placeholder="Imię" required/>
             </div>
           </div>
           <div class="form-group mb-0">
             <div class="input input-group ">
               <div class="input-group-addon"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></div>
-              <input class="form-control" type="email" name="email" id="newsletter-email" placeholder="E-mail"/>
+              <input class="form-control" type="email" name="email" id="newsletter-email" placeholder="E-mail" required/>
             </div>
           </div>
 

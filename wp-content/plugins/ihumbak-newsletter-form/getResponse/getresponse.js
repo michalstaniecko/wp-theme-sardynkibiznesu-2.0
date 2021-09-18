@@ -22,16 +22,16 @@
   }
 
   $(document).ready(function () {
-    $grForm = $('form.getresponse-form');
-    $grForm.on('submit', function (e) {
-      e.preventDefault();
 
-      $('.single-newsletter-form button').prop('disabled', true);
-      data = $(this).serializeArray();
-      add_contact(data);
-    });
+    $('form.getresponse-form').validate({
+      submitHandler: function (form) {
+        $('.single-newsletter-form button').prop('disabled', true);
+        data = $(form).serializeArray();
+        add_contact(data);
+      }
+    })
 
-    $('.single-newsletter-form form').each(function (index, elem) {
+    $('.single-newsletter-form form:not(.getresponse-form)').each(function (index, elem) {
       $(elem).validate({
         submitHandler: function (form) {
           form.submit();

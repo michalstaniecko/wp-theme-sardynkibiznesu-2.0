@@ -1,0 +1,60 @@
+.tax__amount {
+  text-align: right;
+}
+
+.tax__error {
+  border: 1px solid #cc0001 !important;
+  outline-color: transparent !important;
+}
+
+.tax__error + .tax__hint {
+  color: #cc0001;
+}
+
+.tax__row {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 500px;
+  border-bottom: 1px solid #c3c3c3;
+  padding: 10px 0;
+}
+
+
+.tax__col {
+  min-width: 200px;
+}
+
+.tax__col:nth-child(2) {
+  text-align:right;
+  margin-left: auto;
+}
+
+.tax__row-submit {
+  max-width: 500px;
+  margin-left:0;
+  padding: 10px 0;
+  text-align:right;
+}
+
+.tax__hint {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.tax__submit {
+  border-width: 2px;
+  border-color: #cc0001;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #cc0001;
+}
+
+.tax__submit:disabled {
+  opacity: 0.4;
+}
+
+.tax__instruction {
+  font-size: 14px;
+  line-height: 1;
+}

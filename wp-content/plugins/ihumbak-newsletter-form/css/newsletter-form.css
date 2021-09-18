@@ -89,3 +89,8 @@ button.close {
 .single-newsletter-form input + label.error {
     color: #c00 !important;
 }
+
+form.getresponse-form label.error {
+    width: 100%;
+    margin-top: -20px;
+}

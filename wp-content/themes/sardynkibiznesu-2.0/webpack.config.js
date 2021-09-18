@@ -58,16 +58,16 @@ module.exports = function (env = {}, argv) {
     ]
   }
 
-  if (config.mode !== 'development') {
+  /*if (config.mode !== 'development') {
     config.plugins.push(
       new PurgecssPlugin({
-        paths: glob.sync(`${PATHS.src}/**/*`, {
+        paths: glob.sync(`${PATHS.src}/!**!/!*`, {
           nodir: true,
-          ignore: [`${PATHS.src}/node_modules/**/*`]
+          ignore: [`${PATHS.src}/node_modules/!**!/!*`]
         })
       })
     )
-  }
+  }*/
 
   return config
 }

@@ -47,6 +47,8 @@
                     <div class="d-flex align-items-center border-bottom pb-3 pt-2">
                       <div class="flex-shrink-0">
                         <img src="<?= get_avatar_url($post->post_author) ?>" class="article__header-avatar"
+                             width="96"
+                             height="96"
                              alt="author: <?= get_user_by('id', $post->post_author)->display_name ?>"/>
                       </div>
                       <div class="post-meta-infos flex-grow-1 ms-3 mt-auto">
