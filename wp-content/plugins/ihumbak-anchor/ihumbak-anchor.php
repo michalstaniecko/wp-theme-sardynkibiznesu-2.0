@@ -14,7 +14,7 @@ include_once plugin_dir_path(__FILE__).'options.php';
 
 function ihumbak_anchor_assets() {
   if ( is_single() || is_page() ) {
-    wp_enqueue_style('ihumbak-font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+    //wp_enqueue_style('ihumbak-font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
     wp_enqueue_script( 'ihumbak-anchor-script', plugin_dir_url( __FILE__ ) . 'js/ihumbak-anchor.js?v=1.6', array( 'jquery' ), null, true );
     wp_enqueue_style( 'ihumbak-anchor-style', plugin_dir_url( __FILE__ ) . 'css/ihumbak-anchor-style.css', null, null, 'all' );
   }
