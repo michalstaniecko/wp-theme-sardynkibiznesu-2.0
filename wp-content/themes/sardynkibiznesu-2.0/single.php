@@ -28,6 +28,7 @@
                      class="article__image-wrapper">
                     <img
                       src="<?php echo get_the_post_thumbnail_url(null, 'single-desktop'); ?>"
+                      srcset="<?php echo wp_get_attachment_image_srcset(get_post_thumbnail_id()) ?>"
                       class="article__image"
                       alt="<?php the_title(); ?>"
                       width="<?php echo $width ?>"

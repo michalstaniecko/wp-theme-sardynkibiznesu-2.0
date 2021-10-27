@@ -54,7 +54,7 @@ global $wp_query;
                     <div class="post-meta-infos ">
                       <time class="date-container minor-meta updated"><?php echo get_the_date(); ?></time>
                       <span class="text-sep text-sep-date">/</span><span class="comment-container minor-meta"><a
-                          href="https://sardynkibiznesu.pl/podcasty/51-jak-byc-dobrym-szefem-2/#respond"
+                          href="<?php the_permalink() ?>#respond"
                           class="comments-link"><?php printf(_n('%s comment', '%s comments', get_comments_number(), 'sb'), number_format_i18n(get_comments_number())); ?></a></span><span
                         class="text-sep text-sep-comment">/</span><span
                         class="blog-categories minor-meta"><?php _e('in', 'sb'); ?><?php the_category(', '); ?></span><span
@@ -68,8 +68,9 @@ global $wp_query;
                   <div class="entry-content" itemprop="text">
                     <?php the_excerpt(); ?>
                     <p>
-                      <a href="<?php the_permalink(); ?>" class="more-link">Czytaj
-                        dalej ></a>
+                      <a href="<?php the_permalink(); ?>" class="more-link">
+                        <?php _e('Read more', 'sb') ?> >
+                      </a>
                     </p>
                   </div>
                 </div>

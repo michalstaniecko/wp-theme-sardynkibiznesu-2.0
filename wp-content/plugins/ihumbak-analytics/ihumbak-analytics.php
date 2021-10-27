@@ -7,6 +7,11 @@
 
 add_action( 'wp_head', 'ga_code' );
 add_action( 'wp_head', 'convertiser_verification' );
+
+add_action('wp_enqueue_scripts', 'ga_script');
+function ga_script() {
+  wp_enqueue_script('gtm-script', 'https://www.googletagmanager.com/gtag/js?id=UA-62814019-14', false, false,true);
+}
 function ga_code() {
   ?>
   <!-- Facebook Pixel Code -->
@@ -36,7 +41,6 @@ function ga_code() {
   <!-- End Facebook Pixel Code -->
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script defer src="https://www.googletagmanager.com/gtag/js?id=UA-62814019-14"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
 
