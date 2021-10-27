@@ -3,26 +3,24 @@
     <div class=" container-fluid container-fluid-stop">
       <div class="row">
         <div class="col">
-          <p>
-            <strong>SardynkiBiznesu.pl</strong> to blog i podcast, na których znajdziesz porady dotyczące prowadzenia małej firmy. Dzięki
-            nim oszczędzisz dużo czasu, pieniędzy i usprawnisz funkcjonowanie swojego biznesu.
-          </p>
+          <?php if (is_active_sidebar('footer_about_us')) { ?>
+            <?php dynamic_sidebar('footer_about_us'); ?>
+          <?php } ?>
         </div>
         <div class="col">
-          <ul>
-            <li><a href="/blogu/">O NAS</a></li>
-            <li><a href="https://www.facebook.com/sardynkibiznesu/" target="_blank">FACEBOOK</a></li>
-            <li><a href="https://www.youtube.com/channel/UC5W8ggvTgpY3q9g3msgC2Gg/featured" target="_blank">YOUTUBE</a></li>
-          </ul>
+
+          <?php if (is_active_sidebar('footer_nav_menu')) { ?>
+            <?php dynamic_sidebar('footer_nav_menu'); ?>
+          <?php } ?>
         </div>
       </div>
     </div>
   </div>
   <div class="footer__bottom">
     <div class=" container-fluid container-fluid-stop" itemscope="itemscope" itemtype="https://schema.org/WPFooter">
-      <a href="/kontakt/">Kontakt</a> - <a href="/polityka-prywatnosci/">Polityka prywatności</a> - <a
-        href="/regulamin-strony/">Regulamin
-        strony</a> / SardynkiBiznesu.pl © 2021
+      <?php if (is_active_sidebar('footer_bottom_bar')) { ?>
+        <?php dynamic_sidebar('footer_bottom_bar'); ?>
+      <?php } ?>
     </div>
   </div>
 </footer>
