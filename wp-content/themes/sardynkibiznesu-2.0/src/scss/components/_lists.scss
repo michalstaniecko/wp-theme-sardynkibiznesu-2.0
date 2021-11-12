@@ -1,0 +1,18 @@
+ul {
+  .page-template-boxed-without-sidebar & {
+    list-style: none;
+
+    li {
+      position: relative;
+
+      &::before {
+        content: '\f00c';
+        font-family: FontAwesome;
+        color: green;
+        position: absolute;
+        right: 100%;
+        margin-right: 4px;
+      }
+    }
+  }
+}

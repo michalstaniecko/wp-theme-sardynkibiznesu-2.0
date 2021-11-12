@@ -29,7 +29,8 @@ mix.js('src/js/index.js', '')
         /button-outline/,
         /aligncenter/,
         /alignleft/,
-        /alignright/
+        /alignright/,
+        /page-template-boxed-without-sidebar/
       ]
     }
   })
