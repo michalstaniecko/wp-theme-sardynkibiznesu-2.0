@@ -1,0 +1,1 @@
+import './prevent-click'

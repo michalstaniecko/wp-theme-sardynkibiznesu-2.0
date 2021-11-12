@@ -8,3 +8,15 @@ body .alignright, .entry-content-wrapper a:hover .alignright {
 .wp-caption.aligncenter {
   text-align: center;
 }
+
+
+.aligncenter {
+  text-align: center;
+}
+
+body .alignleft, .entry-content-wrapper a:hover .alignleft {
+  float: left;
+  margin: 4px 10px 0 0;
+  display: block;
+  position: relative;
+}

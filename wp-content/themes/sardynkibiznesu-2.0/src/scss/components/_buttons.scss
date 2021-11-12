@@ -36,3 +36,27 @@
     }
   }
 }
+
+.button-outline {
+  padding: 9px 22px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  border-radius: 0;
+  background-color: rgba(#c00, 0);
+  color: #c00;
+  border-color: #c00;
+  border-width: 2px;
+  border-style: solid;
+  text-decoration: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  transition: all 0.2s ease;
+
+  &:hover {
+    text-decoration: none;
+    background-color: rgba(#c00, 1);
+    color: #fff;
+    border-color: #c00;
+  }
+}

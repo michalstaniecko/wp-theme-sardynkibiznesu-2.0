@@ -25,9 +25,16 @@ mix.js('src/js/index.js', '')
         /wpdcom/,
         /cmsmasters/,
         /wp-caption/,
-        /wp-block-image/
+        /wp-block-image/,
+        /button-outline/,
+        /aligncenter/,
+        /alignleft/,
+        /alignright/
       ]
     }
   })
   .setResourceRoot('../assets/')
   .setPublicPath('assets')
+
+mix.sass('src/scss/admin.scss', '')
+mix.js('src/js/admin.js', '')

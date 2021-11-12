@@ -79,6 +79,14 @@ h3 {
 
 .article__content {
   color: #666;
+
+  .page__content--boxed-without-sidebar & {
+    padding: 30px;
+
+    @include media-breakpoint-down(sm) {
+      padding: 10px;
+    }
+  }
 }
 
 .entry-content {
