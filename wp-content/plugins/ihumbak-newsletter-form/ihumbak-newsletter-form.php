@@ -24,3 +24,8 @@ function plugin_theme_scripts() {
     'ajax_url'		=> admin_url('admin-ajax.php')
   ) );
 }
+
+function ihumbak_newsletter_form_load_textdomain() {
+  load_plugin_textdomain( 'ihumbak-newsletter-form', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'init', 'ihumbak_newsletter_form_load_textdomain' );

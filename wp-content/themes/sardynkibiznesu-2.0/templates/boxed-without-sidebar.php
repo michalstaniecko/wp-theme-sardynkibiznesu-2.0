@@ -13,18 +13,8 @@ get_header(); ?>
           <article class="article" itemscope="itemscope" itemtype="https://schema.org/BlogPosting"
                    itemprop="blogPost">
             <div class="row">
-              <?php if (!empty(get_the_post_thumbnail_url(null, 'full'))): ?>
-                <div class="col-12">
-                  <a href="<?php echo get_the_post_thumbnail_url(null, 'full'); ?>" class="article__image-wrapper">
-                    <img
-                      src="<?php echo get_the_post_thumbnail_url(null, 'full'); ?>"
-                      class="article__image"
-                      alt=""
-                    />
-                  </a>
-                </div>
-              <?php endif; ?>
               <div class="col-12">
+                <h1 class="fw-bold text-center p-3 px-md-5 pt-md-5"><?php the_title(); ?></h1>
                 <div class="entry-content article__content" itemprop="text">
                   <?php the_content(); ?>
                 </div>

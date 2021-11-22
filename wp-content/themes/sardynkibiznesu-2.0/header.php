@@ -27,7 +27,7 @@
             <div class="col-auto ms-auto navigation">
               <nav class="navigation__nav ">
                 <?php wp_nav_menu(array(
-                  "menu" => 'primary_menu',
+                  "theme_location" => 'primary_menu',
                   "container_class" => "navigation__nav-container"
                 )); ?>
                 <div class="header__search">
