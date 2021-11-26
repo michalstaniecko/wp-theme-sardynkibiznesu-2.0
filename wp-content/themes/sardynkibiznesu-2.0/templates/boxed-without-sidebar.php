@@ -5,8 +5,8 @@
  */
 
 get_header(); ?>
-  <div class="page__wrapper">
-    <div class="container-fluid container-fluid-stop page__content page__content--boxed-without-sidebar">
+  <div class="page__wrapper page__content--boxed-without-sidebar">
+    <div class="container-fluid container-fluid-stop page__content ">
       <main class="main" itemprop="mainContentOfPage" itemscope="itemscope"
             itemtype="https://schema.org/Blog">
         <?php if (have_posts()): while (have_posts()): the_post(); ?>
@@ -23,7 +23,7 @@ get_header(); ?>
           </article>
         <?php endwhile; endif; ?>
         <?php if (comments_open()): ?>
-          <div class="mt-5">
+          <div class="mt-5 px-5">
             <div class="h3" style="color: #800000"><?php _e('Leave comment', 'sb'); ?></div>
             <?php comments_template(); ?>
           </div>

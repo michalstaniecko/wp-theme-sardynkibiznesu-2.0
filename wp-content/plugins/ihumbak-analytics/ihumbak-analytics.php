@@ -70,3 +70,8 @@ function convertiser_verification() {
     echo '<!-- convertiser-verification: b55eaaf8ee0ce6ea653defdd0c523d39fd047abc -->';
   }
 }
+
+add_action('wp_head', 'shareasale_verification');
+function shareasale_verification() {
+  echo '<!-- A9768BAF-D66E-43D3-8973-0C2C9B224FF0 -->';
+}
