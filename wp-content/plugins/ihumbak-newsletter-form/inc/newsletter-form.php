@@ -58,8 +58,8 @@ function single_newsletter_form($content) {
                      required/>
             </div>
           </div>
-
-          <input type="hidden" value="VjKON" name="campaignId"/>
+          <input type="hidden" name="thankyou_url" value="<?php echo get_field('getresponse_default_thankyou','options') ?>"/>
+          <input type="hidden" value="<?php echo get_field('getresponse_default_token', 'options') ?>" name="campaignId"/>
           <div class="input input-submit">
             <button type="submit" class="button w-100"><?php _e('Zapisz', 'ihumbak-newsletter-form') ?></button>
           </div>

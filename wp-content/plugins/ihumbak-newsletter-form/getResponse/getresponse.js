@@ -9,7 +9,8 @@
       },
       success: function (o) {
         if (!o['httpStatus']) {
-          window.location = "https://sardynkibiznesu.pl/zapis-na-newsletter/podziekowanie/";
+          var thankyou_url = userForm.find(item => item.name === 'thankyou_url').value
+          window.location = thankyou_url;
         } else {
           $('.single-newsletter-form-modal .notification.error').modal('show');
 
