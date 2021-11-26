@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html <?php language_attributes(); ?>>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -18,10 +18,7 @@
           <div class="row">
             <div class="col d-flex align-items-center">
               <a href="/">
-                <img alt="Sardynki Biznesu" class="header__logo"
-                     width="341"
-                     height="60"
-                  src="https://sardynkibiznesu.pl/wp-content/uploads/2020/11/logo_sardynki_biznesu-e1604254608339.png"/>
+                <?php echo sb_get_the_logo(); ?>
               </a>
             </div>
             <div class="col-auto ms-auto navigation">
