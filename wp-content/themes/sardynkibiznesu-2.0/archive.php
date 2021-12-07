@@ -57,7 +57,7 @@ global $wp_query;
                           href="<?php the_permalink() ?>#respond"
                           class="comments-link"><?php printf(_n('%s comment', '%s comments', get_comments_number(), 'sb'), number_format_i18n(get_comments_number())); ?></a></span><span
                         class="text-sep text-sep-comment">/</span><span
-                        class="blog-categories minor-meta"><?php _e('in', 'sb'); ?><?php the_category(', '); ?></span><span
+                        class="blog-categories minor-meta"><?php _e('in', 'sb'); ?> <?php the_category(', '); ?></span><span
                         class="text-sep text-sep-cat">/</span><span
                         class="blog-author minor-meta"><?php _e('Author', 'sb'); ?> <span
                           class="entry-author-link"><span class="vcard author"><span class="fn"><a
