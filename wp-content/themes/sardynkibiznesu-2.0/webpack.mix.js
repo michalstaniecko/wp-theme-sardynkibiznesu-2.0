@@ -30,7 +30,9 @@ mix.js('src/js/index.js', '')
         /aligncenter/,
         /alignleft/,
         /alignright/,
-        /page-template-boxed-without-sidebar/
+        /page-template-boxed-without-sidebar/,
+        /btn/,
+        /btn-light/
       ]
     }
   })

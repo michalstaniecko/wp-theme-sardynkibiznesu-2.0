@@ -24,9 +24,10 @@ add_action( 'wp_enqueue_scripts', 'ihumbak_anchor_assets' );
 
 function ihumbak_anchor_shortcode($atts, $content) {
   $a = shortcode_atts(array(
-    'type' => 'h2'
+    'type' => 'h2',
+    'align' => 'left'
   ), $atts);
-  return '<'.$a['type'].' class="ihumbak-anchor">'.$content.'</'.$a['type'].'>';
+  return '<'.$a['type'].' class="ihumbak-anchor text-'.$a['align'].'">'.$content.'</'.$a['type'].'>';
 }
 
 add_shortcode('ihumbak_anchor', 'ihumbak_anchor_shortcode');
