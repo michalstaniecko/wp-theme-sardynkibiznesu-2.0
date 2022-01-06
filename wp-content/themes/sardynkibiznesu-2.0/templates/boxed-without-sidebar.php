@@ -5,7 +5,7 @@
  */
 
 get_header(); ?>
-  <div class="page__wrapper page__content--boxed-without-sidebar">
+  <div class="page__wrapper page__content--boxed-without-sidebar page__content--with-background">
     <div class="container-fluid container-fluid-stop page__content ">
       <main class="main" itemprop="mainContentOfPage" itemscope="itemscope"
             itemtype="https://schema.org/Blog">
