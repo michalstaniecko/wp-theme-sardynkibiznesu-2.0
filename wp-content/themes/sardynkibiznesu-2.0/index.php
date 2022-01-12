@@ -22,11 +22,8 @@ global $wp_query;
                     <img
                       src="<?php echo get_the_post_thumbnail_url(null, 'full'); ?>"
                       class="article__image"
-                      alt=""
-                      srcset="<?php echo get_the_post_thumbnail_url(null, 'article-mobile'); ?> 728w,
-<?php echo get_the_post_thumbnail_url(null, 'article-tablet'); ?> 627w,
-<?php echo get_the_post_thumbnail_url(null, 'article-desktop'); ?> 240w"
-                      sizes="(min-width:992px) 10vw, 100vw"
+                      alt="<?php the_title(); ?>"
+                      srcset="<?php echo wp_get_attachment_image_srcset(get_post_thumbnail_id()) ?>"
                     />
                   </a>
                 </div>
