@@ -25,11 +25,14 @@ if (!empty($block['align'])) {
 
 $label = get_field('sb-block__button--label');
 $url = get_field('sb-block__button--url')[0];
+$url_outer = get_field('sb-block__url-outer');
+
+$url = $url_outer ?: get_permalink($url);
 
 ?>
 
 <p class="sb-block <?php echo esc_attr($className); ?>">
-  <a href="<?php echo !empty($url) ? get_permalink($url) : '#' ?>" class="button-outline">
+  <a href="<?php echo $url ?>" class="button-outline" rel="nofollow">
     <?php echo $label ?: 'Sprawdź zawartość kursu'; ?>
   </a>
 </p>
