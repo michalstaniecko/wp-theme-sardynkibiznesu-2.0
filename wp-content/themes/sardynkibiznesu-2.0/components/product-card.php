@@ -47,16 +47,13 @@ $image_alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
     <div class="product-card__title">
       <a href="<?php echo $button ?>" title="<?php echo $title ?>"><?php echo $title ?></a>
     </div>
-    <div class="product-card__category">
-      <?php _e('Kategoria', 'sb') ?>:
-      <a href="<?php echo $category['url'] ?>"><?php echo $category['name'] ?></a>
-    </div>
     <div class="product-card__description">
       <?php echo $description ?>
     </div>
   </div>
   <div class="product-card__footer">
     <a href="<?php echo $button ?>" title="<?php echo $title ?>"
+       target="_blank"
        class="button w-100">
       <?php _e('Zobacz więcej', 'sb') ?>
     </a>

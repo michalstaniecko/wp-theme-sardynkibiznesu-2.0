@@ -9,7 +9,7 @@ function sb_button($atts) {
   ), $atts);
   ob_start();
   ?>
-  <a href="<?php echo $a['url'] ?>" class="button-outline" rel="nofollow">
+  <a href="<?php echo $a['url'] ?>" target="_blank" class="button-outline" rel="nofollow">
     <?php echo $a['label'] ?: 'Sprawdź zawartość kursu'; ?>
   </a>
   <?php
