@@ -32,7 +32,7 @@ $url = $url_outer ?: get_permalink($url);
 ?>
 
 <p class="sb-block <?php echo esc_attr($className); ?>">
-  <a href="<?php echo $url ?>" class="button-outline" rel="nofollow" target="_blank">
+  <a href="<?php echo $url ?>" class="button" rel="nofollow" target="_blank">
     <?php echo $label ?: 'Sprawdź zawartość kursu'; ?>
   </a>
 </p>

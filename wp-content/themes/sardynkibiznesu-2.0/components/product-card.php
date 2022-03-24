@@ -12,7 +12,7 @@
 
 $default_args = array(
   'title'       => 'Sardynki Biznesu',
-  'image_id'    => 250,
+  'image'       => 250,
   'label'       => array(
     'text'       => null,
     'background' => '#90CBBF',
@@ -28,19 +28,21 @@ $default_args = array(
 
 extract(wp_parse_args($args, $default_args));
 
-$image_src = wp_get_attachment_image_src($image_id, 'product-card');
-$image_alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
+$image_src = wp_get_attachment_image_src($image, 'product-card');
+$image_alt = get_post_meta($image, '_wp_attachment_image_alt', true);
 
 ?>
 
 <div class="product-card">
   <a class="product-card__image"
      href="<?php echo $button ?>">
-    <img src="<?php echo $image_src[0] ?>"
-         alt="<?php echo $image_alt ?>"
-         width="<?php echo $image_src[1] ?>"
-         height="<?php echo $image_src[2] ?>"
-    />
+    <?php if (!empty($image)): ?>
+      <img src="<?php echo $image_src[0] ?>"
+           alt="<?php echo $image_alt ?>"
+           width="<?php echo $image_src[1] ?>"
+           height="<?php echo $image_src[2] ?>"
+      />
+    <?php endif; ?>
   </a>
   <div class="product-card__body">
     <?php get_template_part('components/product-card/label', '', $label) ?>
