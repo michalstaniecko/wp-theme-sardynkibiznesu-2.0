@@ -20,3 +20,8 @@ function sb_get_the_logo() {
   $logo_html = sprintf($logo_html, $logo_src[0], $logo_src[1], $logo_src[2], get_bloginfo('name'));
   return $logo_html;
 }
+
+add_action('wp_head', 'sb_custom_meta_tags');
+function sb_custom_meta_tags() {
+  echo get_field('custom_head_tags', 'options');
+}
