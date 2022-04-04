@@ -15,11 +15,13 @@ get_header(); ?>
                    itemprop="blogPost">
             <h1 class="fw-bold text-center p-4"><?php the_title(); ?></h1>
             <div class="row mb-n4">
-              <?php foreach ($cards as $card): ?>
-                <div class="col-sm-6 col-lg-4 pb-4">
-                  <?php get_template_part('components/product-card', '', $card); ?>
-                </div>
-              <?php endforeach; ?>
+              <?php if (!empty($cards)): ?>
+                <?php foreach ($cards as $card): ?>
+                  <div class="col-sm-6 col-lg-4 pb-4">
+                    <?php get_template_part('components/product-card', '', $card); ?>
+                  </div>
+                <?php endforeach; ?>
+              <?php endif; ?>
             </div>
           </article>
         <?php endwhile; endif; ?>
