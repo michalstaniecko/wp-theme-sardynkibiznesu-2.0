@@ -2,6 +2,10 @@ let mix = require('laravel-mix')
 let path = require('path')
 require('laravel-mix-purgecss')
 
+if (!mix.inProduction()) {
+  mix.sourceMaps(false, 'source-map')
+}
+
 
 mix.js('src/js/index.js', '')
   .sass('src/scss/main.scss', '')

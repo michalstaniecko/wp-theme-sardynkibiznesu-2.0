@@ -115,7 +115,9 @@ h3 {
 
   ul {
     li {
-      color: #810000;
+      &::marker {
+        color: $red;
+      }
     }
   }
 }

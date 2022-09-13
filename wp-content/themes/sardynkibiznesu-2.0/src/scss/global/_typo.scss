@@ -20,3 +20,9 @@ a {
 b, strong {
   font-weight: 700;
 }
+
+.widget-about {
+  a {
+    color: $red !important;
+  }
+}
