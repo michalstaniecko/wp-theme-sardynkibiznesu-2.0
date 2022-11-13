@@ -8,6 +8,7 @@ function sb_facebook_pixel() {
   ?>
   <!-- Meta Pixel Code -->
   <script>
+    var eventID = Date.now().toString() + "<?php echo md5(uniqid(rand(), true)) ?>"
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
       n = f.fbq = function () {
@@ -27,7 +28,19 @@ function sb_facebook_pixel() {
     }(window, document, 'script',
       'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '<?php echo $code ?>');
-    fbq('track', 'PageView');
+    fbq('track', 'PageView', {}, {eventID: eventID});
+    window.addEventListener('load', function () {
+      jQuery.ajax({
+        method: "post",
+        dataType: "json",
+        url: '<?php echo admin_url('admin-ajax.php') ?>',
+        data: {
+          action: 'fcapi_page_view',
+          sourceUrl: window.location.href,
+          eventID: eventID
+        }
+      })
+    })
   </script>
   <noscript><img height="1" width="1" style="display:none"
                  src="https://www.facebook.com/tr?id=<?php echo $code ?>&ev=PageView&noscript=1"
@@ -69,5 +82,23 @@ function sb_google_analytics() {
     });
   </script>
 
+  <meta name="ir-site-verification-token" value="240681581"/>
   <?php
+}
+
+
+add_action('wp_head', 'convertiser_verification');
+if (!function_exists('convertiser_verification')) {
+  function convertiser_verification() {
+    if (is_front_page() || is_home()) {
+      echo '<!-- convertiser-verification: b55eaaf8ee0ce6ea653defdd0c523d39fd047abc -->';
+    }
+  }
+}
+
+add_action('wp_head', 'shareasale_verification');
+if (!function_exists('shareasale_verification')) {
+  function shareasale_verification() {
+    echo '<!-- A9768BAF-D66E-43D3-8973-0C2C9B224FF0 -->';
+  }
 }
