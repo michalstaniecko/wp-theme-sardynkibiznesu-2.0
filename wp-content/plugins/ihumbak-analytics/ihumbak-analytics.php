@@ -16,6 +16,7 @@ function ga_code() {
   ?>
   <!-- Facebook Pixel Code -->
   <script>
+    var eventID = Date.now().toString() + "<?php echo md5(uniqid(rand(), true)) ?>"
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return;
       n = f.fbq = function () {
@@ -35,7 +36,19 @@ function ga_code() {
     }(window, document, 'script',
       'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '2076220602684583');
-    fbq('track', 'PageView');
+    fbq('track', 'PageView', {}, {eventID: eventID});
+    window.addEventListener('load', function() {
+      jQuery.ajax({
+        method: "post",
+        dataType:"json",
+        url: '<?php echo admin_url('admin-ajax.php') ?>',
+        data: {
+          action: 'fcapi_page_view',
+          sourceUrl: window.location.href,
+          eventID: eventID
+        }
+      })
+    })
   </script>
 
   <!-- End Facebook Pixel Code -->
