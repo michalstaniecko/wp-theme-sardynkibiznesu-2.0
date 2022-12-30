@@ -8,39 +8,48 @@ function sb_facebook_pixel() {
   ?>
   <!-- Meta Pixel Code -->
   <script>
-    var eventID = Date.now().toString() + "<?php echo md5(uniqid(rand(), true)) ?>"
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return;
-      n = f.fbq = function () {
-        n.callMethod ?
-          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-      };
-      if (!f._fbq) f._fbq = n;
-      n.push = n;
-      n.loaded = !0;
-      n.version = '2.0';
-      n.queue = [];
-      t = b.createElement(e);
-      t.async = !0;
-      t.src = v;
-      s = b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t, s)
-    }(window, document, 'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '<?php echo $code ?>');
-    fbq('track', 'PageView', {}, {eventID: eventID});
-    window.addEventListener('load', function () {
-      jQuery.ajax({
-        method: "post",
-        dataType: "json",
-        url: '<?php echo admin_url('admin-ajax.php') ?>',
-        data: {
-          action: 'fcapi_page_view',
-          sourceUrl: window.location.href,
-          eventID: eventID
-        }
-      })
-    })
+    function Sb_Facebook_Pixel() {
+
+      this.execute = function () {
+        console.log('execute Sb_Facebook_Pixel')
+        var eventID = Date.now().toString() + "<?php echo md5(uniqid(rand(), true)) ?>"
+        !function (f, b, e, v, n, t, s) {
+          if (f.fbq) return;
+          n = f.fbq = function () {
+            n.callMethod ?
+              n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n;
+          n.loaded = !0;
+          n.version = '2.0';
+          n.queue = [];
+          t = b.createElement(e);
+          t.async = !0;
+          t.src = v;
+          s = b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '<?php echo $code ?>');
+        fbq('track', 'PageView', {}, {eventID: eventID});
+        window.addEventListener('load', function () {
+          jQuery.ajax({
+            method: "post",
+            dataType: "json",
+            url: '<?php echo admin_url('admin-ajax.php') ?>',
+            data: {
+              action: 'fcapi_page_view',
+              sourceUrl: window.location.href,
+              eventID: eventID
+            }
+          })
+        })
+      }
+    }
+
+    window.sb_facebook_pixel = new Sb_Facebook_Pixel()
+
   </script>
   <noscript><img height="1" width="1" style="display:none"
                  src="https://www.facebook.com/tr?id=<?php echo $code ?>&ev=PageView&noscript=1"
@@ -65,21 +74,31 @@ function sb_google_analytics() {
   ?>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script>
-    window.dataLayer = window.dataLayer || [];
+    function Sb_Google_Analytics() {
 
-    function gtag() {
-      dataLayer.push(arguments);
+      this.execute = function () {
+        console.log('execute sb_google_analytics')
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', '<?php echo $code ?>');
+        setTimeout(function () {
+          gtag('event', 'Over 10 seconds', {
+
+            'event_category': 'NoBounce',
+          });
+        });
+      }
+
     }
 
-    gtag('js', new Date());
+    window.sb_google_analytics = new Sb_Google_Analytics()
 
-    gtag('config', '<?php echo $code ?>');
-    setTimeout(function () {
-      gtag('event', 'Over 10 seconds', {
-
-        'event_category': 'NoBounce',
-      });
-    });
   </script>
 
   <meta name="ir-site-verification-token" value="240681581"/>

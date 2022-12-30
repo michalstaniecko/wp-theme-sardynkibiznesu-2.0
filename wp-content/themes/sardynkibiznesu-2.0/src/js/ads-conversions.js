@@ -9,9 +9,12 @@ export default class AdsConversions {
   ]
 
   constructor() {
-    const links = document.querySelectorAll('a')
+    this.links = document.querySelectorAll('a')
+  }
 
-    links.forEach(item => {
+  execute() {
+    console.log('execute ads conversion')
+    this.links.forEach(item => {
       this.conversions.forEach(conversion => {
         if (item.getAttribute('href') == conversion.url) {
           item.addEventListener('click', (e) => {

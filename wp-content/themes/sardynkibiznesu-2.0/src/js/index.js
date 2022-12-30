@@ -4,8 +4,10 @@ import './scroll-to-top'
 
 //import './photoswipe'
 
-import AdsConversions from "./ads-conversions";
+import GDPR from "./gdpr";
+//import AdsConversions from "./ads-conversions";
 
 window.addEventListener('load', () => {
-  new AdsConversions()
+  new GDPR()
+  //new AdsConversions()
 })

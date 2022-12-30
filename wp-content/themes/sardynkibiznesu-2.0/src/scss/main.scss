@@ -10,6 +10,9 @@
 @import "~bootstrap/scss/utilities";
 @import "~bootstrap/scss/utilities/api";
 @import "~bootstrap/scss/type";
+@import "~bootstrap/scss/offcanvas";
+@import "~bootstrap/scss/accordion";
+@import "~bootstrap/scss/transitions";
 @import "~photoswipe/src/css/main";
 
 @import "global/fonts";
@@ -37,3 +40,4 @@
 @import "components/scroll-to-top";
 @import "components/lists";
 @import "components/product-card";
+@import "components/gdpr";
