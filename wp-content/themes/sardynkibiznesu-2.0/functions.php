@@ -12,4 +12,5 @@ include_once get_stylesheet_directory() . '/inc/acf.php';
 include_once get_stylesheet_directory() . '/inc/acf-blocks.php';
 include_once get_stylesheet_directory() . '/inc/shortcodes.php';
 include_once get_stylesheet_directory() . '/inc/gdpr.php';
+include_once get_stylesheet_directory() . '/inc/article-hooks.php';
 include_once get_stylesheet_directory() . '/cmsmasters-shortcodes/shortcodes.php';
