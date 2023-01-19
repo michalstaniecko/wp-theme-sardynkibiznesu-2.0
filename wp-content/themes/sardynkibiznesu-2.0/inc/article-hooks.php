@@ -4,8 +4,6 @@ add_filter('the_content', 'sb_about_author', 1);
 function sb_about_author($content) {
   global $post;
 
-  if (!is_super_admin()) return $content;
-
   if (!is_single()) return $content;
 
   $author_id = get_post_field('post_author', $post->ID);
