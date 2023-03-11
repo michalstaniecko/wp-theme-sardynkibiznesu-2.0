@@ -86,7 +86,9 @@ export default class GDPR {
   }
 
   displayGDPR() {
-    this.offcanvas = new Offcanvas(this.gdprOffcanvas)
+    this.offcanvas = new Offcanvas(this.gdprOffcanvas, {
+      backdrop: 'static'
+    })
     this.offcanvas.show()
   }
 

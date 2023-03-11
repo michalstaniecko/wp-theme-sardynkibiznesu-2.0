@@ -36,7 +36,8 @@ mix.js('src/js/index.js', '')
         /alignright/,
         /page-template-boxed-without-sidebar/,
         /btn/,
-        /btn-light/
+        /btn-light/,
+        /modal-backdrop/
       ]
     }
   })
