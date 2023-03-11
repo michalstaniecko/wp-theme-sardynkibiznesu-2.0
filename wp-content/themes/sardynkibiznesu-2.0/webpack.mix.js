@@ -37,7 +37,10 @@ mix.js('src/js/index.js', '')
         /page-template-boxed-without-sidebar/,
         /btn/,
         /btn-light/,
-        /modal-backdrop/
+        /modal-backdrop/,
+        /offcanvas-backdrop/,
+        /fade/,
+        /show/
       ]
     }
   })
