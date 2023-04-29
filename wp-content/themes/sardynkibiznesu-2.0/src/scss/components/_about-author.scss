@@ -1,14 +1,40 @@
 .about-author {
-  border-top: 1px solid #919191;
-  padding: 16px 0 24px;
+  padding: 24px 24px 24px 70px;
   margin-bottom: 24px;
+  margin-top: 24px;
+  background-color: #efefef;
+  position: relative;
+  margin-left: 48px;
+  min-height: 148px;
+  max-width: 620px;
 }
 
 .about-author__title {
-  margin-bottom: 8px;
-  color: $red;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.about-author__meta-title {
+  font-size: 12px;
 }
 
 .about-author__description {
   font-size: 14px;
+}
+
+.about-author__image {
+  position: absolute;
+  left: -48px;
+  top: 24px;
+  img {
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+}
+
+.about-author__links {
+  margin-top: 8px;
+  a {
+    margin-right: 0.5rem;
+  }
 }
