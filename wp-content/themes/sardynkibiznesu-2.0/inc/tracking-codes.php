@@ -63,6 +63,13 @@ add_action('wp_enqueue_scripts', 'sb_google_analytics_script');
 function sb_google_analytics_script() {
   $code = get_field('google_analytics', 'options');
   if (empty($code)) return false;
+  wp_enqueue_script('ga-script', 'https://www.googletagmanager.com/gtag/js?id=' . $code, false, false, true);
+}
+
+add_action('wp_enqueue_scripts', 'sb_gtm_script');
+function sb_gtm_script() {
+  $code = get_field('google_tag_manager', 'options');
+  if (empty($code)) return false;
   wp_enqueue_script('gtm-script', 'https://www.googletagmanager.com/gtag/js?id=' . $code, false, false, true);
 }
 
