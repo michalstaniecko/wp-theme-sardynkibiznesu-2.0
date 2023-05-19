@@ -13,6 +13,7 @@ function sardynki_getresponse_form($atts, $content)
     'thankyou_url' =>'https://sardynkibiznesu.pl/zapis-na-newsletter/podziekowanie/',
     'baner' => false,
     'submit' => "Zapisz",
+    'campaignId' => get_field('mailerlite_default_token', 'options'),
     'campaign_token' => get_field('getresponse_default_token', 'options'),
     'image' => 'https://sardynkibiznesu.pl/wp-content/uploads/2020/11/strefa-sardynek-baner.jpg'
   ), $atts);

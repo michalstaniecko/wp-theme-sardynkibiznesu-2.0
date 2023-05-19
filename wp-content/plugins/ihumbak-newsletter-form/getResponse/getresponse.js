@@ -8,7 +8,7 @@
         userForm: userForm
       },
       success: function (o) {
-        if (!o['httpStatus']) {
+        if (!o['httpStatus'] || o['success'] === 'ok') {
           var thankyou_url = userForm.find(item => item.name === 'thankyou_url').value
           window.location = thankyou_url;
         } else {

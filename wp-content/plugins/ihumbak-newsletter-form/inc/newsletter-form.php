@@ -32,6 +32,14 @@ function single_newsletter_form_modals() {
 }
 
 function single_newsletter_form($content) {
+  switch (get_field('default_newsletter', 'options')) {
+    case 'getresponse':
+      $campaignId = get_field('getresponse_default_token', 'options');
+      break;
+    case 'mailerlite':
+      $campaignId = get_field('mailerlite_default_token', 'options');
+      break;
+  }
   ob_start();
   ?>
   <div class="single-newsletter-form">
@@ -40,7 +48,8 @@ function single_newsletter_form($content) {
         <h3 class="title-normal mt-0"
             style="color: #993300"><?php _e('Podobał Ci się ten artykuł?', 'ihumbak-newsletter-form'); ?></h3>
         <p
-          style="font-size: 14px; font-weight: 400; line-height: 21px;"><?php _e('Zapisz się do newslettera, otrzymuj informacje o nowych artykułach, odbierz dostęp do ponad 60 wzorów dokumentów, szablonów, grafik i Exceli.', 'ihumbak-newsletter-form'); ?></p>
+          style="font-size: 14px; font-weight: 400; line-height: 21px;"><?php _e('Zapisz się do newslettera, otrzymuj informacje o nowych artykułach, odbierz dostęp do ponad 60 wzorów dokumentów, szablonów, grafik i Exceli.',
+                                                                                 'ihumbak-newsletter-form'); ?></p>
       </div>
       <div class="col-md-6">
         <form action="#" method="post" class="getresponse-form mb-0">
@@ -58,8 +67,10 @@ function single_newsletter_form($content) {
                      required/>
             </div>
           </div>
-          <input type="hidden" name="thankyou_url" value="<?php echo get_field('getresponse_default_thankyou','options') ?>"/>
-          <input type="hidden" value="<?php echo get_field('getresponse_default_token', 'options') ?>" name="campaignId"/>
+          <input type="hidden" name="thankyou_url"
+                 value="<?php echo get_field('getresponse_default_thankyou', 'options') ?>"/>
+          <input type="hidden" value="<?php echo $campaignId ?>"
+                 name="campaignId"/>
           <div class="input input-submit">
             <button type="submit" class="button w-100"><?php _e('Zapisz', 'ihumbak-newsletter-form') ?></button>
           </div>
