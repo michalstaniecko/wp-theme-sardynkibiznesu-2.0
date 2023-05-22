@@ -6,10 +6,15 @@ add_action('wp_ajax_add_to_get_response', 'ih_add_subscription');
 add_action('wp_ajax_nopriv_add_to_get_response', 'ih_add_subscription');
 
 function ih_add_subscription() {
-  if (is_super_admin() || is_admin()) {
-    add_to_mailer_lite();
-  } else {
-    add_to_get_response();
+  switch (get_field('default_newsletter', 'options')) {
+    case 'mailerlite':
+      add_to_mailer_lite();
+      break;
+    case 'getresponse':
+      add_to_get_response();
+      break;
+    default:
+      break;
   }
 }
 
@@ -22,15 +27,16 @@ function newsletterMapUserForm($formData) {
 
 function add_to_mailer_lite() {
   $newsletter = new NewsletterMailerLite(get_field('newsletter_api_key', 'options'));
-  $userForm = $_POST['userForm'];
-  foreach ($userForm as $value) {
-    $contact[$value['name']] = $value['value'];
-  }
+
   $contact = newsletterMapUserForm($_POST['userForm']);
   try {
     $newsletter->subscribeEmail($contact['email'], $contact['name'], $contact['campaignId']);
   } catch (Exception $error) {
-    wp_send_json_error(array( 'mailerlite' => 'ok', 'groups' => $error ));
+    wp_send_json_error(array(
+                         'mailerlite' => 'ok',
+                         'error'      => $error->getMessage(),
+                         'groups'     => $error
+                       ));
   }
   wp_send_json_success(array( 'mailerlite' => 'ok' ));
 }
