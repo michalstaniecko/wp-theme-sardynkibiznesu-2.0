@@ -18,7 +18,7 @@ function gdpr_settings_bar() {
             ruchu i skuteczności działań), reklamowych (personalizacji reklam) oraz funkcjonalnych (prawidłowego
             działania strony). W każdej chwili możesz zdecydować, które kategorie plików cookies chcesz wyłączyć. Więcej
             informacji o zakresie przetwarzania danych oraz Twoich uprawnieniach znajdziesz w naszej <a
-              href="/polityka-prywatnosci" target="_blank">plikach cookies</a> .</p>
+              href="/polityka-prywatnosci" target="_blank">polityce prywatności</a>.</p>
           <div class="gdpr">
             <div class="gdpr__accordion-collapse accordion-collapse collapse">
               <div class="gdpr__checkbox-container">
