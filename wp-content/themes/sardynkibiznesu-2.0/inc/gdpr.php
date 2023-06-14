@@ -7,8 +7,7 @@ function gdpr_settings_bar() {
        id="offcanvasGdpr"
        aria-labelledby="offcanvasGdprLabel">
     <div class=" text-center pt-3">
-      <h5 class="offcanvas-title mb-0" id="offcanvasBottomLabel"><?php _e('STRONA WYKORZYSTUJE PLIKI COOKIE', 'sb'); ?>
-        .</h5>
+      <h5 class="offcanvas-title mb-0" id="offcanvasBottomLabel"><?php _e('STRONA WYKORZYSTUJE PLIKI COOKIE', 'sb'); ?></h5>
     </div>
     <div class="offcanvas-body pt-2 small">
       <div class="row">
@@ -61,10 +60,10 @@ function gdpr_settings_bar() {
                 <a href="#" class="gdpr__settings-toggler"><i class="fa fa-gear"></i> Pokaż ustawienia cookies</a>
               </div>
               <div class="col-auto my-2 my-lg-0">
-                <button class="btn btn-outline-danger gdpr__submit-selected d-none">Zatwierdź wybrane</button>
+                <button class="btn btn-outline-danger gdpr__submit-selected d-none">Akceptuję wybrane</button>
               </div>
               <div class="col-auto my-2 my-lg-0">
-                <button class="btn btn-danger gdpr__submit-all">Zatwierdź wszystkie</button>
+                <button class="btn btn-danger gdpr__submit-all">Akceptuję wszystkie</button>
               </div>
             </div>
           </div>
