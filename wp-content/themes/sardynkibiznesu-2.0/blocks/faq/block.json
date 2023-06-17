@@ -1,14 +1,18 @@
 {
   "name": "sardynkibiznesu20/faq",
-  "title": "FAQ",
+  "title": "FAQ Sardynki Biznesu",
   "description": "FAQ block.",
-  "style": [ "file:./faq.css" ],
+  "style": [
+    "file:./faq.css"
+  ],
   "category": "text",
   "icon": "admin-comments",
-  "keywords": ["faq"],
+  "keywords": [
+    "faq"
+  ],
   "acf": {
     "mode": "preview",
     "renderTemplate": "faq.php"
   },
-  "align": "full"
+  "script": "faq"
 }

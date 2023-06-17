@@ -8,6 +8,8 @@ function sb_theme_enqueue() {
   wp_enqueue_style('main', get_stylesheet_directory_uri().'/assets/main.css', false);
   wp_enqueue_style('cp-popup', plugins_url('convertpro/assets/modules/css').'/cp-popup.min.css', false);
 
+  wp_register_script('faq', get_stylesheet_directory_uri() .'/blocks/faq/faq.js', false, false, true);
+
 }
 
 add_action('admin_enqueue_scripts', 'sb_admin_enqueue');
