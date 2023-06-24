@@ -29,11 +29,12 @@
 
 .faq__question {
     margin-bottom: 0;
-    font-size: 19px;
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 .faq__answer {
-    font-size: 16px;
+    font-size: 14px;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
 }
@@ -51,6 +52,7 @@ h2 a.faq__link {
 .faq__link-icon {
     rotate: 0;
     transition: rotate 0.2s ease;
+    margin-top: 4px;
 
     .faq__item--active & {
         rotate: 180deg;
