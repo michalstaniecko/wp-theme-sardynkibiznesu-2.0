@@ -18,16 +18,26 @@ $questions = get_field('faq_questions');
 ?>
 
 <div class="faq">
-  <div class="h1 faq__title"><?php echo $title ?></div>
+  <h2 class="h1 ihumbak-anchor faq__title"><?php echo $title ?></h2>
   <div class="faq__list">
-    <?php foreach ($questions as $index => $item): ?>
-      <div class="faq__item">
-        <div class="h2 faq__question"><a class="faq__link" href="#" data-target="question-<?php echo $index ?>"><?php echo $item['question']; ?></a></div>
-        <div class="faq__answer" id="question-<?php echo $index ?>">
-          <div>
-            <?php echo $item['answer']; ?>
+    <?php foreach (array_chunk($questions, count($questions) / 2) as $questions_columns): ?>
+      <div class="faq__column">
+        <?php foreach ($questions_columns as $index => $item): ?>
+          <div class="faq__item">
+            <div class="h2 faq__question">
+              <a class="faq__link" href="#"
+                                             data-target="question-<?php echo $index ?>">
+                <?php echo $item['question']; ?>
+                <i class="fa fa-angle-double-down faq__link-icon"></i>
+              </a>
+            </div>
+            <div class="faq__answer" id="question-<?php echo $index ?>">
+              <div>
+                <?php echo $item['answer']; ?>
+              </div>
+            </div>
           </div>
-        </div>
+        <?php endforeach; ?>
       </div>
     <?php endforeach; ?>
   </div>
