@@ -4,10 +4,13 @@ class NewsletterMailerLite extends Newsletter {
 
   private \MailerLite\MailerLite $mailerLite;
 
+  private string $defaultGroupId;
+
   public function __construct($api_key) {
     parent::__construct($api_key);
 
     $this->mailerLite = new \MailerLite\MailerLite([ "api_key" => $api_key ]);
+    $this->defaultGroupId = get_field('mailerlite_default_token', 'options');
   }
 
   protected function includes() {

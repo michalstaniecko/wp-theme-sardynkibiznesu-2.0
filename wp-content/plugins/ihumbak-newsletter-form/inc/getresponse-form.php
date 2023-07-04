@@ -55,7 +55,7 @@ function sardynki_getresponse_form($atts, $content)
       </div>
       <input type="hidden"
              name="campaign_token"
-             value="<?= $a['campaign_token'] ?>"/>
+             value="<?= $a['campaignId'] ?>"/>
       <input
         type="hidden" name="start_day" value="0"/>
       <input type="hidden" name="thankyou_url" value="<?= $a['thankyou_url'] ?>"/>
