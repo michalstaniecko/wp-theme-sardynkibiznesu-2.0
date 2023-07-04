@@ -68,4 +68,8 @@
 
   })
 
+  $('.single-newsletter-form-modal-button-close').on('click', function() {
+    $('.single-newsletter-form-modal .notification.error').modal('hide');
+  })
+
 })(jQuery);

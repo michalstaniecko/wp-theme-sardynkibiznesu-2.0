@@ -21,7 +21,7 @@ function single_newsletter_form_modals() {
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="" data-dismiss="modal">Zamknij</button>
+            <button type="button" class="button single-newsletter-form-modal-button-close" data-dismiss="modal">Zamknij</button>
 
           </div>
         </div>
