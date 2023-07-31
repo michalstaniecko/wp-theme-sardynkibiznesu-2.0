@@ -11,8 +11,8 @@
     "faq"
   ],
   "acf": {
-    "mode": "preview",
+    "mode": "edit",
     "renderTemplate": "faq.php"
   },
-  "script": "faq"
+  "script": "file:./faq.js"
 }

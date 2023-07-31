@@ -1,6 +1,7 @@
 import './navigation'
 import './search-toggler'
 import './scroll-to-top'
+import './faq'
 
 //import './photoswipe'
 

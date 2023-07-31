@@ -20,7 +20,7 @@ $questions = get_field('faq_questions');
 <div class="faq">
   <h2 class="h1 ihumbak-anchor faq__title"><?php echo $title ?></h2>
   <div class="faq__list">
-    <?php foreach (array_chunk($questions, count($questions) / 2) as $questions_columns): ?>
+    <?php foreach (array_chunk($questions, ceil(count($questions) / 2)) as $questions_columns): ?>
       <div class="faq__column">
         <?php foreach ($questions_columns as $index => $item): ?>
           <div class="faq__item">
