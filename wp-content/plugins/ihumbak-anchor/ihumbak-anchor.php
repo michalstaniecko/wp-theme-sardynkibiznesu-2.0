@@ -53,3 +53,8 @@ function ihumbak_anchor_register_buttons( $buttons ) {
   array_push( $buttons, 'ihumbak_anchor_button' ); // dropcap', 'recentposts
   return $buttons;
 }
+
+add_action( 'init', 'ihumbak_anchor_register_acf_blocks' );
+function ihumbak_anchor_register_acf_blocks() {
+    register_block_type( __DIR__ . '/blocks/anchor' );
+}
