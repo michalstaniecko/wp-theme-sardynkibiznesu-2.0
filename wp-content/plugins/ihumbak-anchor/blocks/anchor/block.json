@@ -1,0 +1,14 @@
+{
+  "name": "sardynkibiznesu20/anchor-heading",
+  "title": "Anchor Heading",
+  "description": "Anchor Heading.",
+  "category": "text",
+  "icon": "admin-comments",
+  "keywords": [
+    "anchor", "heading"
+  ],
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "anchor.php"
+  }
+}
