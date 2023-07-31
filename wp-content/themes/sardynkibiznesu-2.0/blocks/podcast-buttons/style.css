@@ -1,0 +1,15 @@
+.podcast-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-block: 16px;
+}
+
+.podcast-buttons a {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.podcast-buttons a:hover {
+    opacity: 0.7;
+}

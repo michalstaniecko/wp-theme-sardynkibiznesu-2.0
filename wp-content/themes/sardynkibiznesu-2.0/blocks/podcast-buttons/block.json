@@ -1,0 +1,15 @@
+{
+  "name": "sardynkibiznesu20/podcast-buttons",
+  "title": "Podcast Buttons",
+  "description": "Podcast Buttons.",
+  "category": "text",
+  "icon": "admin-comments",
+  "keywords": [
+    "podcast", "buttons", "button", "download"
+  ],
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "podcast-buttons.php"
+  },
+  "style": ["file:./style.css"]
+}
