@@ -95,6 +95,11 @@ h3 {
   .page__content--listing-recommended & {
     padding: 30px;
   }
+
+  h2 {
+    margin-top: calc(1rem + 1px);
+    margin-bottom: calc(1rem + 1px);
+  }
 }
 
 .entry-content {
