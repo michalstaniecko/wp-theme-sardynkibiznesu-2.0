@@ -24,7 +24,7 @@ if (!empty($block['align'])) {
 }
 
 $label = get_field('sb-block__button--label');
-$url = get_field('sb-block__button--url')[0];
+$url = !empty(get_field('sb-block__button--url')) ? get_field('sb-block__button--url')[0] : '';
 $url_outer = get_field('sb-block__url-outer');
 
 $url = $url_outer ?: get_permalink($url);
