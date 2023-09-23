@@ -56,3 +56,47 @@ h2 a.faq__link {
         rotate: 180deg;
     }
 }
+
+
+.faq.faq--accordion {
+    background-color: transparent;
+    padding: 16px 0;
+    border: none;
+
+    .faq__item {
+        border-left: 3px solid #c00;
+        padding-left: 16px;
+        transition: border-bottom-color 0.2s ease;
+
+        &.faq__item--active {
+            border-bottom-color: #c00;
+        }
+    }
+
+    .faq__item--active .faq__link-icon {
+        rotate: 90deg;
+    }
+    .faq__link {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .faq__link-icon {
+        margin-right: 1rem;
+    }
+
+    .faq__question {
+        margin-top: 0;
+        padding-top: 8px;
+        margin-bottom: 0;
+    }
+
+    .faq__answer {
+        font-size: 12px;
+
+        &, p {
+            line-height: 1.5;
+        }
+    }
+}

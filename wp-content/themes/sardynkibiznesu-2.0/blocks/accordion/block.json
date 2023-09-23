@@ -1,0 +1,18 @@
+{
+  "name": "sardynkibiznesu20/accordion",
+  "title": "Accordion",
+  "description": "Accordion block.",
+  "style": [
+    "file:./accordion.css"
+  ],
+  "category": "text",
+  "icon": "admin-comments",
+  "keywords": [
+    "accordion"
+  ],
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "accordion.php"
+  },
+  "script": "file:./accordion.js"
+}
