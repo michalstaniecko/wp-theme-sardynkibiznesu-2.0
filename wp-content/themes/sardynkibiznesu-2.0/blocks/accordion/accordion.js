@@ -1,10 +1,14 @@
-console.log('accordion');
+console.log('accordion')
 
-function Accordion(list) {
+function Accordion(list, options) {
     this.ACTIVE_CLASS = 'faq__item--active';
     this.ITEM_CLASS = 'faq__item';
+    this.OPEN_ALL_BUTTON = 'faq__open-all'
+    this.CLOSE_ALL_BUTTON = 'faq__close-all'
 
     this.list = list;
+
+    this.options = options
 
     this.openItem = function (e) {
         e.preventDefault();
@@ -16,19 +20,28 @@ function Accordion(list) {
     };
 
     this.closeAll = function () {
-        const active = this.list.querySelector(`.${this.ACTIVE_CLASS}`)
-        if (!active) return false;
-        active.classList.remove(this.ACTIVE_CLASS)
+        const items = this.list.querySelectorAll(`.${this.ACTIVE_CLASS}`);
+        items.forEach(active => active.classList.remove(this.ACTIVE_CLASS));
     };
+
+    this.openAll = function() {
+        console.log('open all')
+        const items = this.list.querySelectorAll(`.${this.ITEM_CLASS}`)
+        items.forEach(item => item.classList.add(this.ACTIVE_CLASS));
+    }
 
     this.init = function () {
         this.list.addEventListener('click', this.openItem.bind(this))
+        this.list.querySelector(`.${this.OPEN_ALL_BUTTON}`).addEventListener('click', this.openAll.bind(this));
+        this.list.querySelector(`.${this.CLOSE_ALL_BUTTON}`).addEventListener('click', this.closeAll.bind(this));
     };
 }
 
 if (document.querySelectorAll('.faq__list')) {
     document.querySelectorAll('.faq__list').forEach(list => {
-        const faq = new Accordion(list);
+        const faq = new Accordion(list, {
+            forceOpenAll: true
+        });
         faq.init();
     })
 }

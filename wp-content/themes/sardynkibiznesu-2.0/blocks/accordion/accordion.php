@@ -19,7 +19,11 @@ $questions = get_field('accordion_questions');
 
 <div class="faq faq--accordion">
     <h2 class="h1 ihumbak-anchor faq__title"><?php echo $title ?></h2>
-    <div class="faq__list">
+    <div class="faq__list" data-force-open-all="1">
+        <div class="">
+            <button class="button button-small faq__open-all">Rozwiń wszystko</button>
+            <button class="button button-small button-outline faq__close-all">Zwiń wszystko</button>
+        </div>
         <div class="faq__column">
             <?php foreach ($questions as $index => $item): ?>
                 <div class="faq__item <?php echo $index == 0 ? 'faq__item--active' : null ?>">
