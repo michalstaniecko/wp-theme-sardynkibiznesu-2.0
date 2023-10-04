@@ -15,6 +15,8 @@
 $title = get_field('accordion_title');
 $questions = get_field('accordion_questions');
 
+// TODO: display open/close all buttons only when chosen forceOpenAll
+
 ?>
 
 <div class="faq faq--accordion">
