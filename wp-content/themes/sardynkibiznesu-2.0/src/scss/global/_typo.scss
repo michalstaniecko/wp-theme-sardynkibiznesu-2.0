@@ -1,9 +1,9 @@
 a {
-  color: $red;
+  color: $link;
   text-decoration: none;
 
   &:hover {
-    color: #88bbc8;
+    color: $link;
     text-decoration: underline;
   }
 }
