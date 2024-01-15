@@ -1,11 +1,28 @@
 {
-    "key": "group_648dea8666c09",
-    "title": "Block: FAQ",
+    "key": "group_650f3840c9c5d",
+    "title": "Block: Accordion",
     "fields": [
         {
-            "key": "field_648e021cdee2b",
+            "key": "field_651dc58f3d067",
+            "label": "Content",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_650f3840cf8a7",
             "label": "Title",
-            "name": "faq_title",
+            "name": "accordion_title",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -23,9 +40,9 @@
             "append": ""
         },
         {
-            "key": "field_648dea98ff107",
+            "key": "field_650f3840cf8e8",
             "label": "Questions",
-            "name": "faq_questions",
+            "name": "accordion_questions",
             "aria-label": "",
             "type": "repeater",
             "instructions": "",
@@ -45,7 +62,7 @@
             "rows_per_page": 20,
             "sub_fields": [
                 {
-                    "key": "field_648df445d21b3",
+                    "key": "field_650f384278699",
                     "label": "Question",
                     "name": "question",
                     "aria-label": "",
@@ -63,10 +80,10 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "parent_repeater": "field_648dea98ff107"
+                    "parent_repeater": "field_650f3840cf8e8"
                 },
                 {
-                    "key": "field_648df46bd21b4",
+                    "key": "field_650f3842786d7",
                     "label": "Answer",
                     "name": "answer",
                     "aria-label": "",
@@ -84,9 +101,26 @@
                     "toolbar": "full",
                     "media_upload": 1,
                     "delay": 0,
-                    "parent_repeater": "field_648dea98ff107"
+                    "parent_repeater": "field_650f3840cf8e8"
                 }
             ]
+        },
+        {
+            "key": "field_651dc5a83d068",
+            "label": "Options",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
         }
     ],
     "location": [
@@ -94,7 +128,7 @@
             {
                 "param": "block",
                 "operator": "==",
-                "value": "sardynkibiznesu20\/faq"
+                "value": "sardynkibiznesu20\/accordion"
             }
         ]
     ],
@@ -107,5 +141,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1687638546
+    "modified": 1696450013
 }

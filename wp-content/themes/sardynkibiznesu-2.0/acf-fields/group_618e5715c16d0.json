@@ -3,9 +3,27 @@
     "title": "Block: Button",
     "fields": [
         {
+            "key": "field_65a5aa25f7a80",
+            "label": "Content",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
             "key": "field_618e572531fa2",
             "label": "Etykieta",
             "name": "sb-block__button--label",
+            "aria-label": "",
             "type": "text",
             "instructions": "",
             "required": 1,
@@ -25,6 +43,7 @@
             "key": "field_618e573031fa3",
             "label": "Link",
             "name": "sb-block__button--url",
+            "aria-label": "",
             "type": "relationship",
             "instructions": "",
             "required": 0,
@@ -50,6 +69,7 @@
             "key": "field_61df40c2a9b6b",
             "label": "Link zewnętrzny",
             "name": "sb-block__url-outer",
+            "aria-label": "",
             "type": "text",
             "instructions": "Jeśli adres będzie uzupełniony to będzie kierowało do tej strony, a nie wybranej wyżej. Pozostaw to pole puste, aby kierowało do strony wybranej wyżej.",
             "required": 0,
@@ -64,6 +84,49 @@
             "prepend": "",
             "append": "",
             "maxlength": ""
+        },
+        {
+            "key": "field_65a5aa40f7a81",
+            "label": "Layout",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_65a5aa5ff7a82",
+            "label": "Button color",
+            "name": "sb-block__button-color",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "default": "Default (Red)",
+                "blue": "Blue"
+            },
+            "default_value": "default",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
         }
     ],
     "location": [
@@ -84,5 +147,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1642021144
+    "modified": 1705356460
 }

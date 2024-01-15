@@ -78,3 +78,14 @@
 .button--bold {
   font-weight: 700;
 }
+
+.button--blue {
+  background-color: rgba(#008080, 1);
+  border-color: #008080;
+
+  &:hover {
+    background-color: rgba(#008080, 0);
+    border-color: #008080;
+    color: #008080;
+  }
+}

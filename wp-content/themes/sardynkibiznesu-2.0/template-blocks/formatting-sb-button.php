@@ -26,13 +26,17 @@ if (!empty($block['align'])) {
 $label = get_field('sb-block__button--label');
 $url = !empty(get_field('sb-block__button--url')) ? get_field('sb-block__button--url')[0] : '';
 $url_outer = get_field('sb-block__url-outer');
+$button_color = get_field('sb-block__button-color') ?? 'default';
+$button_color_class = "button--" . $button_color;
+
+$button_classes = "button button--bold " . $button_color_class;
 
 $url = $url_outer ?: get_permalink($url);
 
 ?>
 
 <p class="sb-block <?php echo esc_attr($className); ?>">
-  <a href="<?php echo $url ?>" class="button button--bold" rel="nofollow" target="_blank">
+  <a href="<?php echo $url ?>" class="<?php echo $button_classes ?>" rel="nofollow" target="_blank">
     <?php echo $label ?: 'Sprawdź zawartość kursu'; ?>
   </a>
 </p>
