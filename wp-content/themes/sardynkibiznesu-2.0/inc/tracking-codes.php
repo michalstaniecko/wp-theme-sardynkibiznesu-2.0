@@ -7,12 +7,12 @@ function sb_facebook_pixel() {
 
   ?>
   <!-- Meta Pixel Code -->
-  <script>
-    function Sb_Facebook_Pixel() {
-
-      this.execute = function () {
-        console.log('execute Sb_Facebook_Pixel')
-        var eventID = Date.now().toString() + "<?php echo md5(uniqid(rand(), true)) ?>"
+  <script type="text/plain"
+          data-category="analytics"
+          data-service="Meta Pixel">
+      (function () {
+              console.log('execute Sb_Facebook_Pixel')
+              var eventID = Date.now().toString() + "<?php echo md5(uniqid(rand(), true)) ?>"
         !function (f, b, e, v, n, t, s) {
           if (f.fbq) return;
           n = f.fbq = function () {
@@ -45,15 +45,10 @@ function sb_facebook_pixel() {
             }
           })
         })
-      }
-    }
-
-    window.sb_facebook_pixel = new Sb_Facebook_Pixel()
+      })();
 
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-                 src="https://www.facebook.com/tr?id=<?php echo $code ?>&ev=PageView&noscript=1"
-    /></noscript>
+
   <!-- End Meta Pixel Code -->
 
   <?php
@@ -80,31 +75,27 @@ function sb_google_analytics() {
 
   ?>
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script>
-    function Sb_Google_Analytics() {
+  <script type="text/plain"
+          data-category="analytics"
+          data-service="Google Analytics">
+      (function () {
+              console.log('execute sb_google_analytics')
+              window.dataLayer = window.dataLayer || [];
 
-      this.execute = function () {
-        console.log('execute sb_google_analytics')
-        window.dataLayer = window.dataLayer || [];
+              function gtag() {
+                dataLayer.push(arguments);
+              }
 
-        function gtag() {
-          dataLayer.push(arguments);
-        }
+              gtag('js', new Date());
 
-        gtag('js', new Date());
-
-        gtag('config', '<?php echo $code ?>');
+              gtag('config', '<?php echo $code ?>');
         setTimeout(function () {
           gtag('event', 'Over 10 seconds', {
 
             'event_category': 'NoBounce',
           });
         });
-      }
-
-    }
-
-    window.sb_google_analytics = new Sb_Google_Analytics()
+      })();
 
   </script>
 
