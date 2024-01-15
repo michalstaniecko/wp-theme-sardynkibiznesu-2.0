@@ -1,0 +1,39 @@
+{
+  "consentModal": {
+    "title": "Strona wykorzystuje pliki cookies",
+    "description": "Strona internetowa Sardynkibiznesu.pl wykorzystuje pliki cookies. Pliki są wykorzystywane przez nas i naszych partnerów w przetwarzaniu danych w celach; statystycznych (mierzenia ruchu i skuteczności działań), reklamowych (personalizacji reklam) oraz funkcjonalnych (prawidłowego działania strony). W każdej chwili możesz zdecydować, które kategorie plików cookies chcesz wyłączyć. Więcej informacji o zakresie przetwarzania danych oraz Twoich uprawnieniach znajdziesz w naszej <a href=\"https://sardynkibiznesu.pl/polityka-prywatnosci/\" target=\"_blank\">polityce prywatności</a>.",
+    "acceptAllBtn": "Akcpetuję wszystkie",
+    "acceptNecessaryBtn": "Odrzuć wszystkie",
+    "showPreferencesBtn": "Pokaż ustawienia cookies"
+  },
+  "preferencesModal": {
+    "title": "Zarządzaj ustawieniami cookies",
+    "buttons": {
+      "acceptAll": "Akceptuję wszystkie",
+      "rejectAll": "Odrzucam wszystkie",
+      "savePreferences": "Akceptuję wybrane"
+    },
+    "closeIconLabel": "Zamknij",
+    "sections": [
+      {
+        "title": "Ciasteczka techniczne",
+        "description": "Techniczne Pliki Cookies są wykorzystywane do prawidłowego działania portalu i bezpiecznej komunikacji zwrotnej z klientami. Ich użycie jest niezbędne do funkcjonowania serwisu panel.sardynkibiznesu.pl.",
+        "linkedCategory": "necessary"
+      },
+      {
+        "title": "Ciasteczka analityczne",
+        "description": "Analityczne Pliki Cookies pozwalają zbierać informacje o interakcjach oraz zachowaniach użytkowników w naszym serwisie.",
+        "linkedCategory": "analytics"
+      },
+      {
+        "title": "Ciasteczka marketingowe",
+        "description": "Reklamowe Pliki Cookies służą do dostosowania reklam oraz treści wyświetlanych użytkownikowi na naszej stronie lub stronach naszych partnerów reklamowych.",
+        "linkedCategory": "marketing"
+      },
+      {
+        "title": "Więcej informacji",
+        "description": "Więcej informacji o zakresie przetwarzania danych oraz Twoich uprawnieniach znajdziesz w naszej <a href=\"https://sardynkibiznesu.pl/polityka-prywatnosci/\" target=\"_blank\">polityce prywatności</a>"
+      }
+    ]
+  }
+}

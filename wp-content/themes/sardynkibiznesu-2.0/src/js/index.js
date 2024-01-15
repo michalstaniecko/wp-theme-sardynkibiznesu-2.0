@@ -5,10 +5,8 @@ import './faq'
 
 //import './photoswipe'
 
-import GDPR from "./gdpr";
 //import AdsConversions from "./ads-conversions";
 
 window.addEventListener('load', () => {
-  new GDPR()
   //new AdsConversions()
 })
