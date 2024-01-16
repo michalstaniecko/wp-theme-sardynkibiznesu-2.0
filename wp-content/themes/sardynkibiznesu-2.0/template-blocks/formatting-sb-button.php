@@ -29,7 +29,7 @@ $url_outer = get_field('sb-block__url-outer');
 $button_color = get_field('sb-block__button-color') ?? 'default';
 $button_color_class = "button--" . $button_color;
 
-$button_classes = "button button--bold " . $button_color_class;
+$button_classes = "button button--bold button--rounded " . $button_color_class;
 
 $url = $url_outer ?: get_permalink($url);
 
