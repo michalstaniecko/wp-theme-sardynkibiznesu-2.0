@@ -1,6 +1,5 @@
 .faq {
     padding-top: 16px;
-    background-color: #fbfbfb;
     border: 1px solid #c00;
 }
 
@@ -51,6 +50,7 @@ h2 a.faq__link {
     rotate: 0;
     transition: rotate 0.2s ease;
     margin-top: 4px;
+    color: #0097b2;
 
     .faq__item--active & {
         rotate: 180deg;
