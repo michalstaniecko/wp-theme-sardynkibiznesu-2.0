@@ -75,20 +75,35 @@ function sb_google_analytics() {
 
   ?>
   <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied',
+            'wait_for_update': 500
+        });
+    </script>
   <script type="text/plain"
           data-category="analytics"
           data-service="Google Analytics">
       (function () {
               console.log('execute sb_google_analytics')
-              window.dataLayer = window.dataLayer || [];
-
-              function gtag() {
-                dataLayer.push(arguments);
-              }
 
               gtag('js', new Date());
 
               gtag('config', '<?php echo $code ?>');
+gtag('consent', 'update', {
+  'ad_storage': 'granted',
+  'ad_user_data': 'granted',
+  'ad_personalization': 'granted',
+  'analytics_storage': 'granted'
+});
         setTimeout(function () {
           gtag('event', 'Over 10 seconds', {
 
