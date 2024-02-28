@@ -48,8 +48,10 @@ function Faq( list ) {
         this.setup();
         this.list.addEventListener( 'click', this.openItem.bind( this ) );
         if (this.options.forceOpenAll) {
-            this.list.querySelector( `.${ this.OPEN_ALL_BUTTON }` ).addEventListener( 'click', this.openAll.bind( this ) );
-            this.list.querySelector( `.${ this.CLOSE_ALL_BUTTON }` ).addEventListener( 'click', this.closeAll.bind( this ) );
+            if (this.list.querySelector( `.${ this.OPEN_ALL_BUTTON }` ) && this.list.querySelector( `.${ this.CLOSE_ALL_BUTTON }` )) {
+                this.list.querySelector( `.${ this.OPEN_ALL_BUTTON }` ).addEventListener( 'click', this.openAll.bind( this ) );
+                this.list.querySelector( `.${ this.CLOSE_ALL_BUTTON }` ).addEventListener( 'click', this.closeAll.bind( this ) );
+            }
         }
     };
 }
