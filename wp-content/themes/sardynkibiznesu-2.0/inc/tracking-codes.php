@@ -7,9 +7,7 @@ function sb_facebook_pixel() {
 
   ?>
   <!-- Meta Pixel Code -->
-  <script type="text/plain"
-          data-category="analytics"
-          data-service="Meta Pixel">
+  <script>
       (function () {
               console.log('execute Sb_Facebook_Pixel')
               var eventID = Date.now().toString() + "<?php echo md5(uniqid(rand(), true)) ?>"
@@ -89,9 +87,7 @@ function sb_google_analytics() {
             'wait_for_update': 500
         });
     </script>
-  <script type="text/plain"
-          data-category="analytics"
-          data-service="Google Analytics">
+  <script>
       (function () {
               console.log('execute sb_google_analytics')
 
