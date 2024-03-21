@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <?php wp_head(); ?>
@@ -35,14 +35,18 @@
                     <form action="/" method="get">
                       <div class="input-group">
                         <input type="text" placeholder="<?php _e('Search...', 'sb') ?>" class="form-control mb-0" name="s" />
-                        <button class="btn btn-danger" type="submit"><i class="fa fa-search"></i></button>
+                        <button
+                                aria-label="Search"
+                                class="btn btn-danger" type="submit"><i class="fa fa-search"></i></button>
                       </div>
                     </form>
                   </div>
                 </div>
               </nav>
               <div class="d-lg-none">
-                <button class="navigation__toggle">
+                <button
+                        aria-label="Toggle navigation"
+                        class="navigation__toggle">
                   <span></span>
                   <span></span>
                   <span></span>
