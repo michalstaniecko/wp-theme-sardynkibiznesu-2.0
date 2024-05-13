@@ -5,11 +5,17 @@ export default class AdsConversions {
       'name': 'ototax',
       'url': 'https://ototax.pl/rejestracja/?=SardynkiBiznesu.pl',
       'sendTo': 'AW-688741306/0wijCPnojdoDELq3tcgC'
+    },
+    {
+      'name': 'ifirma',
+      'url': 'https://www.ifirma.pl/app/wa/polecam?ref=OLUE2I6LK4',
+      'sendTo': 'AW-688741306/gvIbCPuRvKIZELq3tcgC'
     }
   ]
 
   constructor() {
     this.links = document.querySelectorAll('a')
+    this.execute()
   }
 
   execute() {

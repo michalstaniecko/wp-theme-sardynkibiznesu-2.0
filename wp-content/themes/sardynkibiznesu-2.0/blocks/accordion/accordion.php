@@ -22,7 +22,8 @@ $hide_buttons = true;
 ?>
 
 <div class="faq faq--accordion">
-    <h2 class="h1 ihumbak-anchor faq__title"><?php echo $title ?></h2>
+    <h2 class="h1 faq__title"><?php echo $title ?></h2>
+    <div class="faq__tip">Rozwiń i sprawdź szczegóły!</div>
     <div class="faq__list" data-force-open-all="1">
         <?php if (!$hide_buttons): ?>
             <div class="">
@@ -32,8 +33,8 @@ $hide_buttons = true;
         <?php endif; ?>
         <div class="faq__column">
             <?php foreach ($questions as $index => $item): ?>
-                <div class="faq__item <?php echo $index == 0 ? 'faq__item--active' : null ?>">
-                    <div class="h2 faq__question">
+                <div class="faq__item">
+                    <h3 class="h2 faq__question">
                         <a
                                 class="faq__link" href="#"
                                 data-target="question-<?php echo $index ?>"
@@ -41,7 +42,7 @@ $hide_buttons = true;
                             <i class="fa fa-caret-right faq__link-icon"></i>
                             <?php echo $item['question']; ?>
                         </a>
-                    </div>
+                    </h3>
                     <div class="faq__answer" id="question-<?php echo $index ?>">
                         <div>
                             <?php echo $item['answer']; ?>

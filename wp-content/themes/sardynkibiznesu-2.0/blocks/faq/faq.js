@@ -1,5 +1,3 @@
-console.log('faq');
-
 function Faq(list) {
   this.ACTIVE_CLASS = 'faq__item--active';
   this.ITEM_CLASS = 'faq__item';
@@ -7,9 +5,11 @@ function Faq(list) {
   this.list = list;
 
   this.openItem = function (e) {
-    e.preventDefault();
     const link = e.target.closest('.faq__link');
-    if (!link) return false;
+    if (!link) return;
+
+    e.preventDefault();
+
     if (!link.closest(`.${this.ACTIVE_CLASS}`))
       this.closeAll()
     link.closest(`.${this.ITEM_CLASS}`).classList.toggle(this.ACTIVE_CLASS);

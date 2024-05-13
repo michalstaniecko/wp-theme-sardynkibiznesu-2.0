@@ -11,13 +11,13 @@
           <a href="/start/"><strong>Sklep:</strong></a>
           <ul>
             <li>
-              <a href="/regulamin-sklepu/">Regulamin sklepu i strony www</a>
+              <a href="/regulamin-sklepu/" rel="nofollow">Regulamin sklepu i strony www</a>
             </li>
+              <li>
+                  <a href="/pakietrodo/" rel="nofollow">Pakiet RODO dla małej firmy</a>
+              </li>
             <li>
-              <a href="/case-study-reklama-lokalnej-firmy-na-facebooku/">Case Study - Reklama na Facebooku</a>
-            </li>
-            <li>
-              <a href="/umowy/">Wzory umów dla małej firmy</a>
+              <a href="/umowy/" rel="nofollow">Wzory umów dla małej firmy</a>
             </li>
           </ul>
         </div>
@@ -25,13 +25,10 @@
           <strong>Darmowe materiały:</strong>
           <ul>
             <li>
-              <a href="/polityka-prywatnosci-dla-strony-bloga-pobierz-wzor/">Darmowa polityka prywatności</a>
+              <a href="/polityka-prywatnosci-dla-strony-bloga-pobierz-wzor/" rel="nofollow">Darmowa polityka prywatności</a>
             </li>
             <li>
-              <a href="/zapis-na-newsletter/">Newsletter</a>
-            </li>
-            <li>
-              <a href="/strefa-sardynek/">Strefa Sardynek</a>
+              <a href="/zapis-na-newsletter/" rel="nofollow">Newsletter</a>
             </li>
           </ul>
         </div>
@@ -39,13 +36,13 @@
           <strong>O nas:</strong>
           <ul>
             <li>
-              <a href="/kontakt/">Kontakt</a>
+              <a href="/kontakt/" rel="nofollow">Kontakt</a>
             </li>
             <li>
-              <a href="/blogu/">O blogu</a>
+              <a href="/blogu/" rel="nofollow">O blogu</a>
             </li>
             <li>
-              <a href="/tu-zacznij/">Tu zacznij</a>
+              <a href="/tu-zacznij/" rel="nofollow">Tu zacznij</a>
             </li>
           </ul>
         </div>

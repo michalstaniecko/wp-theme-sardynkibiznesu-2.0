@@ -54,7 +54,7 @@ h2,
 h3 {
 
   &.ihumbak-anchor {
-    color: maroon !important;
+    color: #666 !important;
   }
 
 }
@@ -98,8 +98,8 @@ h3 {
 
   h2,
   h3 {
-    margin-top: calc(1rem + 1px);
-    margin-bottom: calc(1rem + 1px);
+    margin-top: calc(1rem + 10px);
+    margin-bottom: calc(1rem + 10px);
   }
 }
 
@@ -125,5 +125,12 @@ h3 {
         color: $red;
       }
     }
+  }
+}
+
+.article__content {
+  h2.wp-block-heading,
+  h3.wp-block-heading {
+    color: #666 !important;
   }
 }

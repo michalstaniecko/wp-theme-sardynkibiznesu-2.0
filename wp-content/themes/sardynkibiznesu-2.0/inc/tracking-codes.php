@@ -79,34 +79,30 @@ function sb_google_analytics() {
         function gtag() {
             dataLayer.push(arguments);
         }
+
+        gtag('js', new Date());
+
         gtag('consent', 'default', {
-            'ad_storage': 'denied',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied',
-            'analytics_storage': 'denied',
-            'wait_for_update': 500
+            ad_storage: "denied",
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+            analytics_storage: "denied",
+            functionality_storage: "denied",
+            personalization_storage: "denied",
+            security_storage: "granted",
+            wait_for_update: 2000,
         });
-    </script>
-  <script>
-      (function () {
-              console.log('execute sb_google_analytics')
+        gtag("set", "ads_data_redaction", true);
+        gtag("set", "url_passthrough", true);
 
-              gtag('js', new Date());
+        gtag('config', '<?php echo $code ?>');
 
-              gtag('config', '<?php echo $code ?>');
-gtag('consent', 'update', {
-  'ad_storage': 'granted',
-  'ad_user_data': 'granted',
-  'ad_personalization': 'granted',
-  'analytics_storage': 'granted'
-});
         setTimeout(function () {
-          gtag('event', 'Over 10 seconds', {
+            gtag('event', 'Over 10 seconds', {
 
-            'event_category': 'NoBounce',
-          });
-        });
-      })();
+                'event_category': 'NoBounce',
+            });
+        }, 10000);
 
   </script>
 

@@ -9,11 +9,11 @@ if (!mix.inProduction()) {
 
 mix.js('src/js/index.js', '')
   .sass('src/scss/main.scss', '')
-  .purgeCss({
+  /*.purgeCss({
     content: [
-      path.join(__dirname, '**/*.php'),
-      path.join(__dirname, '../../plugins/**/*.php'),
-      path.join(__dirname, 'src/js/*.js')
+      path.join(__dirname, '**!/!*.php'),
+      path.join(__dirname, '../../plugins/!**!/!*.php'),
+      path.join(__dirname, 'src/js/!*.js')
     ],
     safelist: {
       deep: [
@@ -40,10 +40,11 @@ mix.js('src/js/index.js', '')
         /modal-backdrop/,
         /offcanvas-backdrop/,
         /fade/,
-        /show/
+        /show/,
+          /button/,
       ]
     }
-  })
+  })*/
   .setResourceRoot('../assets/')
   .setPublicPath('assets')
 
