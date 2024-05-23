@@ -9,7 +9,6 @@ function sb_facebook_pixel() {
   <!-- Meta Pixel Code -->
   <script>
       (function () {
-              console.log('execute Sb_Facebook_Pixel')
               var eventID = Date.now().toString() + "<?php echo md5(uniqid(rand(), true)) ?>"
         !function (f, b, e, v, n, t, s) {
           if (f.fbq) return;
@@ -31,18 +30,18 @@ function sb_facebook_pixel() {
           'https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '<?php echo $code ?>');
         fbq('track', 'PageView', {}, {eventID: eventID});
-        window.addEventListener('load', function () {
-          jQuery.ajax({
-            method: "post",
-            dataType: "json",
-            url: '<?php echo admin_url('admin-ajax.php') ?>',
-            data: {
-              action: 'fcapi_page_view',
-              sourceUrl: window.location.href,
-              eventID: eventID
-            }
-          })
-        })
+        //window.addEventListener('load', function () {
+        //  jQuery.ajax({
+        //    method: "post",
+        //    dataType: "json",
+        //    url: '<?php //echo admin_url('admin-ajax.php') ?>//',
+        //    data: {
+        //      action: 'fcapi_page_view',
+        //      sourceUrl: window.location.href,
+        //      eventID: eventID
+        //    }
+        //  })
+        //})
       })();
 
   </script>
@@ -88,7 +87,7 @@ function sb_google_analytics() {
             ad_personalization: "denied",
             analytics_storage: "denied",
             functionality_storage: "denied",
-            personalization_storage: "denied",
+            personalization_storage: "granted",
             security_storage: "granted",
             wait_for_update: 2000,
         });

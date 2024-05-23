@@ -17,7 +17,7 @@ $questions = get_field('faq_questions');
 
 ?>
 
-<div class="faq">
+<div class="faq faq-faq">
   <h2 class="h1 faq__title"><?php echo $title ?></h2>
   <div class="faq__list">
     <?php foreach (array_chunk($questions, ceil(count($questions) / 2)) as $questions_columns): ?>

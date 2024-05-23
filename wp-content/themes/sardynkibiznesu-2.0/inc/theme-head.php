@@ -16,7 +16,7 @@ function favicon() {
 function sb_get_the_logo() {
   $logo_id = get_field('logo', 'options');
   $logo_src = wp_get_attachment_image_src($logo_id, 'full');
-  $logo_html = '<img src="%s" width="%s" height="%s" alt="%s" class="header__logo" />';
+  $logo_html = '<img src="%s" width="%s" height="%s" alt="%s" class="header__logo no-lazy-load" />';
   $logo_html = sprintf($logo_html, $logo_src[0], $logo_src[1], $logo_src[2], get_bloginfo('name'));
   return $logo_html;
 }

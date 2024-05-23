@@ -26,7 +26,6 @@
     "resolve-url-loader": "^4.0.0",
     "sass": "^1.32.12",
     "sass-loader": "^11.0.1",
-    "tailwindcss": "^2.2.16",
     "webpack": "^5.36.2",
     "webpack-cli": "^4.7.0"
   },
@@ -36,5 +35,8 @@
     "production": "webpack --mode=production"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^3.4.3"
+  }
 }

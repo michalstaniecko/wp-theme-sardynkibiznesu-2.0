@@ -16,3 +16,11 @@ add_action('after_setup_theme', 'sb_load_theme_textdomain',10);
 function sb_load_theme_textdomain() {
   load_theme_textdomain( 'sb', get_template_directory() . '/languages' );
 }
+
+add_filter( 'image_size_names_choose', 'child_custom_sizes' );
+
+function child_custom_sizes( $sizes ) {
+    return array_merge( $sizes, array(
+        'article-mobile' => __( 'Landing page 728px' ),
+    ) );
+}

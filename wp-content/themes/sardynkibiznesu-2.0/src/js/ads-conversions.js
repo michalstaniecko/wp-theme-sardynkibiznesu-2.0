@@ -19,7 +19,6 @@ export default class AdsConversions {
   }
 
   execute() {
-    console.log('execute ads conversion')
     this.links.forEach(item => {
       this.conversions.forEach(conversion => {
         if (item.getAttribute('href') == conversion.url) {

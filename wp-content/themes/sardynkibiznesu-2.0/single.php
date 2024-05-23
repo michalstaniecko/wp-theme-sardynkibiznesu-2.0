@@ -29,7 +29,7 @@
                     <img
                       src="<?php echo get_the_post_thumbnail_url(null, 'single-desktop'); ?>"
                       srcset="<?php echo wp_get_attachment_image_srcset(get_post_thumbnail_id()) ?>"
-                      class="article__image"
+                      class="article__image no-lazy-load"
                       alt="<?php the_title(); ?>"
                       width="<?php echo $width ?>"
                       height="<?php echo $height ?>"
