@@ -4,6 +4,7 @@
 
     li {
       position: relative;
+      list-style: none;
 
       &::before {
         content: '\f00c';
@@ -20,6 +21,13 @@
 .entry-content {
   li {
     margin-bottom: 3px;
+  }
+}
+
+
+ul li {
+  &::marker {
+    color: #810000;
   }
 }
 

@@ -12,6 +12,8 @@
 }
 
 @include font-face(montserrat, montserrat-v15-latin-ext_latin-400);
+@include font-face(montserrat, montserrat-v15-latin-ext_latin-500, normal, 500);
 @include font-face(montserrat, montserrat-v15-latin-ext_latin-600, normal, 600);
+@include font-face(montserrat, montserrat-v15-latin-ext_latin-700, normal, 700);
 
 @import "font-awesome";

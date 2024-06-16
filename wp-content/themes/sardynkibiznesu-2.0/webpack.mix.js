@@ -11,7 +11,7 @@ if (!mix.inProduction()) {
 mix.js( 'src/js/index.js', '' )
     .sass( 'src/scss/main.scss', '' )
     .options( {
-        processCssUrls: true,
+        processCssUrls: false,
         postCss: [ tailwindcss( 'tailwind.config.js' ) ]
     } )
     /*.purgeCss({
@@ -52,9 +52,6 @@ mix.js( 'src/js/index.js', '' )
     })*/
     .setResourceRoot( '../assets/' )
     .setPublicPath( 'assets' )
-    .options( {
-        processCssUrls: false
-    } );
 
 mix.copyDirectory('src/fonts', 'assets/fonts');
 

@@ -2,11 +2,11 @@ module.exports = {
     content: [
         './admin/**/*.php',
         './blocks/**/*.js',
-        './blocks/**/*.php', //// Path to your PHP files
-        './components/**/*.php', //// Path to your PHP files
+        './blocks/**/*.php',
+        './components/**/*.php',
         './inc/**/*.php',
-        './template-blocks/**/*.php', //// Path to your PHP files
-        './templates/**/*.php',
+        './template-blocks/**/*.php',
+        './templates//**/*.php',
         './404.php',
         './archive.php',
         './footer.php',
@@ -14,20 +14,29 @@ module.exports = {
         './header.php',
         './index.php',
         './page.php',
-        './sidebar.php',
+        './search.php',
         './single.php',
+        './sidebar.php',
         './src/js/*.js',
         './blocks/**/*.js'
     ],
-    darkMode: false, // or 'media' or 'class'
+    darkMode: 'class', // or 'media' or 'class'
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                base: '#666',
+                link: '#008080'
+            },
+        },
     },
     variants: {
-        extend: {},
     },
+    plugins: [],
     safelist: [
         'has-text-align-center',
-    ],
-    plugins: [],
+        {
+            pattern: /grid-cols-(2|3|4|5|6)/,
+            variants: ['sm', 'md', 'lg']
+        }
+    ]
 }

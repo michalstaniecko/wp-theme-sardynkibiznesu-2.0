@@ -85,6 +85,7 @@
                      title="<?php _e('Article', 'sb'); ?>: <?= $related_post->post_title ?>">
                     <div class="flex-shrink-0">
                       <img
+                        data-lazyloaded="1"
                         src="<?php echo get_the_post_thumbnail_url($related_post->ID, 'article-desktop') ?>"
                         alt="<?php echo $related_post->post_title ?>"
                         class="nav-posts__image"
@@ -115,6 +116,7 @@
                      title="<?php _e('Article', 'sb'); ?>: <?= $related_post->post_title ?>">
                     <div class="flex-shrink-0">
                       <img
+                        data-lazyloaded="1"
                         src="<?php echo get_the_post_thumbnail_url($related_post->ID, 'article-desktop') ?>"
                         alt="<?php echo $related_post->post_title ?>"
                         class="nav-posts__image"

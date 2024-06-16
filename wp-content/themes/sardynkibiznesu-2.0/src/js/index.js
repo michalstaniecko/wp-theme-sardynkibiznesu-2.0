@@ -5,8 +5,12 @@ import './scroll-to-top'
 
 //import './photoswipe'
 
+import tablePrice from "./table-price";
+
 import AdsConversions from "./ads-conversions";
 
-window.addEventListener('load', () => {
-  new AdsConversions()
-})
+
+window.addEventListener( 'load', () => {
+    new AdsConversions()
+    tablePrice();
+} )

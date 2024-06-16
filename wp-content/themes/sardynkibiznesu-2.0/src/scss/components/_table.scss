@@ -1,0 +1,90 @@
+.table__row {
+  @apply text-sm font-medium text-gray-900 dark:bg-gray-800 dark:text-white;
+}
+
+@layer components {
+  .table-border {
+    @apply border;
+    @apply border-gray-200;
+    @apply dark:border-gray-700;
+  }
+}
+
+@layer components {
+  .table-border-bottom {
+    @apply border-gray-200;
+    @apply dark:border-gray-700;
+    @apply border-b;
+  }
+}
+
+@layer components {
+  .table-border-top {
+    @apply border-gray-200;
+    @apply dark:border-gray-700;
+    @apply border-t;
+  }
+}
+
+@layer components {
+  .table-border-left {
+    @apply border-gray-200;
+    @apply dark:border-gray-700;
+    @apply border-l;
+  }
+}
+
+@layer components {
+  .table-border-right {
+    @apply border-gray-200;
+    @apply dark:border-gray-700;
+    @apply border-r;
+  }
+}
+
+@layer components {
+  .table-border-none {
+    @apply border-none;
+  }
+
+  .table-border-left-none {
+    @apply border-l-0;
+  }
+
+  .table-border-right-none {
+    @apply border-r-0;
+  }
+
+  .table-border-top-none {
+    @apply border-t-0;
+  }
+
+  .table-border-bottom-none {
+    @apply border-b-0;
+  }
+}
+
+.table__row--head {
+  @apply bg-white;
+  @apply text-center;
+}
+
+.table__row--body {
+
+}
+
+.table__row-head {
+  @apply text-base;
+  &:hover {
+    @apply text-base;
+    text-decoration: none;
+  }
+}
+
+.table__row-cell {
+
+}
+
+.table-cell-padding {
+  @apply px-2 py-4;
+}
