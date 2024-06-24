@@ -57,6 +57,7 @@
     $('.single-newsletter-form form:not(.getresponse-form)').each(function (index, elem) {
       $(elem).validate({
         submitHandler: function (form) {
+          $(form).find('button').prop('disabled', true);
           const data = $(form).serializeArray().map(changeKeys)
           add_contact(data);
 
