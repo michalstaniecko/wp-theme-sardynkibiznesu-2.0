@@ -9,6 +9,7 @@ wp-content/*
 !wp-content/mu-plugins/
 !wp-content/plugins/
 !wp-content/themes/
+lightbox-photoswipe
 
 # ignore these plugins
 wp-content/plugins/hello.php

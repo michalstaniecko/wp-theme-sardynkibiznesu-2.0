@@ -17,7 +17,7 @@
         <div class="container-fluid-stop">
           <div class="row">
             <div class="col d-flex align-items-center">
-              <a href="/">
+              <a href="/" class="no-lazy-loading">
                 <?php echo sb_get_the_logo(); ?>
               </a>
             </div>

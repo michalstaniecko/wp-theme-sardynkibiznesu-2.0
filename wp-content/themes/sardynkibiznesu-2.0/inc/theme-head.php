@@ -25,3 +25,24 @@ add_action('wp_head', 'sb_custom_meta_tags');
 function sb_custom_meta_tags() {
   echo get_field('custom_head_tags', 'options');
 }
+
+add_action('wp_head', 'preload_fonts', -100);
+function preload_fonts() {
+    $fonts = scandir(get_stylesheet_directory().'/assets/fonts');
+    foreach ($fonts as $font) {
+        if (strpos($font, '.woff2') !== false) {
+            echo '<link rel="preload" href="'.get_stylesheet_directory_uri().'/assets/fonts/'.$font.'" as="font" type="font/woff2" crossorigin="anonymous">';
+        }
+    }
+}
+
+//add_action('wp_head', 'preload_featured_image', -110);
+function preload_featured_image() {
+    if (is_single() || is_page()) {
+        $featured_image_id = get_post_thumbnail_id();
+        if (!$featured_image_id) return;
+        $featured_image_src = wp_get_attachment_image_src($featured_image_id, 'article-mobile');
+        $featured_image_srcset = wp_get_attachment_image_srcset($featured_image_id, 'full');
+        echo '<link rel="preload" href="'.$featured_image_src[0].'.webp" as="image">';
+    }
+}
