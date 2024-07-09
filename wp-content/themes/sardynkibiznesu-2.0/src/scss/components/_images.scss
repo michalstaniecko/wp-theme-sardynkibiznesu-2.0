@@ -3,6 +3,12 @@
     font-size: 12px;
     line-height: 18px;
   }
+
+  .aligncenter {
+    img {
+      @apply mx-auto;
+    }
+  }
 }
 
 .wp-caption-text {

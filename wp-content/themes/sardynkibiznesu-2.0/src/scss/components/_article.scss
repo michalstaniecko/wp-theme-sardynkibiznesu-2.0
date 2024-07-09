@@ -98,8 +98,21 @@ h3 {
 
   h2,
   h3 {
-    margin-top: calc(1rem + 10px);
-    margin-bottom: calc(1rem + 10px);
+    line-height: 1.75;
+  }
+
+  > * {
+    margin-bottom: 25px;
+  }
+
+  .page__wrapper:not(.page__content--boxed-without-sidebar) & {
+    ul li {
+      @apply list-disc;
+    }
+  }
+
+  ol li {
+    @apply list-decimal;
   }
 }
 
@@ -131,6 +144,14 @@ h3 {
 .article__content {
   h2.wp-block-heading,
   h3.wp-block-heading {
-    color: #666 !important;
+  }
+}
+
+.page__content--boxed-without-sidebar {
+  .article {
+    h2:not(.faq__question), h3:not(.faq__question) {
+      color: #000 !important;
+      font-weight: 700;
+    }
   }
 }

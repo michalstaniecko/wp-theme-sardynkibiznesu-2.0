@@ -24,12 +24,21 @@
         <div class="col-md-6 col-lg-auto footer__menu">
           <strong>Darmowe materiały:</strong>
           <ul>
-            <li>
-              <a href="/polityka-prywatnosci-dla-strony-bloga-pobierz-wzor/" rel="nofollow">Darmowa polityka prywatności</a>
-            </li>
-            <li>
-              <a href="/zapis-na-newsletter/" rel="nofollow">Newsletter</a>
-            </li>
+              <li>
+                  <a href="/polityka-prywatnosci-dla-strony-bloga-pobierz-wzor/" rel="nofollow">Darmowa polityka prywatności</a>
+              </li>
+              <li>
+                  <a href="/zapis-na-newsletter/" rel="nofollow">Newsletter</a>
+              </li>
+              <li>
+                  <a href="/kalkulator-vat/" rel="nofollow">Kalkulator VAT (brutto netto) </a>
+              </li>
+              <li>
+                  <a href="/kalkulator-b2b-wyceny-uslugi-i-stawki-godzinowej/" rel="nofollow">Kalkulator B2B wyceny usług i stawki godzinowej</a>
+              </li>
+              <li>
+                  <a href="/kalkulator-podatkowy-dla-jednoosobowej-dzialalnosci-gospodarczej-arkusz-kalkulacyjny-online/" rel="nofollow">Kalkulator podatkowy dla małych firm</a>
+              </li>
           </ul>
         </div>
         <div class="col-md-6 col-lg-auto footer__menu">
