@@ -1,5 +1,6 @@
 <?php
 get_header();
+$index = 0;
 $paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
 global $wp_query;
 ?>
@@ -18,7 +19,7 @@ global $wp_query;
                      itemprop="blogPost">
               <div class="row">
                 <div class="col-12 col-lg-auto">
-                  <a href="<?php the_permalink(); ?>" class="article__image-wrapper">
+                  <a href="<?php the_permalink(); ?>" class="article__image-wrapper <?php echo ($index === 0 ? 'no-lazy-loading' : '') ?> ">
                     <img
                       src="<?php echo get_the_post_thumbnail_url(null, 'full'); ?>"
                       class="article__image"
@@ -62,6 +63,7 @@ global $wp_query;
                 </div>
               </div>
             </article>
+          <?php $index++; ?>
           <?php endwhile; ?>
             <div class="pagination">
               <div class="pagination__count me-3">

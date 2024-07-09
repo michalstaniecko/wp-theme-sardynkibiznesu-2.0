@@ -34,7 +34,7 @@ $image_alt = get_post_meta($image, '_wp_attachment_image_alt', true);
 ?>
 
 <div class="product-card">
-  <a class="product-card__image"
+  <a class="product-card__image no-lazy-load"
      href="<?php echo $button ?>">
     <?php if (!empty($image)): ?>
       <img src="<?php echo $image_src[0] ?>"

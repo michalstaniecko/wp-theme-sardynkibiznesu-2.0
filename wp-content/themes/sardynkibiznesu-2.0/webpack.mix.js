@@ -52,6 +52,11 @@ mix.js( 'src/js/index.js', '' )
     })*/
     .setResourceRoot( '../assets/' )
     .setPublicPath( 'assets' )
+    .options( {
+        processCssUrls: false
+    } );
+
+mix.copyDirectory('src/fonts', 'assets/fonts');
 
 mix.sass( 'src/scss/admin.scss', '' )
 mix.js( 'src/js/admin.js', '' )

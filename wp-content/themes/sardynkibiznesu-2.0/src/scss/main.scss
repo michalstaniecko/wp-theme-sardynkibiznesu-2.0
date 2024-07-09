@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "global/fonts";
 @import "~bootstrap/scss/functions";
 @import "vendors/bootstrap";
 @import "~bootstrap/scss/mixins";
@@ -19,7 +20,6 @@
 @import "~bootstrap/scss/transitions";
 @import "~photoswipe/src/css/main";
 
-@import "global/fonts";
 @import "global/typo";
 @import "global/aligns";
 
