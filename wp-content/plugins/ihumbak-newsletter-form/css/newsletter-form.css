@@ -5,12 +5,16 @@
 .single-newsletter-form {
 
     background-color: #fbfbfb;
-    border: 1px solid #e4e4e4;
+    border: 1px solid #c00;
     padding: 20px 20px;
     padding-bottom: 20px !important;
     margin-bottom: 30px;
     font-size: 14px;
     font-weight: 400;
+}
+
+.single-newsletter-form--widget {
+    border: 1px solid #e4e4e4;
 }
 
 .single-newsletter-form a {
