@@ -63,22 +63,7 @@ ul.ihumbak-anchor-menu > li {
   display: none;
 }
 
-.ihumbak-anchor {
-  color: inherit;
-}
-
 .ihumbak-anchor-menu > li > ul {
   margin-top: 8px;
   margin-bottom: 15px;
-}
-
-h2.ihumbak-anchor,
-h3.ihumbak-anchor {
-  color: #666 !important;
-}
-
-
-h2.ihumbak-anchor span,
-h3.ihumbak-anchor span {
-  color: #666 !important;
 }
