@@ -50,7 +50,7 @@ function sardynki_getresponse_form($atts, $content)
         </div>
         <div class="col-md-12 mt-3">
 
-          <button type="submit" class=" w-100 button"><?= $a['submit'] ?></button>
+          <button type="submit" class=" w-100 button button--blue"><?= $a['submit'] ?></button>
         </div>
       </div>
       <input type="hidden"

@@ -46,7 +46,7 @@ function single_newsletter_form($content) {
     <div class="row mb-0">
       <div class="col-md-6">
         <h3 class="title-normal mt-0"
-            style="color: #993300"><?php _e('Podobał Ci się ten artykuł?', 'ihumbak-newsletter-form'); ?></h3>
+            style="color: #008080"><?php _e('Podobał Ci się ten artykuł?', 'ihumbak-newsletter-form'); ?></h3>
         <p
           style="font-size: 14px; font-weight: 400; line-height: 21px;"><?php _e('Zapisz się do newslettera, otrzymuj informacje o nowych artykułach, odbierz dostęp do ponad 60 wzorów dokumentów, szablonów, grafik i Exceli.',
                                                                                  'ihumbak-newsletter-form'); ?></p>
@@ -72,7 +72,7 @@ function single_newsletter_form($content) {
           <input type="hidden" value="<?php echo $campaignId ?>"
                  name="campaignId"/>
           <div class="input input-submit">
-            <button type="submit" class="button w-100"><?php _e('Zapisz', 'ihumbak-newsletter-form') ?></button>
+            <button type="submit" class="button button--blue w-100"><?php _e('Zapisz', 'ihumbak-newsletter-form') ?></button>
           </div>
         </form>
       </div>
