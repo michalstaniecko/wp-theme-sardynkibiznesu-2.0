@@ -3,13 +3,15 @@ let path = require( 'path' )
 let tailwindcss = require( 'tailwindcss' )
 require( 'laravel-mix-purgecss' )
 
+const themePath = 'wp-content/themes/sardynkibiznesu-2.0'
+
 if (!mix.inProduction()) {
     mix.sourceMaps( false, 'source-map' )
 }
 
 
-mix.js( 'src/js/index.js', '' )
-    .sass( 'src/scss/main.scss', '' )
+mix.js( 'src/js/index.js', `${themePath}/assets/index.js` )
+    .sass( 'src/scss/main.scss', `${themePath}/assets/main.css` )
     .options( {
         processCssUrls: false,
         postCss: [ tailwindcss( 'tailwind.config.js' ) ]
@@ -51,9 +53,8 @@ mix.js( 'src/js/index.js', '' )
       }
     })*/
     .setResourceRoot( '../assets/' )
-    .setPublicPath( 'assets' )
 
-mix.copyDirectory('src/fonts', 'assets/fonts');
+mix.copyDirectory('src/fonts', `${themePath}/assets/fonts`);
 
-mix.sass( 'src/scss/admin.scss', '' )
-mix.js( 'src/js/admin.js', '' )
+mix.sass( 'src/scss/admin.scss', `${themePath}/assets/admin.css` )
+mix.js( 'src/js/admin.js', `${themePath}/assets/admin.js` )

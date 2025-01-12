@@ -5,10 +5,6 @@
  *
  */
 
-add_action( 'wp_head', 'ga_code' );
-add_action( 'wp_head', 'convertiser_verification' );
-
-add_action('wp_enqueue_scripts', 'ga_script');
 function ga_script() {
   wp_enqueue_script('gtm-script', 'https://www.googletagmanager.com/gtag/js?id=UA-62814019-14', false, false,true);
 }
@@ -84,7 +80,12 @@ function convertiser_verification() {
   }
 }
 
-add_action('wp_head', 'shareasale_verification');
 function shareasale_verification() {
   echo '<!-- A9768BAF-D66E-43D3-8973-0C2C9B224FF0 -->';
 }
+add_action('wp_head', 'shareasale_verification');
+
+add_action( 'wp_head', 'ga_code' );
+add_action( 'wp_head', 'convertiser_verification' );
+
+add_action('wp_enqueue_scripts', 'ga_script');
