@@ -80,13 +80,13 @@
 }
 
 .button--blue {
-  background-color: rgba(#008080, 1);
-  border-color: #008080;
+  @apply bg-link;
+  border-color: theme('colors.link');
 
   &:hover {
-    background-color: rgba(#008080, 0);
-    border-color: #008080;
-    color: #008080;
+    @apply bg-transparent;
+    border-color: theme('colors.link');
+    color: theme('colors.link');
   }
 }
 
