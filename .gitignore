@@ -151,8 +151,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-package-lock.json
-
 wp-content/themes/sardynkibiznesu-2.0/assets
 convertpro
 wp-content/plugins/cookie-notice
