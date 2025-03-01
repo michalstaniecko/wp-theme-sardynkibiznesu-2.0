@@ -37,8 +37,10 @@ if (!function_exists('getenv_docker')) {
   }
 }
 
-define('WP_HOME', 'http://' . $_SERVER['HTTP_HOST']);
-define('WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST']);
+$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
+
+define('WP_HOME', $protocol . $_SERVER['HTTP_HOST']);
+define('WP_SITEURL', $protocol . $_SERVER['HTTP_HOST']);
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
