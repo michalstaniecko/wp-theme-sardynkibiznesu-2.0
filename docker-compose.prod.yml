@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  wordpress:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${PROJECT}.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${PROJECT}.tls=true
+      - traefik.http.routers.${PROJECT}.tls.certresolver=lets-encrypt
+      - traefik.port=80
+      - "traefik.http.middlewares.${PROJECT}-compress.compress=true"
+      - "traefik.http.routers.${PROJECT}.middlewares=${PROJECT}-compress@docker"
+#      - traefik.http.middlewares.${PROJECT}-auth.basicauth.users=smallfish:$$apr1$$qKS5h3Ee$$ryblpf7DmJd5L6PKfcoMM1

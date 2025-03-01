@@ -156,3 +156,6 @@ convertpro
 wp-content/plugins/cookie-notice
 !wp-content/plugins/ihumbak-newsletter-form/js/jquery-validation/dist
 /wp-content/plugins/ihumbak-facebook-api/
+
+/wordpress
+/database
