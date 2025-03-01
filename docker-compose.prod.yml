@@ -1,5 +1,11 @@
 version: "3.8"
 
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+
 services:
   wordpress:
     labels:
@@ -10,4 +16,13 @@ services:
       - traefik.port=80
       - "traefik.http.middlewares.${PROJECT}-compress.compress=true"
       - "traefik.http.routers.${PROJECT}.middlewares=${PROJECT}-compress@docker"
-#      - traefik.http.middlewares.${PROJECT}-auth.basicauth.users=smallfish:$$apr1$$qKS5h3Ee$$ryblpf7DmJd5L6PKfcoMM1
+    #      - traefik.http.middlewares.${PROJECT}-auth.basicauth.users=smallfish:$$apr1$$qKS5h3Ee$$ryblpf7DmJd5L6PKfcoMM1
+    networks:
+      - internal
+      - web
+
+  db:
+    labels:
+      - traefik.enable=false
+    networks:
+      - internal
