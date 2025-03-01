@@ -37,7 +37,7 @@ if (!function_exists('getenv_docker')) {
   }
 }
 
-$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
+$protocol = $_SERVER['HTTP_HOST'] === 'localhost' ? 'http://' : 'https://';
 
 define('WP_HOME', $protocol . $_SERVER['HTTP_HOST']);
 define('WP_SITEURL', $protocol . $_SERVER['HTTP_HOST']);
