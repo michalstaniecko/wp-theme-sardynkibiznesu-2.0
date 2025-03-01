@@ -10,6 +10,11 @@ services:
   wordpress:
     labels:
       - traefik.enable=true
+      - traefik.http.routers.${PROJECT}-http.entrypoints=web
+      - traefik.http.routers.${PROJECT}-http.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.${PROJECT}-http.middlewares=${PROJECT}-https@docker
+      - traefik.http.middlewares.${PROJECT}-https.redirectscheme.scheme=https
+      - traefik.http.routers.${PROJECT}.entrypoints=websecure
       - traefik.http.routers.${PROJECT}.rule=Host(`${DOMAIN}`)
       - traefik.http.routers.${PROJECT}.tls=true
       - traefik.http.routers.${PROJECT}.tls.certresolver=lets-encrypt
