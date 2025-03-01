@@ -3,8 +3,6 @@ services:
   wordpress:
     image: wordpress
     restart: always
-    ports:
-      - 80:80
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wordpress
@@ -15,6 +13,7 @@ services:
       - ./wp-config.php:/var/www/html/wp-config.php
       - ./wp-content/themes:/var/www/html/wp-content/themes
       - ./wp-content/plugins:/var/www/html/wp-content/plugins
+      - ./uploads:/var/www/html/wp-content/uploads
 
   db:
     image: mysql:8.0

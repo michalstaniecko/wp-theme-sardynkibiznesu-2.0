@@ -30,6 +30,8 @@ class PriceCompare {
 
   public function init() {
     add_action('init', array($this, 'register_post_type'));
+    add_filter('manage_price-compare_posts_columns', array($this, 'add_columns'));
+    add_action('manage_price-compare_posts_custom_column', array($this, 'fill_shortcode_column'), 10, 2);
 
     Shortcodes::getInstance()->init();
   }
@@ -84,5 +86,17 @@ class PriceCompare {
       throw new \Exception('Error while creating table model');
     }
     return $tableModel;
+  }
+
+  public function add_columns($columns) {
+    $columns['price-compare-shortcode'] = __('Shortcode', 'sardynkibiznesu');
+    return $columns;
+  }
+
+  public function fill_shortcode_column($column, $post_id) {
+    if ($column !== 'price-compare-shortcode') {
+      return;
+    }
+    echo '[price_compare id="' . $post_id . '"]';
   }
 }
