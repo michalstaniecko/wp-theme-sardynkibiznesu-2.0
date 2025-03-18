@@ -41,4 +41,5 @@ function sb_register_acf_blocks()
     register_block_type(untrailingslashit(get_stylesheet_directory()) . '/blocks/faq');
     register_block_type(untrailingslashit(get_stylesheet_directory()) . '/blocks/podcast-buttons');
     register_block_type(untrailingslashit(get_stylesheet_directory()) . '/blocks/accordion');
+    register_block_type(untrailingslashit(get_stylesheet_directory()) . '/blocks/countdown-timer');
 }

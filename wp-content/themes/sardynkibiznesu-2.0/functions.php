@@ -5,7 +5,11 @@ include_once get_stylesheet_directory() . '/inc/theme-support.php';
 include_once get_stylesheet_directory() . '/inc/theme-enqueue.php';
 include_once get_stylesheet_directory() . '/inc/theme-head.php';
 include_once get_stylesheet_directory() . '/inc/theme-footer.php';
-include_once get_stylesheet_directory() . '/inc/tracking-codes.php';
+
+if (!defined('ENVIRONMENT') || ENVIRONMENT !== 'development') {
+  include_once get_stylesheet_directory() . '/inc/tracking-codes.php';
+}
+
 include_once get_stylesheet_directory() . '/inc/menus.php';
 include_once get_stylesheet_directory() . '/inc/register-widgets.php';
 include_once get_stylesheet_directory() . '/inc/converter-pro.php';
@@ -17,6 +21,8 @@ include_once get_stylesheet_directory() . '/inc/seo-schema.php';
 include_once get_stylesheet_directory() . '/cmsmasters-shortcodes/shortcodes.php';
 
 include_once get_stylesheet_directory() . '/inc/price-compare/price-compare.php';
+
+include_once get_stylesheet_directory() . '/inc/one-time-offer/one-time-offer.php';
 
 
 //add_action('all', 'log_hook_calls');
@@ -41,6 +47,8 @@ function log_hook_calls($tag) {
 function sb_load_theme()
 {
     \SardynkiBiznesu\PriceCompare\PriceCompare::getInstance();
+
+    new OneTimeOffer();
 }
 
 sb_load_theme();

@@ -31,3 +31,16 @@ services:
       - traefik.enable=false
     networks:
       - internal
+
+  node:
+    depends_on:
+      - wordpress
+    build:
+      context: node
+      dockerfile: Dockerfile
+    volumes:
+      - ./wp-content/themes/sardynkibiznesu-2.0/assets:/app/wp-content/themes/sardynkibiznesu-2.0/assets:rw
+    labels:
+      - traefik.enable=false
+    networks:
+      - internal

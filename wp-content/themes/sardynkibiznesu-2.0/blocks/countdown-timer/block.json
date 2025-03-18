@@ -1,0 +1,14 @@
+{
+  "name": "sardynkibiznesu20/countdown-timer",
+  "title": "Countdown Timer",
+  "description": "Countdown Timer",
+  "category": "text",
+  "icon": "admin-comments",
+  "keywords": [
+    "one time offer", "offer", "timer", "countdown"
+  ],
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "countdown-timer.php"
+  }
+}

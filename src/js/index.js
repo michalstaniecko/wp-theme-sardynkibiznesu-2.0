@@ -9,8 +9,11 @@ import tablePrice from "./table-price";
 
 import AdsConversions from "./ads-conversions";
 
+import {countdownTimer} from "./countdown-timer";
+
 
 window.addEventListener( 'load', () => {
     new AdsConversions()
     tablePrice();
+    countdownTimer();
 } )
