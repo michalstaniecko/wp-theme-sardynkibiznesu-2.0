@@ -52,6 +52,11 @@ class TableCellModel {
       get_template_part('inc/price-compare/view/table-cell-check');
       $value = ob_get_clean();
     }
+    if ($this->type === 'yes-no' && $this->value !== true) {
+      ob_start();
+      get_template_part('inc/price-compare/view/table-cell-not-check');
+      $value = ob_get_clean();
+    }
     return $value;
   }
 }
