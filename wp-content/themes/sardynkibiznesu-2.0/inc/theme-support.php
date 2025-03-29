@@ -24,3 +24,8 @@ function child_custom_sizes( $sizes ) {
         'article-mobile' => __( 'Landing page 728px' ),
     ) );
 }
+
+add_filter('sb_is_local_env', 'sb_is_local_env');
+function sb_is_local_env() {
+  return $_SERVER['HTTP_HOST'] === 'localhost';
+}

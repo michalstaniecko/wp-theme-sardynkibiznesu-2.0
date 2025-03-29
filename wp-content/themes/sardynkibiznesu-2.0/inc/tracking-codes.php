@@ -1,7 +1,5 @@
 <?php
-add_action('wp_head', function() {
-    print_r('dupa');
-});
+
 add_action('wp_head', 'sb_facebook_pixel');
 function sb_facebook_pixel() {
   $code = get_field('facebook_pixel', 'options');

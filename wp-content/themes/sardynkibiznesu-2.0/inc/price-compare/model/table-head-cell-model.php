@@ -8,11 +8,14 @@ class TableHeadCellModel {
   private $label;
   private $link;
 
+  private $imageId;
+
   public function __construct(array $head) {
     $this->name = $head['name'];
     $this->price = $head['price'];
     $this->label = $head['label'];
     $this->link = $head['link'];
+    $this->imageId = $head['image'];
   }
 
   public function getName(): string {
@@ -29,5 +32,13 @@ class TableHeadCellModel {
 
   public function getLink(): string {
     return $this->link;
+  }
+
+  public function getImageSrc(): array | null {
+    if (empty($this->imageId)) {
+      return null;
+    }
+    $imageSrc = wp_get_attachment_image_src($this->imageId, 'article-desktop');
+    return $imageSrc;
   }
 }

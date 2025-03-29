@@ -6,7 +6,7 @@ include_once get_stylesheet_directory() . '/inc/theme-enqueue.php';
 include_once get_stylesheet_directory() . '/inc/theme-head.php';
 include_once get_stylesheet_directory() . '/inc/theme-footer.php';
 
-if (!defined('ENVIRONMENT') || ENVIRONMENT !== 'development') {
+if (false === apply_filters('sb_is_local_env', false)) {
   include_once get_stylesheet_directory() . '/inc/tracking-codes.php';
 }
 
