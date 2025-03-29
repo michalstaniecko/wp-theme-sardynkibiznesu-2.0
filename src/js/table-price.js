@@ -18,7 +18,13 @@ function tablePrice() {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 collapse.toggle();
-            })
+            });
+            collapseItem.addEventListener('hide.bs.collapse', () => {
+                link.classList.remove('active');
+            });
+            collapseItem.addEventListener('show.bs.collapse', () => {
+                link.classList.add('active');
+            });
         });
     }
 

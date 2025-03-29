@@ -19,8 +19,8 @@ $cols = $table_head->countColumns();
 
 <div class="grid lg:grid-cols-<?php echo $cols + 2 ?> table__row table__row--body table-border-bottom">
     <div class="grid items-start gap-2 table__row-head lg:col-span-2 table-border-bottom lg:table-border-bottom-none table-cell-padding">
-        <a href="#" class="table-price__link flex items-start gap-2 text-base hover:text-base hover:no-underline">
-            <i class="far fa fa-angle-right mt-[2px]"></i>
+        <a href="#" class="collapse-button table-price__link flex items-start gap-2 text-base hover:text-base hover:no-underline">
+            <i class="far fa fa-angle-right mt-[2px] [.collapse-button.active_&]:rotate-90 transition-[transform] duration-300"></i>
             <div class="text-base"><?php echo $row->getTitle() ?></div>
         </a>
         <div class="collapse font-normal text-sm text-gray-500"><?php echo $row->getDescription() ?></div>
