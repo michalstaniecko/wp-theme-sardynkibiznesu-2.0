@@ -8,12 +8,14 @@ class TableSectionsModel {
 
   public function __construct($id) {
     $sections = get_field('section', $id);
+    $index = 0;
 
     if (empty($sections)) {
       return;
     }
 
-    $this->sections = array_map(function($section) {
+    $this->sections = array_map(function($section) use (&$index) {
+      $section['index'] = $index++;
       return new TableSectionModel($section);
     }, $sections);
   }

@@ -16,6 +16,6 @@ use SardynkiBiznesu\PriceCompare\Model\TableSectionModel;
             <?php echo $section->getIcon() ?>
           </div>
       <?php endif; ?>
-        <h2><?php echo $section->getTitle() ?></h2>
+        <h2 class="table-price__section-title"><?php echo $section->getTitle() ?></h2>
     </div>
 </div>

@@ -7,8 +7,14 @@ class TableRowModel {
   private $description;
   private $cells;
 
+  private $index;
+
+  private $sectionIndex;
+
   public function __construct(array $row) {
     $this->title = $row['title'];
+    $this->index = $row['index'];
+    $this->sectionIndex = $row['sectionIndex'];
     $this->description = $row['description'];
     $this->cells = array_map(function($cell) {
       return new TableCellModel($cell);
@@ -28,5 +34,13 @@ class TableRowModel {
    */
   public function getCells() {
     return $this->cells;
+  }
+
+  public function getIndex() {
+    return $this->index;
+  }
+
+  public function getSectionIndex() {
+    return $this->sectionIndex;
   }
 }

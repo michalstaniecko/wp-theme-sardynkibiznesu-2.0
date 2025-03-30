@@ -142,7 +142,7 @@
 
 .page__content--boxed-without-sidebar {
   .article {
-    h2:not(.faq__question), h3:not(.faq__question) {
+    h2:not(.faq__question, .table-price__section-title), h3:not(.faq__question, .table-price__row-title) {
       color: #000 !important;
       font-weight: 700;
     }

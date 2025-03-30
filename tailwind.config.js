@@ -1,7 +1,14 @@
 module.exports = {
     content: [
-        './wp-content/themes/sardynkibiznesu-2.0/**/*.{php,html,js,ts}',
-        '!./wp-content/themes/sardynkibiznesu-2.0/assets/**/*',
+        './wp-content/themes/sardynkibiznesu-2.0/admin/**/*.{php,html,js,ts}',
+        './wp-content/themes/sardynkibiznesu-2.0/blocks/**/*.{php,html,js,ts}',
+        './wp-content/themes/sardynkibiznesu-2.0/cmsmasters-shortcodes/**/*.{php,html,js,ts}',
+        './wp-content/themes/sardynkibiznesu-2.0/components/**/*.{php,html,js,ts}',
+        './wp-content/themes/sardynkibiznesu-2.0/inc/**/*.{php,html,js,ts}',
+        './wp-content/themes/sardynkibiznesu-2.0/template-blocks/**/*.{php,html,js,ts}',
+        './wp-content/themes/sardynkibiznesu-2.0/templates/**/*.{php,html,js,ts}',
+        './wp-content/themes/sardynkibiznesu-2.0/*.php',
+        './src/js/**/*.js',
     ],
     darkMode: 'class', // or 'media' or 'class'
     theme: {
