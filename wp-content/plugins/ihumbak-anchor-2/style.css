@@ -1,0 +1,97 @@
+.ihumbak-anchor-links {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  li {
+    list-style: none !important;
+    font-size: 14px;
+    line-height: 1.25;
+  }
+}
+
+.ihumbak-anchor-links a {
+    text-decoration: none;
+    color: #0073aa;
+    margin-right: 10px;
+}
+
+
+.ihumbak-anchor-menu-show, .ihumbak-anchor-menu-hide {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  font-size: 13px;
+  cursor: pointer;
+}
+.ihumbak-anchor-menu-wrapper > strong {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #cc0001;
+  color: #fff !important;
+  padding: 0 10px;
+  font-size: 12px;
+  line-height: 2;
+}
+
+.ihumbak-anchor-menu-wrapper {
+  margin-top: 20px;
+  padding: 15px 20px;
+  border: 1px solid  #cc0001;
+  background-color: #fff;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+a.ihumbak-anchor-link {
+  font-weight: 400;
+}
+.ihumbak-anchor-menu li {
+  line-height: 1.5;
+  list-style: none !important;
+  position: relative;
+  margin: 0 0 8px 0 !important;
+  padding: 0 !important;
+}
+
+ul.ihumbak-anchor-menu:empty {
+  display: none;
+}
+
+.ihumbak-anchor-menu {
+  padding-left: 0;
+}
+
+@media (max-width: 768px) {
+  .ihumbak-anchor-menu {
+    padding-left: 0;
+  }
+}
+
+.ihumbak-anchor-link {
+  padding-left: 25px;
+}
+
+
+.ihumbak-anchor-link::before {
+  top: 5px;
+}
+
+@media (max-width: 768px) {
+  .ihumbak-anchor-menu li {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .ihumbak-anchor-link {
+    padding-left: 20px;
+  }
+
+  .ihumbak-anchor-link::before {
+    top: 2px;
+  }
+}
+
