@@ -57,7 +57,7 @@ class Ihumbak_Anchor {
 		if ( preg_match_all( $pattern, $content, $matches, PREG_SET_ORDER ) ) {
 			foreach ( $matches as $match ) {
 				$level = intval( $match[1] );
-				$id = sanitize_title( $match[2] );
+				$id = ( $match[2] );
 				$name = wp_strip_all_tags( $match[3] );
 				$anchor_links[] = array(
 					'level' => $level,

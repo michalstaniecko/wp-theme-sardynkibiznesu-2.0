@@ -95,3 +95,10 @@ ul.ihumbak-anchor-menu:empty {
   }
 }
 
+li.ihumbak-anchor-level-3 {
+  margin-left: 12px !important;
+}
+
+li.ihumbak-anchor-level-4 {
+  margin-left: 24px !important;
+}
