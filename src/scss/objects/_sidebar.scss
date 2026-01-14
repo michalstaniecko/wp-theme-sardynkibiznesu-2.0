@@ -1,7 +1,11 @@
+// ==========================================================================
+// Sidebar - Modernized
+// ==========================================================================
+
 .sidebar {
   .widget {
-    padding: 30px 0;
-    color: #919191;
+    padding: 24px 0;
+    color: var(--sb-color-text-muted);
 
     &:first-child {
       padding-top: 0;
@@ -9,20 +13,23 @@
   }
 
   a {
-    color: #919191;
+    color: var(--sb-color-text-muted);
+    transition: color var(--sb-transition-fast);
 
     &:hover {
-      color: #88bbc8;
+      color: var(--sb-color-link);
     }
   }
 }
+
 .widget-about {
   font-size: 12px;
   line-height: 20px;
   font-weight: 400;
-  padding: 15px;
-  background-color: #fbfbfb;
-  border: 1px solid #e4e4e4;
+  padding: 20px;
+  background-color: var(--sb-color-bg-subtle);
+  border: 1px solid var(--sb-color-border-light);
+  border-radius: var(--sb-radius-md);
 }
 
 p.single-newsletter-form-small {

@@ -1,3 +1,7 @@
+// ==========================================================================
+// Lists - Modernized
+// ==========================================================================
+
 .entry-content ul {
   .page-template-boxed-without-sidebar & {
     list-style: none;
@@ -9,7 +13,7 @@
       &::before {
         content: '\f00c';
         font-family: FontAwesome;
-        color: #0097b2;
+        color: var(--sb-color-link);
         position: absolute;
         right: 100%;
         margin-right: 4px;
@@ -24,10 +28,9 @@
   }
 }
 
-
 ul li {
   &::marker {
-    color: #810000;
+    color: var(--sb-color-primary);
   }
 }
 

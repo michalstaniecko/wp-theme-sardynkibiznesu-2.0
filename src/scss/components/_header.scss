@@ -3,6 +3,13 @@
   width: 100%;
   background-color: #fff;
   z-index: 100;
+  box-shadow: var(--sb-shadow-header);
+  transition: box-shadow var(--sb-transition-base);
+
+  // Enhanced shadow on scroll (requires JS to add class)
+  &.header--scrolled {
+    box-shadow: var(--sb-shadow-md);
+  }
 }
 
 .header__logo {

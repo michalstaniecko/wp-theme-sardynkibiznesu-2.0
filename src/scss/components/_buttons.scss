@@ -1,21 +1,32 @@
+// ==========================================================================
+// Buttons - Modernized
+// ==========================================================================
+
 .button {
-  padding: 9px 22px;
+  padding: 10px 24px;
   cursor: pointer;
   -webkit-appearance: none;
-  border-radius: 0;
-  background-color: #c00;
+  border-radius: var(--sb-radius-button);
+  background-color: var(--sb-color-primary);
   color: #fff;
-  border-color: #c00;
-  border-style: solid;
-  border-width: 2px;
+  border: 2px solid var(--sb-color-primary);
   display: inline-block;
-  transition: all 0.2s ease;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--sb-transition-base);
+  box-shadow: var(--sb-shadow-button);
 
   &:hover {
     text-decoration: none;
-    background-color: #fff;
-    color: #c00;
-    border-color: #c00;
+    background-color: var(--sb-color-primary-dark);
+    border-color: var(--sb-color-primary-dark);
+    box-shadow: var(--sb-shadow-button-hover);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--sb-shadow-xs);
   }
 }
 
@@ -23,56 +34,54 @@
   padding: 10px 0;
 
   a {
-    border-color: #cc0001;
+    border-color: var(--sb-color-primary);
     background-color: #fff;
-    color: #cc0001;
-    transition: all .3s ease-in-out;
-    padding: 9px 20px;
-    border-width: 1px;
+    color: var(--sb-color-primary);
+    transition: all var(--sb-transition-base);
+    padding: 10px 24px;
+    border-width: 2px;
     border-style: solid;
+    border-radius: var(--sb-radius-button);
     display: inline-block;
 
     &:hover {
       text-decoration: none;
-      border-color: #cc0001;
-      background-color: #cc0001;
+      border-color: var(--sb-color-primary);
+      background-color: var(--sb-color-primary);
       color: #fff;
     }
   }
 }
 
 .button-outline {
-  padding: 9px 22px;
+  padding: 10px 24px;
   cursor: pointer;
   -webkit-appearance: none;
-  border-radius: 0;
-  background-color: rgba(#c00, 0);
-  color: #c00;
-  border-color: #c00;
-  border-width: 2px;
-  border-style: solid;
+  border-radius: var(--sb-radius-button);
+  background-color: transparent;
+  color: var(--sb-color-primary);
+  border: 2px solid var(--sb-color-primary);
   text-decoration: none;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-weight: 500;
   display: inline-block;
-  transition: all 0.2s ease;
+  transition: all var(--sb-transition-base);
 
   &:hover {
     text-decoration: none;
-    background-color: rgba(#c00, 1);
+    background-color: var(--sb-color-primary);
     color: #fff;
-    border-color: #c00;
+    border-color: var(--sb-color-primary);
+    box-shadow: var(--sb-shadow-button-hover);
   }
 }
 
 .button-small {
-  padding: 4px 16px;
-  font-size: 16px;
+  padding: 6px 16px;
+  font-size: 14px;
 }
 
 .button-small.button-outline {
-  font-weight: 300;
-  text-transform: none;
+  font-weight: 400;
 }
 
 .button--bold {
@@ -82,6 +91,7 @@
 .button--blue {
   @apply bg-link;
   border-color: theme('colors.link');
+  border-radius: var(--sb-radius-button);
 
   &:hover {
     @apply bg-transparent;
@@ -90,8 +100,14 @@
   }
 }
 
+// Legacy class - now default behavior (kept for backwards compatibility)
 .button--rounded {
-  border-radius: 8px;
+  border-radius: var(--sb-radius-button);
+}
+
+// Square variant for backwards compatibility
+.button--square {
+  border-radius: 0;
 }
 
 .single-newsletter-form {

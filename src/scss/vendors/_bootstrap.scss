@@ -40,7 +40,7 @@ $blue:    #0d6efd !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
 $pink:    #d63384 !default;
-$red:     #810000;
+$red:     #dc2626;  // Modernized from #810000
 $orange:  #fd7e14 !default;
 $yellow:  #ffc107 !default;
 $green:   #198754 !default;
@@ -216,7 +216,7 @@ $escaped-characters: (
 
 $enable-caret:                true !default;
 $enable-rounded:              true !default;
-$enable-shadows:              false !default;
+$enable-shadows:              true;  // Modernized: enable shadow system
 $enable-gradients:            false !default;
 $enable-transitions:          true !default;
 $enable-reduced-motion:       true !default;
@@ -372,9 +372,9 @@ $border-color:                $gray-300 !default;
 // scss-docs-end border-variables
 
 // scss-docs-start border-radius-variables
-$border-radius:               0;
-$border-radius-sm:            0;
-$border-radius-lg:            0;
+$border-radius:               8px;   // Modernized from 0
+$border-radius-sm:            4px;   // Modernized from 0
+$border-radius-lg:            12px;  // Modernized from 0
 $border-radius-pill:          50rem !default;
 // scss-docs-end border-radius-variables
 

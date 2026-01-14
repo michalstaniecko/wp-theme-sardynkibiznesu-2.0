@@ -1,11 +1,12 @@
 .faq {
     padding-top: 16px;
-    border: 1px solid #c00;
+    border: 1px solid var(--sb-color-primary);
+    border-radius: var(--sb-radius-md);
 }
 
 .faq__title {
     text-align: center;
-    color: #666;
+    color: var(--sb-color-text-secondary);
 }
 
 .faq__list {
@@ -59,7 +60,7 @@ h2 a.faq__link {
     rotate: 0;
     transition: rotate 0.2s ease;
     margin-top: 4px;
-    color: #0097b2;
+    color: var(--sb-color-link);
 
     .faq__item--active & {
         rotate: 180deg;
@@ -73,12 +74,12 @@ h2 a.faq__link {
     border: none;
 
     .faq__item {
-        border-left: 3px solid #c00;
+        border-left: 3px solid var(--sb-color-primary);
         padding-left: 16px;
         transition: border-bottom-color 0.2s ease;
 
         &.faq__item--active {
-            border-bottom-color: #c00;
+            border-bottom-color: var(--sb-color-primary);
         }
     }
 

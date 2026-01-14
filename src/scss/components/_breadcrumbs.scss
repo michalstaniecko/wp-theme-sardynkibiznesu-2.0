@@ -1,15 +1,27 @@
+// ==========================================================================
+// Breadcrumbs - Modernized
+// ==========================================================================
+
 .breadcrumbs {
-  background-color: #fcfcfc;
-  border-bottom: 1px solid $border-color;
+  background-color: var(--sb-color-bg-subtle);
+  border-bottom: 1px solid var(--sb-color-border);
   font-size: 11px;
 
   &, a {
-    color: #888;
+    color: var(--sb-color-text-light);
+  }
+
+  a {
+    transition: color var(--sb-transition-fast);
+
+    &:hover {
+      color: var(--sb-color-primary);
+    }
   }
 }
 
 .breadcrumbs__wrapper {
-  height: 56px;
+  height: 48px;  // Slightly smaller to match new header
   display: flex;
   align-items: center;
   justify-content: flex-end;

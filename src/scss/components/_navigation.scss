@@ -1,7 +1,7 @@
 .navigation {
   display: flex;
   align-items: center;
-  height: 88px;
+  height: var(--sb-header-height);  // Modernized from 88px
 }
 
 .navigation__nav {
@@ -50,7 +50,7 @@
 
       &:hover {
         &::after {
-          background-color: #c00;
+          background-color: var(--sb-color-primary);
         }
       }
     }
@@ -146,12 +146,10 @@
           > .sub-menu {
             display: flex;
             background-color: #fff;
-            box-shadow: 0 8px 15px rgb(0 0 0 / 10%);
-            border-color: #e1e1e1;
-            border-width: 1px;
-            border-style: solid;
-            border-top-width: 2px;
-            border-top-color: $red;
+            box-shadow: var(--sb-shadow-dropdown);
+            border: 1px solid var(--sb-color-border-light);
+            border-top: 2px solid var(--sb-color-primary);
+            border-radius: 0 0 var(--sb-radius-md) var(--sb-radius-md);
 
             a {
               padding: 8px 15px;

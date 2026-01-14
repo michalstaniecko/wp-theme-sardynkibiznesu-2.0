@@ -1,0 +1,152 @@
+// ==========================================================================
+// Animations - Sardynki Biznesu 2.0 Modernization
+// ==========================================================================
+
+// -------------------------------------------------------------------------
+// Keyframe Definitions
+// -------------------------------------------------------------------------
+
+@keyframes sb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes sb-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sb-fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sb-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sb-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes sb-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// -------------------------------------------------------------------------
+// Animation Utility Classes
+// -------------------------------------------------------------------------
+
+.sb-animate-fade-in {
+  animation: sb-fade-in var(--sb-transition-base) ease-out;
+}
+
+.sb-animate-fade-in-up {
+  animation: sb-fade-in-up var(--sb-transition-slow) ease-out;
+}
+
+.sb-animate-fade-in-down {
+  animation: sb-fade-in-down var(--sb-transition-slow) ease-out;
+}
+
+.sb-animate-scale-in {
+  animation: sb-scale-in var(--sb-transition-base) ease-out;
+}
+
+.sb-animate-pulse {
+  animation: sb-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.sb-animate-spin {
+  animation: sb-spin 1s linear infinite;
+}
+
+// -------------------------------------------------------------------------
+// Transition Utilities
+// -------------------------------------------------------------------------
+
+.sb-transition-all {
+  transition: all var(--sb-transition-base);
+}
+
+.sb-transition-colors {
+  transition: var(--sb-transition-colors);
+}
+
+.sb-transition-transform {
+  transition: transform var(--sb-transition-base);
+}
+
+.sb-transition-shadow {
+  transition: box-shadow var(--sb-transition-base);
+}
+
+// -------------------------------------------------------------------------
+// Hover Effects
+// -------------------------------------------------------------------------
+
+.sb-hover-lift {
+  transition: transform var(--sb-transition-base), box-shadow var(--sb-transition-base);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sb-shadow-md);
+  }
+}
+
+.sb-hover-scale {
+  transition: transform var(--sb-transition-fast);
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.sb-hover-glow {
+  transition: box-shadow var(--sb-transition-base);
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+  }
+}
+
+// -------------------------------------------------------------------------
+// Focus States (Accessibility)
+// -------------------------------------------------------------------------
+
+.sb-focus-ring {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  }
+
+  &:focus:not(:focus-visible) {
+    box-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  }
+}

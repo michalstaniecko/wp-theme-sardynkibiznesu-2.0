@@ -1,0 +1,141 @@
+// ==========================================================================
+// Design Tokens - Sardynki Biznesu 2.0 Modernization
+// ==========================================================================
+
+:root {
+  // -------------------------------------------------------------------------
+  // Color System
+  // -------------------------------------------------------------------------
+
+  // Primary Brand Colors (Modernized Red)
+  --sb-color-primary: #dc2626;           // Vibrant red (Tailwind red-600)
+  --sb-color-primary-light: #ef4444;     // Lighter variant (red-500)
+  --sb-color-primary-dark: #b91c1c;      // Darker variant (red-700)
+  --sb-color-primary-50: #fef2f2;        // Very light tint
+  --sb-color-primary-100: #fee2e2;       // Light tint
+
+  // Legacy colors (for backwards compatibility during transition)
+  --sb-color-legacy-red: #810000;
+  --sb-color-legacy-red-alt: #cc0000;
+
+  // Accent Colors
+  --sb-color-link: #0097b2;              // Existing link color (teal)
+  --sb-color-link-hover: #007a91;        // Darker teal for hover
+
+  // Neutral Colors - Text
+  --sb-color-text-primary: #222222;      // Headings, strong text
+  --sb-color-text-secondary: #666666;    // Body text
+  --sb-color-text-muted: #919191;        // Meta info, captions
+  --sb-color-text-light: #888888;        // Subtle text
+
+  // Background Colors
+  --sb-color-bg-white: #ffffff;
+  --sb-color-bg-light: #f8f8f8;
+  --sb-color-bg-subtle: #fcfcfc;
+  --sb-color-bg-muted: #efefef;
+  --sb-color-bg-dark: #222222;
+  --sb-color-bg-darker: #333333;
+
+  // Border Colors
+  --sb-color-border: #dee2e6;
+  --sb-color-border-light: #e1e1e1;
+  --sb-color-border-card: #eaf0f3;
+
+  // -------------------------------------------------------------------------
+  // Spacing System (8px base scale)
+  // -------------------------------------------------------------------------
+  --sb-space-1: 0.25rem;   // 4px
+  --sb-space-2: 0.5rem;    // 8px
+  --sb-space-3: 0.75rem;   // 12px
+  --sb-space-4: 1rem;      // 16px
+  --sb-space-5: 1.25rem;   // 20px
+  --sb-space-6: 1.5rem;    // 24px
+  --sb-space-8: 2rem;      // 32px
+  --sb-space-10: 2.5rem;   // 40px
+  --sb-space-12: 3rem;     // 48px
+  --sb-space-16: 4rem;     // 64px
+
+  // -------------------------------------------------------------------------
+  // Border Radius System
+  // -------------------------------------------------------------------------
+  --sb-radius-none: 0;
+  --sb-radius-sm: 4px;
+  --sb-radius-md: 8px;
+  --sb-radius-lg: 12px;
+  --sb-radius-xl: 16px;
+  --sb-radius-2xl: 24px;
+  --sb-radius-full: 9999px;
+
+  // Component-specific radii
+  --sb-radius-button: var(--sb-radius-md);
+  --sb-radius-card: var(--sb-radius-lg);
+  --sb-radius-input: var(--sb-radius-md);
+  --sb-radius-image: var(--sb-radius-sm);
+
+  // -------------------------------------------------------------------------
+  // Shadow System (Layered)
+  // -------------------------------------------------------------------------
+  --sb-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --sb-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --sb-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --sb-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --sb-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  // Component-specific shadows
+  --sb-shadow-card: var(--sb-shadow-sm);
+  --sb-shadow-card-hover: var(--sb-shadow-md);
+  --sb-shadow-dropdown: var(--sb-shadow-lg);
+  --sb-shadow-button: var(--sb-shadow-xs);
+  --sb-shadow-button-hover: var(--sb-shadow-sm);
+  --sb-shadow-header: var(--sb-shadow-sm);
+
+  // -------------------------------------------------------------------------
+  // Typography
+  // -------------------------------------------------------------------------
+  --sb-font-family-base: montserrat, sans-serif;
+
+  --sb-font-size-xs: 0.75rem;    // 12px
+  --sb-font-size-sm: 0.875rem;   // 14px
+  --sb-font-size-base: 1rem;     // 16px (NEW - was 19px)
+  --sb-font-size-lg: 1.125rem;   // 18px
+  --sb-font-size-xl: 1.25rem;    // 20px
+  --sb-font-size-2xl: 1.5rem;    // 24px
+  --sb-font-size-3xl: 1.75rem;   // 28px
+
+  --sb-line-height-tight: 1.25;
+  --sb-line-height-normal: 1.5;
+  --sb-line-height-relaxed: 1.75;
+
+  // -------------------------------------------------------------------------
+  // Layout
+  // -------------------------------------------------------------------------
+  --sb-header-height: 64px;              // NEW - was 88px
+  --sb-header-height-mobile: 64px;
+  --sb-container-max-width: 1310px;
+
+  // -------------------------------------------------------------------------
+  // Transitions
+  // -------------------------------------------------------------------------
+  --sb-transition-fast: 150ms ease;
+  --sb-transition-base: 200ms ease;
+  --sb-transition-slow: 300ms ease;
+  --sb-transition-colors: color var(--sb-transition-base),
+                          background-color var(--sb-transition-base),
+                          border-color var(--sb-transition-base);
+}
+
+// ==========================================================================
+// SCSS Variable Mappings (for Bootstrap compatibility)
+// ==========================================================================
+
+// Map CSS custom properties to SCSS variables for use in Bootstrap mixins
+$sb-color-primary: #dc2626;
+$sb-color-primary-light: #ef4444;
+$sb-color-primary-dark: #b91c1c;
+
+$sb-radius-sm: 4px;
+$sb-radius-md: 8px;
+$sb-radius-lg: 12px;
+$sb-radius-xl: 16px;
+
+$sb-header-height: 64px;
