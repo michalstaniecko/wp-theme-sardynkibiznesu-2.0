@@ -164,6 +164,7 @@ dist
 .pnp.*
 
 wp-content/themes/sardynkibiznesu-2.0/assets
+/assets
 convertpro
 wp-content/plugins/cookie-notice
 !wp-content/plugins/ihumbak-newsletter-form/js/jquery-validation/dist
