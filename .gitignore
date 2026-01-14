@@ -1,4 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
+
+# macOS
+.DS_Store
+
 ### WordPress template
 # ignore everything in the root except the "wp-content" directory.
 !wp-content/
@@ -11,6 +15,7 @@ wp-content/*
 !wp-content/themes/
 lightbox-photoswipe
 wp-content/plugins/updraftplus
+wp-content/plugins/ihumbak-semantic-search
 
 # ignore these plugins
 wp-content/plugins/hello.php

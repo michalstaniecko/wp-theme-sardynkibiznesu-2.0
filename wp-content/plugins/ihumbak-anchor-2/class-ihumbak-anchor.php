@@ -7,7 +7,7 @@ class Ihumbak_Anchor {
 	public function __construct() {
 		add_action('wp_enqueue_scripts', array($this, 'ihumbak_anchor_enqueue_scripts'));
 		add_action( 'save_post', array( $this, 'save_anchor_links_to_meta' ), 10, 3 );
-		add_shortcode( 'ihumbak_anchor', array( $this, 'ihumbak_anchor_shortcode' ) );
+		add_shortcode( 'ihumbak_anchor_toc', array( $this, 'ihumbak_anchor_shortcode' ) );
 	}
 
 	public function ihumbak_anchor_enqueue_scripts() {

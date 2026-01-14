@@ -56,5 +56,11 @@ mix.js( 'src/js/index.js', `${themePath}/assets/index.js` )
 
 mix.copyDirectory('src/fonts', `${themePath}/assets/fonts`);
 
+mix.webpackConfig({
+    watchOptions: {
+        ignored: /node_modules|wp-content\/themes\/sardynkibiznesu-2.0\/assets/,
+    }
+});
+
 mix.sass( 'src/scss/admin.scss', `${themePath}/assets/admin.css` )
 mix.js( 'src/js/admin.js', `${themePath}/assets/admin.js` )
