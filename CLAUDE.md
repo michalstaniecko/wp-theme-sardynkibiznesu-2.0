@@ -85,3 +85,23 @@ Project-specific plugins prefixed with `ihumbak-`:
 - Advanced Custom Fields Pro (embedded in theme)
 - PhotoSwipe 4.1.3
 - jQuery Validation 1.19.3
+
+## Available Skills
+
+Custom Claude Code skills are available in `.claude/skills/` to provide context-aware assistance:
+
+| Skill | Purpose |
+|-------|---------|
+| `wordpress-theme` | Theme templates, hooks, singleton pattern, environment detection |
+| `wordpress-plugin` | Plugin architecture (ihumbak-* pattern), shortcodes, AJAX |
+| `gutenberg-blocks` | ACF Gutenberg blocks, block.json, render templates |
+| `frontend-design` | SCSS (ITCSS), Tailwind CSS, Bootstrap 5, responsive design |
+| `frontend-develop` | JavaScript ES6, Laravel Mix, Webpack, module patterns |
+| `devops` | Docker, npm scripts, environment configuration |
+| `acf-fields` | Advanced Custom Fields, Local JSON, repeaters, flexible content |
+| `price-compare` | Price comparison CPT, model architecture, shortcodes |
+| `seo-schema` | SEO, Schema.org JSON-LD, Yoast integration |
+| `analytics` | Google Analytics (GA4), Facebook Pixel, conversion tracking |
+| `newsletter` | MailerLite/GetResponse integration, form validation |
+
+Skills are automatically loaded by Claude Code when relevant to the task.
