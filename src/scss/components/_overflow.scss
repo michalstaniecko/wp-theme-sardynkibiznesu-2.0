@@ -4,11 +4,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.3;
   background-color: #000000;
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--sb-transition-base), visibility var(--sb-transition-base);
+  z-index: 99;  // Below header (100) but above content
 
   .is-navigation--pushed & {
-    display: block;
+    opacity: 0.3;
+    visibility: visible;
   }
 }

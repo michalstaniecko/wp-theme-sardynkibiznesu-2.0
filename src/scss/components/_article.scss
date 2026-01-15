@@ -107,6 +107,34 @@
     margin-bottom: 30px;
   }
 
+  // Optimal reading width (680px) for text content
+  > p,
+  > ul,
+  > ol,
+  > blockquote,
+  > h2,
+  > h3,
+  > h4,
+  > .wp-block-paragraph,
+  > .wp-block-list,
+  > .wp-block-heading,
+  > .wp-block-quote {
+    max-width: 680px;
+  }
+
+  // Allow wider elements (images, tables, embeds, TOC)
+  > figure,
+  > .wp-block-image,
+  > .wp-block-table,
+  > .wp-block-embed,
+  > .alignwide,
+  > .alignfull,
+  > .ihumbak-anchor-menu-wrapper,
+  > .table-price,
+  > .faq {
+    max-width: 100%;
+  }
+
   .page__wrapper:not(.page__content--boxed-without-sidebar) & {
     ul li {
       @apply list-disc;
