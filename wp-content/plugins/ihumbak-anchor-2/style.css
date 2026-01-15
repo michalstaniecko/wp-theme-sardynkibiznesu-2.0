@@ -7,8 +7,7 @@
 .ihumbak-anchor-menu-wrapper {
   margin-top: 24px;
   margin-bottom: 24px;
-  padding: 24px;
-  padding-top: 32px;
+  padding: 12px 24px 12px 24px;
   border: 1px solid var(--sb-color-border-light, #e1e1e1);
   border-radius: var(--sb-radius-lg, 12px);
   background-color: var(--sb-color-bg-subtle, #fcfcfc);
@@ -53,13 +52,19 @@
   border-color: var(--sb-color-primary, #dc2626);
 }
 
+/* Utility class for toggle */
+.ihumbak-anchor-d-none {
+  display: none;
+}
+
 /* Menu list */
 .ihumbak-anchor-menu {
   padding-left: 0;
-  margin: 0;
+  margin: 0 !important;
+  margin-top: 8px !important;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
 }
 
 ul.ihumbak-anchor-menu:empty {
@@ -72,13 +77,20 @@ ul.ihumbak-anchor-menu:empty {
   list-style: none !important;
   position: relative;
   margin: 0 !important;
+  margin-bottom: 0 !important;
   padding: 0 !important;
+}
+
+/* Override old plugin margin */
+ul.ihumbak-anchor-menu > li {
+  margin-bottom: 0 !important;
 }
 
 /* Links */
 .ihumbak-anchor-link {
   display: block;
-  padding: 8px 16px;
+  position: relative;
+  padding: 4px 16px 4px 24px;
   color: var(--sb-color-text-secondary, #666);
   text-decoration: none;
   font-weight: 400;
@@ -87,10 +99,28 @@ ul.ihumbak-anchor-menu:empty {
   transition: background-color 150ms ease, color 150ms ease;
 }
 
+/* Arrow icon */
+.ihumbak-anchor-link::before {
+  content: "\f061";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: var(--sb-color-text-muted, #919191);
+  transition: left 150ms ease, color 150ms ease;
+}
+
 .ihumbak-anchor-link:hover {
   background-color: var(--sb-color-primary-50, #fef2f2);
   color: var(--sb-color-primary, #dc2626);
   text-decoration: none;
+}
+
+.ihumbak-anchor-link:hover::before {
+  left: 10px;
+  color: var(--sb-color-primary, #dc2626);
 }
 
 a.ihumbak-anchor-link {
@@ -144,13 +174,16 @@ li.ihumbak-anchor-level-4 .ihumbak-anchor-link {
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .ihumbak-anchor-menu-wrapper {
-    padding: 20px;
-    padding-top: 28px;
+    padding: 14px 16px 10px 16px;
   }
 
   .ihumbak-anchor-link {
-    padding: 10px 12px;
+    padding: 6px 12px 6px 22px;
     font-size: 14px;
+  }
+
+  .ihumbak-anchor-link::before {
+    left: 6px;
   }
 
   li.ihumbak-anchor-level-3 {
@@ -158,7 +191,7 @@ li.ihumbak-anchor-level-4 .ihumbak-anchor-link {
   }
 
   li.ihumbak-anchor-level-3 .ihumbak-anchor-link {
-    padding-left: 16px;
+    padding-left: 22px;
   }
 
   li.ihumbak-anchor-level-4 {
@@ -166,6 +199,6 @@ li.ihumbak-anchor-level-4 .ihumbak-anchor-link {
   }
 
   li.ihumbak-anchor-level-4 .ihumbak-anchor-link {
-    padding-left: 24px;
+    padding-left: 22px;
   }
 }
