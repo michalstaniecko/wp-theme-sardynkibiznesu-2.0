@@ -14,6 +14,12 @@
   --sb-color-primary-50: #fef2f2;        // Very light tint
   --sb-color-primary-100: #fee2e2;       // Light tint
 
+  // Primary Color Alpha Variants (for focus rings, hover states, glows)
+  --sb-color-primary-alpha-5: rgba(220, 38, 38, 0.05);   // Subtle hover backgrounds
+  --sb-color-primary-alpha-10: rgba(220, 38, 38, 0.1);  // Light focus rings
+  --sb-color-primary-alpha-20: rgba(220, 38, 38, 0.2);  // Standard focus rings
+  --sb-color-primary-alpha-30: rgba(220, 38, 38, 0.3);  // Glow effects
+
   // Legacy colors (for backwards compatibility during transition)
   --sb-color-legacy-red: #810000;
   --sb-color-legacy-red-alt: #cc0000;

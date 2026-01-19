@@ -133,11 +133,11 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+    box-shadow: 0 0 0 3px var(--sb-color-primary-alpha-20);
   }
 
   &:hover {
-    background-color: rgba(220, 38, 38, 0.05);
+    background-color: var(--sb-color-primary-alpha-5);
 
     span {
       background-color: var(--sb-color-primary);
@@ -168,7 +168,7 @@
 
   // Hamburger to X animation when menu is open
   .navigation--pushed & {
-    background-color: rgba(220, 38, 38, 0.05);
+    background-color: var(--sb-color-primary-alpha-5);
 
     span {
       background-color: var(--sb-color-primary);

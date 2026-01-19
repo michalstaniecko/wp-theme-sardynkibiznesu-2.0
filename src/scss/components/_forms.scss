@@ -15,7 +15,7 @@ input {
 
   &:focus {
     border-color: var(--sb-color-primary-light);
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    box-shadow: 0 0 0 3px var(--sb-color-primary-alpha-10);
   }
 }
 
@@ -33,7 +33,7 @@ textarea.form-control {
 
   &:focus {
     border-color: var(--sb-color-primary-light);
-    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    box-shadow: 0 0 0 3px var(--sb-color-primary-alpha-10);
   }
 }
 
