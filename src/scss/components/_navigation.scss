@@ -112,42 +112,82 @@
 }
 
 .navigation__toggle {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 0;
-  outline: 0;
   padding: 0;
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  align-content: center;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: 6px;
-  background-color: #fff;
+  background-color: transparent;
+  border-radius: var(--sb-radius-md);
   cursor: pointer;
+  transition: background-color var(--sb-transition-fast);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  }
+
+  &:hover {
+    background-color: rgba(220, 38, 38, 0.05);
+
+    span {
+      background-color: var(--sb-color-primary);
+    }
+
+    span:nth-child(2) {
+      width: 16px;
+    }
+  }
 
   span {
-    width: 24px;
-    height: 3px;
-    background-color: #808080;
     display: block;
-    transition: transform var(--sb-transition-base), opacity var(--sb-transition-base);
+    width: 22px;
+    height: 2px;
+    background-color: var(--sb-color-text-primary);
+    border-radius: 1px;
+    transition:
+      transform var(--sb-transition-base) cubic-bezier(0.68, -0.6, 0.32, 1.6),
+      width var(--sb-transition-fast),
+      opacity var(--sb-transition-fast),
+      background-color var(--sb-transition-fast);
     transform-origin: center;
+
+    &:nth-child(1) { transition-delay: 0ms; }
+    &:nth-child(2) { transition-delay: 50ms; }
+    &:nth-child(3) { transition-delay: 100ms; }
   }
 
   // Hamburger to X animation when menu is open
   .navigation--pushed & {
+    background-color: rgba(220, 38, 38, 0.05);
+
+    span {
+      background-color: var(--sb-color-primary);
+    }
+
     span:nth-child(1) {
-      transform: translateY(9px) rotate(45deg);
+      transform: translateY(8px) rotate(45deg);
+      transition-delay: 100ms;
     }
 
     span:nth-child(2) {
+      width: 0;
       opacity: 0;
-      transform: scaleX(0);
+      transition-delay: 0ms;
     }
 
     span:nth-child(3) {
-      transform: translateY(-9px) rotate(-45deg);
+      transform: translateY(-8px) rotate(-45deg);
+      transition-delay: 100ms;
     }
   }
 }
