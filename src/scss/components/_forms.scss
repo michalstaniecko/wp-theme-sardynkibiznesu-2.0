@@ -1,15 +1,21 @@
+// ==========================================================================
+// Forms - Modernized
+// ==========================================================================
+
 input {
-  border: 1px solid #e1e1e1;
-  background-color: #fcfcfc;
-  color: #919191;
+  border: 1px solid var(--sb-color-border-light);
+  background-color: var(--sb-color-bg-subtle);
+  color: var(--sb-color-text-muted);
   outline: 0;
+  transition: border-color var(--sb-transition-fast), box-shadow var(--sb-transition-fast);
 
   &.form-control {
-    border-radius: 0;
+    border-radius: var(--sb-radius-input);
   }
 
   &:focus {
-    box-shadow: 0 0 2px 0 rgb(0 0 0 / 20%);
+    border-color: var(--sb-color-primary-light);
+    box-shadow: 0 0 0 3px var(--sb-color-primary-alpha-10);
   }
 }
 
@@ -17,5 +23,21 @@ input {
   &[type=text],
   &[type=email] {
     margin-bottom: 20px;
+    border-radius: var(--sb-radius-input);
   }
+}
+
+// Textarea styles
+textarea.form-control {
+  border-radius: var(--sb-radius-input);
+
+  &:focus {
+    border-color: var(--sb-color-primary-light);
+    box-shadow: 0 0 0 3px var(--sb-color-primary-alpha-10);
+  }
+}
+
+// Select styles
+select.form-control {
+  border-radius: var(--sb-radius-input);
 }

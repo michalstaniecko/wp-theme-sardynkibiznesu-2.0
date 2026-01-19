@@ -3,12 +3,23 @@
   width: 100%;
   background-color: #fff;
   z-index: 100;
+  box-shadow: var(--sb-shadow-header);
+  transition: box-shadow var(--sb-transition-base);
+
+  // Enhanced shadow on scroll (JS adds this class when page is scrolled)
+  &.header--scrolled {
+    box-shadow: var(--sb-shadow-md);
+  }
 }
 
 .header__logo {
+  max-height: 40px;
+  width: auto;
+  height: auto;
+
   @include media-breakpoint-down(sm) {
     max-width: 200px;
-    width: 100%;
+    max-height: 36px;
   }
 }
 

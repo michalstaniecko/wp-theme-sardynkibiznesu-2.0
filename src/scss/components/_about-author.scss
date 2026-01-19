@@ -1,12 +1,17 @@
+// ==========================================================================
+// About Author - Modernized
+// ==========================================================================
+
 .about-author {
   padding: 24px 24px 24px 70px;
   margin-bottom: 24px;
   margin-top: 24px;
-  background-color: #efefef;
+  background-color: var(--sb-color-bg-muted);
   position: relative;
   margin-left: 48px;
   min-height: 148px;
   max-width: 620px;
+  border-radius: var(--sb-radius-lg);
 }
 
 .about-author__title {
@@ -16,25 +21,36 @@
 
 .about-author__meta-title {
   font-size: 12px;
+  color: var(--sb-color-text-muted);
 }
 
 .about-author__description {
   font-size: 14px;
+  color: var(--sb-color-text-secondary);
 }
 
 .about-author__image {
   position: absolute;
   left: -48px;
   top: 24px;
+
   img {
     border-radius: 50%;
     border: 2px solid #fff;
+    box-shadow: var(--sb-shadow-sm);
   }
 }
 
 .about-author__links {
   margin-top: 8px;
+
   a {
     margin-right: 0.5rem;
+    color: var(--sb-color-text-muted);
+    transition: color var(--sb-transition-fast);
+
+    &:hover {
+      color: var(--sb-color-primary);
+    }
   }
 }

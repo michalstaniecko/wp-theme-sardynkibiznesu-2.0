@@ -1,69 +1,160 @@
+/* ==========================================================================
+   Table of Contents - Legacy Plugin Modernized Styles
+   Aligned with ihumbak-anchor-2 design
+   ========================================================================== */
+
+/* Wrapper */
 .ihumbak-anchor-menu-wrapper {
-  padding: 15px 20px;
-  border-top: 1px solid #e6e6e6;
-  border-bottom: 1px solid #e6e6e6;
-  background-color: #f4f4f4;
-  margin-bottom: 20px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  padding: 12px 24px 12px 24px;
+  border: 1px solid var(--sb-color-border-light, #e1e1e1);
+  border-radius: var(--sb-radius-lg, 12px);
+  background-color: var(--sb-color-bg-subtle, #fcfcfc);
+  box-shadow: var(--sb-shadow-sm, 0 1px 3px 0 rgb(0 0 0 / 0.1));
   position: relative;
 }
 
+/* Title label - floating above border */
+.ihumbak-anchor-menu-wrapper > strong {
+  position: absolute;
+  top: -12px;
+  left: 16px;
+  background-color: var(--sb-color-primary, #dc2626);
+  color: #fff !important;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  border-radius: var(--sb-radius-sm, 4px);
+  box-shadow: var(--sb-shadow-xs, 0 1px 2px 0 rgb(0 0 0 / 0.05));
+}
+
+/* Collapse/Expand buttons */
+.ihumbak-anchor-menu-show,
+.ihumbak-anchor-menu-hide {
+  position: absolute;
+  right: 16px;
+  top: -10px;
+  font-size: 12px;
+  cursor: pointer;
+  background: var(--sb-color-bg-white, #fff);
+  border: 1px solid var(--sb-color-border-light, #e1e1e1);
+  color: var(--sb-color-text-muted, #919191);
+  padding: 4px 10px;
+  border-radius: var(--sb-radius-sm, 4px);
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.ihumbak-anchor-menu-show:hover,
+.ihumbak-anchor-menu-hide:hover {
+  color: var(--sb-color-primary, #dc2626);
+  border-color: var(--sb-color-primary, #dc2626);
+}
+
+/* Utility class for toggle */
+.ihumbak-anchor-d-none {
+  display: none;
+}
+
+/* Menu list */
 .ihumbak-anchor-menu {
-  margin-left: 0 !important;
-  margin-top: 25px !important;
-  margin-bottom: 0 !important;
+  padding-left: 0;
+  margin: 0 !important;
+  margin-top: 8px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-
-ul.ihumbak-anchor-menu > li {
-  margin-bottom: 13px !important;
-}
-
-
+/* Menu items */
 .ihumbak-anchor-menu li {
-  line-height: 1;
+  line-height: 1.5;
   list-style: none !important;
   position: relative;
-  margin: 0 0 8px 0 !important;
-  padding-left: 0 !important;
+  margin: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
 }
 
 .ihumbak-anchor-menu li::before {
   display: none !important;
 }
 
-.ihumbak-anchor-link {
-  position: relative;
-  padding-left: 15px;
-  display: inline-block;
+/* Override old plugin margin */
+ul.ihumbak-anchor-menu > li {
+  margin-bottom: 0 !important;
 }
 
+/* Links */
+.ihumbak-anchor-link {
+  display: block;
+  position: relative;
+  padding: 4px 16px 4px 24px;
+  color: var(--sb-color-text-secondary, #666);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: var(--sb-radius-sm, 4px);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+/* Arrow icon */
 .ihumbak-anchor-link::before {
   content: "\f061";
-  position: absolute;
   font-family: FontAwesome;
-  left: 0px;
-  top: 2px;
-  font-size: 12px;
-  transition: left 0.2s ease-in-out;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: var(--sb-color-text-muted, #919191);
+  transition: left 150ms ease, color 150ms ease;
+}
+
+.ihumbak-anchor-link:hover {
+  background-color: var(--sb-color-primary-50, #fef2f2);
+  color: var(--sb-color-primary, #dc2626);
+  text-decoration: none;
 }
 
 .ihumbak-anchor-link:hover::before {
-  left: 3px;
-}
-.ihumbak-anchor-menu-show,
-.ihumbak-anchor-menu-hide {
-  position: absolute;
-  right: 20px;
-  top: 17px;
-  font-size:13px;
-  cursor: pointer;
+  left: 10px;
+  color: var(--sb-color-primary, #dc2626);
 }
 
-.ihumbak-anchor-d-none {
-  display: none;
-}
-
+/* Nested levels (old plugin uses nested ul) */
 .ihumbak-anchor-menu > li > ul {
-  margin-top: 8px;
-  margin-bottom: 15px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 16px !important;
+  padding-left: 0;
+}
+
+.ihumbak-anchor-menu > li > ul .ihumbak-anchor-link {
+  font-size: 13px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .ihumbak-anchor-menu-wrapper {
+    padding: 14px 16px 10px 16px;
+  }
+
+  .ihumbak-anchor-link {
+    padding: 6px 12px 6px 22px;
+    font-size: 14px;
+  }
+
+  .ihumbak-anchor-link::before {
+    left: 6px;
+  }
+
+  .ihumbak-anchor-menu > li > ul {
+    margin-left: 8px !important;
+  }
+
+  .ihumbak-anchor-menu > li > ul .ihumbak-anchor-link {
+    padding-left: 22px;
+  }
 }

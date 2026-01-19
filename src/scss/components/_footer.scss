@@ -1,12 +1,21 @@
+// ==========================================================================
+// Footer - Modernized
+// ==========================================================================
+
 .footer__main {
-  padding-top: 50px;
-  padding-bottom: 50px;
-  background-color: #222;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  background-color: var(--sb-color-bg-dark);
   color: #ddd;
   font-size: 14px;
 
   a {
     color: inherit;
+    transition: color var(--sb-transition-fast);
+
+    &:hover {
+      color: var(--sb-color-primary-light);
+    }
   }
 
   ul {
@@ -15,21 +24,24 @@
 }
 
 .footer__bottom {
-  background-color: #333;
+  background-color: var(--sb-color-bg-darker);
   color: #eee;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   font-size: 11px;
 
   a {
     color: inherit;
+    transition: color var(--sb-transition-fast);
+
+    &:hover {
+      color: var(--sb-color-primary-light);
+    }
   }
 }
 
 .footer__menu {
   font-size: 14px;
-  a {
-  }
 
   ul {
     list-style: none;
@@ -38,6 +50,7 @@
 
     li {
       list-style: none;
+      margin-bottom: var(--sb-space-2);
     }
   }
 }

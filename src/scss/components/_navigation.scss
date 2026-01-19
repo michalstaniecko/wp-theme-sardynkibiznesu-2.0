@@ -1,7 +1,7 @@
 .navigation {
   display: flex;
   align-items: center;
-  height: 88px;
+  height: var(--sb-header-height);  // Modernized from 88px
 }
 
 .navigation__nav {
@@ -50,7 +50,7 @@
 
       &:hover {
         &::after {
-          background-color: #c00;
+          background-color: var(--sb-color-primary);
         }
       }
     }
@@ -89,6 +89,7 @@
     max-width: 350px;
     width: 100%;
     background-color: #fff;
+    transition: transform var(--sb-transition-slow);  // Smooth slide animation
 
     ul {
       flex-wrap: wrap;
@@ -111,20 +112,83 @@
 }
 
 .navigation__toggle {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 0;
-  outline: 0;
   padding: 0;
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  background-color: #fff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: transparent;
+  border-radius: var(--sb-radius-md);
+  cursor: pointer;
+  transition: background-color var(--sb-transition-fast);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--sb-color-primary-alpha-20);
+  }
+
+  &:hover {
+    background-color: var(--sb-color-primary-alpha-5);
+
+    span {
+      background-color: var(--sb-color-primary);
+    }
+
+    span:nth-child(2) {
+      width: 16px;
+    }
+  }
 
   span {
-    width: 100%;
-    height: 3px;
-    background-color: #808080;
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: var(--sb-color-text-primary);
+    border-radius: 1px;
+    transition:
+      transform var(--sb-transition-base) cubic-bezier(0.68, -0.6, 0.32, 1.6),
+      width var(--sb-transition-fast),
+      opacity var(--sb-transition-fast),
+      background-color var(--sb-transition-fast);
+    transform-origin: center;
+
+    &:nth-child(1) { transition-delay: 0ms; }
+    &:nth-child(2) { transition-delay: 50ms; }
+    &:nth-child(3) { transition-delay: 100ms; }
+  }
+
+  // Hamburger to X animation when menu is open
+  .navigation--pushed & {
+    background-color: var(--sb-color-primary-alpha-5);
+
+    span {
+      background-color: var(--sb-color-primary);
+    }
+
+    span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+      transition-delay: 100ms;
+    }
+
+    span:nth-child(2) {
+      width: 0;
+      opacity: 0;
+      transition-delay: 0ms;
+    }
+
+    span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+      transition-delay: 100ms;
+    }
   }
 }
 
@@ -146,12 +210,10 @@
           > .sub-menu {
             display: flex;
             background-color: #fff;
-            box-shadow: 0 8px 15px rgb(0 0 0 / 10%);
-            border-color: #e1e1e1;
-            border-width: 1px;
-            border-style: solid;
-            border-top-width: 2px;
-            border-top-color: $red;
+            box-shadow: var(--sb-shadow-dropdown);
+            border: 1px solid var(--sb-color-border-light);
+            border-top: 2px solid var(--sb-color-primary);
+            border-radius: 0 0 var(--sb-radius-md) var(--sb-radius-md);
 
             a {
               padding: 8px 15px;

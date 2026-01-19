@@ -18,11 +18,8 @@
     "laravel-mix": "^6.0.31",
     "laravel-mix-purgecss": "^6.0.0",
     "magnific-popup": "^1.1.0",
-    "mini-css-extract-plugin": "^1.6.0",
     "photoswipe": "^4.1.3",
     "postcss": "^8.3.9",
-    "postcss-purgecss-laravel": "^2.0.0",
-    "purgecss-webpack-plugin": "^4.0.3",
     "resolve-url-loader": "^4.0.0",
     "sass": "^1.32.12",
     "sass-loader": "^11.0.1",
@@ -30,9 +27,9 @@
     "webpack-cli": "^4.7.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "development": "webpack --watch --mode=development",
-    "production": "webpack --mode=production"
+    "dev": "npx mix",
+    "watch": "npx mix watch",
+    "production": "npx mix --production"
   },
   "author": "",
   "license": "ISC",

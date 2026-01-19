@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+// Design system foundation
+@import "global/design-tokens";
+@import "global/animations";
+
 @import "global/fonts";
 @import "~bootstrap/scss/functions";
 @import "vendors/bootstrap";
