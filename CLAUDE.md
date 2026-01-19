@@ -8,13 +8,13 @@ WordPress website "Sardynki Biznesu 2.0" - a Polish business information portal 
 
 ## Build Commands
 
-**IMPORTANT:** This project uses Laravel Mix (`webpack.mix.js`), NOT `webpack.config.js`. Always use `npx mix` commands to build assets.
+This project uses Laravel Mix (`webpack.mix.js`) for asset compilation.
 
 ```bash
-npx mix --production   # Build assets (ALWAYS USE THIS)
+npm run dev            # Build assets (development)
+npm run watch          # Build and watch for changes
+npm run production     # Build assets (production, minified)
 ```
-
-**NEVER use `npm run development`** - it runs in watch mode indefinitely and will hang/timeout.
 
 ## Local Development
 
@@ -29,8 +29,8 @@ Environment variables can be set via `.env` file (DB_USER, DB_PASSWORD, DB_NAME)
 
 ### Build System
 - **Laravel Mix** (Webpack wrapper) for asset compilation
-- **Configuration**: `webpack.mix.js` (NOT webpack.config.js)
-- **Build command**: `npx mix --production`
+- **Configuration**: `webpack.mix.js`
+- **Build command**: `npm run production`
 - **Source files**: `src/js/` and `src/scss/`
 - **Output**: `wp-content/themes/sardynkibiznesu-2.0/assets/`
 - **Tailwind config**: `tailwind.config.js`
