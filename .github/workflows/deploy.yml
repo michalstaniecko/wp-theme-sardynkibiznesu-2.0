@@ -1,0 +1,221 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      skip_backup:
+        description: 'Skip backup step'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  THEME_NAME: sardynkibiznesu-2.0
+  NODE_VERSION: '20'
+
+jobs:
+  build:
+    name: Build Assets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production assets
+        run: npm run production
+
+      - name: Verify build output
+        run: |
+          echo "Checking build output..."
+          if [ ! -f "wp-content/themes/${{ env.THEME_NAME }}/assets/index.js" ]; then
+            echo "Error: index.js not found"
+            exit 1
+          fi
+          if [ ! -f "wp-content/themes/${{ env.THEME_NAME }}/assets/main.css" ]; then
+            echo "Error: main.css not found"
+            exit 1
+          fi
+          echo "Build verification passed"
+          ls -la wp-content/themes/${{ env.THEME_NAME }}/assets/
+
+      - name: Upload theme artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-build
+          path: wp-content/themes/${{ env.THEME_NAME }}/
+          retention-days: 7
+
+  backup:
+    name: Backup Current Theme
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.skip_backup != 'true' }}
+    steps:
+      - name: Create backup on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            BACKUP_DIR="${{ secrets.REMOTE_PATH }}/theme-backups"
+            THEME_DIR="${{ secrets.REMOTE_PATH }}/wp-content/themes/${{ env.THEME_NAME }}"
+            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+            # Create backup directory if not exists
+            mkdir -p "$BACKUP_DIR"
+
+            # Create backup if theme exists
+            if [ -d "$THEME_DIR" ]; then
+              echo "Creating backup: theme_${TIMESTAMP}.tar.gz"
+              cd "${{ secrets.REMOTE_PATH }}/wp-content/themes"
+              tar -czf "$BACKUP_DIR/theme_${TIMESTAMP}.tar.gz" "${{ env.THEME_NAME }}"
+              echo "Backup created successfully"
+
+              # Keep only last 5 backups
+              cd "$BACKUP_DIR"
+              ls -t theme_*.tar.gz 2>/dev/null | tail -n +6 | xargs -r rm --
+              echo "Old backups cleaned up"
+
+              # List current backups
+              echo "Current backups:"
+              ls -lh theme_*.tar.gz 2>/dev/null || echo "No backups found"
+            else
+              echo "No existing theme found, skipping backup"
+            fi
+
+  deploy:
+    name: Deploy Theme
+    needs: [build, backup]
+    if: always() && needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download theme artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: theme-build
+          path: theme-build/
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude-from='.rsyncignore' \
+            -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }}" \
+            theme-build/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_PATH }}/wp-content/themes/${{ env.THEME_NAME }}/
+
+      - name: Set permissions
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            THEME_DIR="${{ secrets.REMOTE_PATH }}/wp-content/themes/${{ env.THEME_NAME }}"
+
+            # Set directory permissions
+            find "$THEME_DIR" -type d -exec chmod 755 {} \;
+
+            # Set file permissions
+            find "$THEME_DIR" -type f -exec chmod 644 {} \;
+
+            echo "Permissions set successfully"
+
+  verify:
+    name: Verify Deployment
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Health check
+        run: |
+          echo "Checking site availability..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ secrets.SITE_URL }}")
+          echo "HTTP Status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
+            echo "Site is responding correctly"
+          else
+            echo "Warning: Site returned status $HTTP_STATUS"
+            exit 1
+          fi
+
+      - name: Clear cache (optional)
+        uses: appleboy/ssh-action@v1.0.3
+        continue-on-error: true
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Clear WP cache if WP-CLI is available
+            if command -v wp &> /dev/null; then
+              cd "${{ secrets.REMOTE_PATH }}"
+              wp cache flush --allow-root 2>/dev/null || true
+              echo "Cache cleared"
+            else
+              echo "WP-CLI not available, skipping cache clear"
+            fi
+
+  notify:
+    name: Send Notification
+    needs: [build, backup, deploy, verify]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine status
+        id: status
+        run: |
+          if [ "${{ needs.deploy.result }}" == "success" ] && [ "${{ needs.verify.result }}" == "success" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "emoji=:white_check_mark:" >> $GITHUB_OUTPUT
+            echo "message=Deployment completed successfully" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "emoji=:x:" >> $GITHUB_OUTPUT
+            echo "message=Deployment failed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Slack notification
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.status.outputs.emoji }} *${{ steps.status.outputs.message }}*\n\n*Repository:* ${{ github.repository }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>\n*Actor:* ${{ github.actor }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

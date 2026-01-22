@@ -1,0 +1,156 @@
+name: Rollback Theme
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_timestamp:
+        description: 'Backup timestamp (e.g., 20240115_143022). Leave empty to list available backups.'
+        required: false
+        type: string
+
+env:
+  THEME_NAME: sardynkibiznesu-2.0
+
+jobs:
+  list-backups:
+    name: List Available Backups
+    if: ${{ github.event.inputs.backup_timestamp == '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: List backups on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            BACKUP_DIR="${{ secrets.REMOTE_PATH }}/theme-backups"
+
+            echo "=========================================="
+            echo "Available Theme Backups"
+            echo "=========================================="
+
+            if [ -d "$BACKUP_DIR" ]; then
+              cd "$BACKUP_DIR"
+              if ls theme_*.tar.gz 1> /dev/null 2>&1; then
+                echo ""
+                echo "Backup files (newest first):"
+                echo "-------------------------------------------"
+                ls -lth theme_*.tar.gz | while read line; do
+                  filename=$(echo "$line" | awk '{print $NF}')
+                  size=$(echo "$line" | awk '{print $5}')
+                  date=$(echo "$line" | awk '{print $6, $7, $8}')
+                  timestamp=$(echo "$filename" | sed 's/theme_\(.*\)\.tar\.gz/\1/')
+                  echo "  Timestamp: $timestamp"
+                  echo "  File: $filename"
+                  echo "  Size: $size | Date: $date"
+                  echo "-------------------------------------------"
+                done
+                echo ""
+                echo "To rollback, run this workflow again with"
+                echo "the desired timestamp (e.g., 20240115_143022)"
+              else
+                echo "No backups found in $BACKUP_DIR"
+              fi
+            else
+              echo "Backup directory does not exist: $BACKUP_DIR"
+            fi
+
+  rollback:
+    name: Rollback to Backup
+    if: ${{ github.event.inputs.backup_timestamp != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate and restore backup
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            BACKUP_DIR="${{ secrets.REMOTE_PATH }}/theme-backups"
+            THEME_DIR="${{ secrets.REMOTE_PATH }}/wp-content/themes"
+            BACKUP_FILE="$BACKUP_DIR/theme_${{ github.event.inputs.backup_timestamp }}.tar.gz"
+
+            echo "=========================================="
+            echo "Theme Rollback"
+            echo "=========================================="
+            echo ""
+            echo "Backup file: $BACKUP_FILE"
+            echo "Target: $THEME_DIR/${{ env.THEME_NAME }}"
+            echo ""
+
+            # Check if backup exists
+            if [ ! -f "$BACKUP_FILE" ]; then
+              echo "Error: Backup file not found!"
+              echo "Run this workflow without a timestamp to list available backups."
+              exit 1
+            fi
+
+            echo "Backup file found. Size: $(ls -lh "$BACKUP_FILE" | awk '{print $5}')"
+            echo ""
+
+            # Create a pre-rollback backup of current state
+            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+            if [ -d "$THEME_DIR/${{ env.THEME_NAME }}" ]; then
+              echo "Creating pre-rollback backup..."
+              cd "$THEME_DIR"
+              tar -czf "$BACKUP_DIR/theme_${TIMESTAMP}_pre_rollback.tar.gz" "${{ env.THEME_NAME }}"
+              echo "Pre-rollback backup created: theme_${TIMESTAMP}_pre_rollback.tar.gz"
+              echo ""
+            fi
+
+            # Remove current theme
+            echo "Removing current theme..."
+            rm -rf "$THEME_DIR/${{ env.THEME_NAME }}"
+
+            # Extract backup
+            echo "Extracting backup..."
+            cd "$THEME_DIR"
+            tar -xzf "$BACKUP_FILE"
+
+            # Set permissions
+            echo "Setting permissions..."
+            find "$THEME_DIR/${{ env.THEME_NAME }}" -type d -exec chmod 755 {} \;
+            find "$THEME_DIR/${{ env.THEME_NAME }}" -type f -exec chmod 644 {} \;
+
+            echo ""
+            echo "=========================================="
+            echo "Rollback completed successfully!"
+            echo "=========================================="
+
+      - name: Verify rollback
+        run: |
+          echo "Checking site availability..."
+          sleep 5
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ secrets.SITE_URL }}")
+          echo "HTTP Status: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
+            echo "Site is responding correctly after rollback"
+          else
+            echo "Warning: Site returned status $HTTP_STATUS"
+            echo "Please check the site manually"
+          fi
+
+      - name: Send Slack notification
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ":rewind: *Theme Rollback Completed*\n\n*Repository:* ${{ github.repository }}\n*Backup Used:* theme_${{ github.event.inputs.backup_timestamp }}.tar.gz\n*Actor:* ${{ github.actor }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

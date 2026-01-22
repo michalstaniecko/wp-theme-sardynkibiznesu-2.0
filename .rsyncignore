@@ -1,0 +1,66 @@
+# Node.js
+node_modules/
+package-lock.json
+
+# Source files (not needed in production)
+src/
+
+# Build configuration
+webpack.mix.js
+tailwind.config.js
+postcss.config.js
+mix-manifest.json
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+docker-compose.yml
+docker-compose.yaml
+Dockerfile
+.docker/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.editorconfig
+
+# Development files
+.env
+.env.*
+*.log
+
+# Documentation
+README.md
+CHANGELOG.md
+CLAUDE.md
+LICENSE
+*.txt
+
+# GitHub
+.github/
+
+# Claude Code
+.claude/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+tests/
+*.test.js
+*.spec.js
+phpunit.xml
+phpunit.xml.dist
+
+# Other
+*.map
+*.bak
+*.orig
+*.swp
+*~
