@@ -159,8 +159,10 @@
 .entry-content {
 
   ul,
+  ol,
   li,
   p {
+    font-size: var(--sb-font-size-lg); // 1.125rem = 18px
     line-height: 1.75;
   }
 

@@ -57,11 +57,18 @@
   }
 
   .menu-item {
+    &.current-menu-item,
     &.current-menu-ancestor,
     &.current-menu-parent {
-      a {
+      > a {
         color: #333;
       }
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    .menu > .menu-item.current-menu-item > a::after {
+      background-color: var(--sb-color-primary);
     }
   }
 
