@@ -181,6 +181,9 @@ mix.js( 'src/js/index.js', `${themePath}/assets/index.js` )
                 /^contact_widget/,
                 /^adr$/,
                 /^adress_wrap/,
+
+                /^sidebar/,
+                /^widget-about/,
             ],
 
             // Greedy - only patterns that truly need greedy matching
