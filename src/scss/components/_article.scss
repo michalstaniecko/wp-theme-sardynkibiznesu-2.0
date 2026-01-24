@@ -101,9 +101,14 @@
 
   h2,
   h3 {
-    line-height: 1.75;
-    font-weight: 700;
+    line-height: 1.5;
+    font-weight: 500;
     color: var(--sb-color-text-primary);
+
+    strong,
+    b {
+      font-weight: 500;
+    }
   }
 
   > * {

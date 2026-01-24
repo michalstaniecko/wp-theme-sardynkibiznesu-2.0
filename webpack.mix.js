@@ -131,6 +131,12 @@ mix.js( 'src/js/index.js', `${themePath}/assets/index.js` )
                 /^entry-/,
                 /^page-template/,
 
+                // WordPress menu classes (essential for multi-level menus)
+                /^menu$/,          // .menu wrapper
+                /^menu-item/,      // .menu-item, .menu-item-has-children
+                /^sub-menu$/,      // .sub-menu wrapper
+                /^current-menu/,   // .current-menu-ancestor, .current-menu-parent, .current-menu-item
+
                 // Newsletter form
                 /^single-newsletter/,
                 /^notification/,

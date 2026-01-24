@@ -39,11 +39,7 @@
                 <div class="col-12">
                   <header class="article__header">
                     <h1 class="post-title entry-title article__title" itemprop="headline">
-                      <a
-                        href="<?php the_permalink(); ?>" rel="bookmark"
-                        title="Permanent Link: <?php the_title(); ?>">
-                        <?php the_title(); ?>
-                      </a>
+                      <?php the_title(); ?>
                     </h1>
                     <div class="d-flex align-items-center border-bottom pb-3 pt-2">
                       <div class="flex-shrink-0">
