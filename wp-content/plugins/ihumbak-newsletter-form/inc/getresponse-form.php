@@ -12,60 +12,55 @@ function sardynki_getresponse_form($atts, $content)
     'about_label' => '',
     'thankyou_url' =>'https://sardynkibiznesu.pl/zapis-na-newsletter/podziekowanie/',
     'baner' => false,
-    'submit' => "Zapisz",
+    'submit' => "Zapisz się",
     'campaign_id' => get_field('mailerlite_default_token', 'options'),
     'campaign_token' => get_field('getresponse_default_token', 'options'),
     'image' => 'https://sardynkibiznesu.pl/wp-content/uploads/2020/11/strefa-sardynek-baner.jpg'
   ), $atts);
+
+  $is_widget = $a['type'] == 'widget';
+  $has_content = $a['title'] || $is_widget || $content;
+  $wrapper_class = 'newsletter-form'
+    . ($is_widget ? ' newsletter-form--widget' : '')
+    . (!$has_content ? ' newsletter-form--form-only' : '');
+
   ob_start();
   ?>
-  <div style=""
-       class=" single-newsletter-form <?= $a['type'] == 'widget' ? 'single-newsletter-form--widget mb-0' : 'mb-5' ?>">
+  <div class="<?= $wrapper_class ?>" data-newsletter-form>
     <?php if ($a['baner']): ?>
-
-    <img src="<?= $a['image'] ?>" alt="" style="margin-bottom: 15px;width: 100%" />
-
-    <?php endif; ?>
-    <?php if ($a['type'] == 'widget' && !$a['title']): ?>
-      <p>Zapisz się do newslettera!</p>
+      <img src="<?= $a['image'] ?>" alt="" class="newsletter-form__banner" style="margin-bottom: 15px; width: 100%; border-radius: var(--sb-radius-card);" />
     <?php endif; ?>
 
-    <?php if ($a['title']): ?>
-      <p class="single-newsletter-form-title"><?= $a['title'] ?></p>
-    <?php endif; ?>
-    <?php if ($content): ?>
-      <p class="single-newsletter-form-small"><?= $content ?></p>
-    <?php endif; ?>
-    <form action="https://app.getresponse.com/add_subscriber.html" accept-charset="utf-8" method="post">
+    <?php if ($has_content): ?>
+    <div class="newsletter-form__content">
+      <div class="newsletter-form__header">
+        <?php if ($a['title']): ?>
+          <h3 class="newsletter-form__title"><?= $a['title'] ?></h3>
+        <?php elseif ($is_widget): ?>
+          <h3 class="newsletter-form__title">Zapisz się do newslettera!</h3>
+        <?php endif; ?>
 
-
-      <div class="row mb-0">
-        <div class="<?= $a['type'] == 'widget' ? 'col-md-12 mb-3' : 'col-md-6' ?>">
-
-          <input type="text" required name="first_name" placeholder="<?= $a['name_placeholder'] ?>" class="form-control w-100 mb-3 mb-md-0"/>
-        </div>
-        <div class="<?= $a['type'] == 'widget' ? 'col-md-12' : 'col-md-6' ?>">
-
-          <input type="email" required name="email" placeholder="<?= $a['email_placeholder'] ?>" class="form-control w-100 mb-0"/>
-        </div>
-        <div class="col-md-12 mt-3">
-
-          <button type="submit" class=" w-100 button button--blue"><?= $a['submit'] ?></button>
-        </div>
+        <?php if ($content): ?>
+          <p class="newsletter-form__description"><?= $content ?></p>
+        <?php endif; ?>
       </div>
-      <input type="hidden"
-             name="campaign_token"
-             value="<?= $a['campaign_id'] ?>"/>
-      <input
-        type="hidden" name="start_day" value="0"/>
-      <input type="hidden" name="thankyou_url" value="<?= $a['thankyou_url'] ?>"/>
-    </form>
-    <?php if ($a['about_url']): ?>
+    </div>
+    <?php endif; ?>
 
-      <div class="" style="margin-top: 10px">
+    <form class="newsletter-form__form getresponse-form" action="#" method="post">
+      <input type="text" required name="name" placeholder="<?= $a['name_placeholder'] ?>" class="newsletter-form__input"/>
+      <input type="email" required name="email" placeholder="<?= $a['email_placeholder'] ?>" class="newsletter-form__input"/>
+      <input type="hidden" name="campaignId" value="<?= $a['campaign_token'] ?>"/>
+      <input type="hidden" name="thankyou_url" value="<?= $a['thankyou_url'] ?>"/>
+      <button type="submit" class="newsletter-form__submit"><?= $a['submit'] ?></button>
+    </form>
+
+    <?php newsletter_form_render_messages(); ?>
+
+    <?php if ($a['about_url']): ?>
+      <div class="newsletter-form__footer" style="margin-top: var(--sb-space-3);">
         <a href="<?= $a['about_url'] ?>"><strong><?= $a['about_label'] ?></strong></a>
       </div>
-
     <?php endif; ?>
   </div>
   <?php
