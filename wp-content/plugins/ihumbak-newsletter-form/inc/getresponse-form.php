@@ -47,10 +47,15 @@ function sardynki_getresponse_form($atts, $content)
     </div>
     <?php endif; ?>
 
+    <?php
+    $campaign_value = (get_field('default_newsletter', 'options') === 'mailerlite')
+      ? $a['campaign_id']
+      : $a['campaign_token'];
+    ?>
     <form class="newsletter-form__form getresponse-form" action="#" method="post">
       <input type="text" required name="name" placeholder="<?= $a['name_placeholder'] ?>" class="newsletter-form__input"/>
       <input type="email" required name="email" placeholder="<?= $a['email_placeholder'] ?>" class="newsletter-form__input"/>
-      <input type="hidden" name="campaignId" value="<?= $a['campaign_token'] ?>"/>
+      <input type="hidden" name="campaignId" value="<?= $campaign_value ?>"/>
       <input type="hidden" name="thankyou_url" value="<?= $a['thankyou_url'] ?>"/>
       <button type="submit" class="newsletter-form__submit"><?= $a['submit'] ?></button>
     </form>
