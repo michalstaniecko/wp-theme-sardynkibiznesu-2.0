@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { useRegistry, useSelect } from '@wordpress/data';
 import {
@@ -32,6 +32,7 @@ import {
 	getTableParts,
 	insertColumn,
 	reconcileTable,
+	setColumnCount,
 } from '../../utils/columns';
 
 const TEMPLATE = [
@@ -43,6 +44,10 @@ const TEMPLATE = [
 	],
 	[ SECTION, {}, [ [ ROW, {}, [ [ VALUE ], [ VALUE ] ] ] ] ],
 ];
+
+// Offered column counts. A table can still be brought down to one column
+// with the column toolbar.
+const COLUMN_COUNTS = [ 2, 3, 4 ].filter( ( count ) => count <= MAX_COLUMNS );
 
 const HEADING_LEVELS = [ 2, 3, 4, 5, 6 ].map( ( level ) => ( {
 	value: String( level ),
@@ -78,13 +83,17 @@ export default function Edit( {
 		}
 	}, [ inconsistency, registry, clientId ] );
 
+	const cols = Math.min( Math.max( columnCount, 1 ), MAX_COLUMNS );
+
 	const blockProps = useBlockProps( {
-		className: [ 'ihumbak-ct', stickyHeader && 'ihumbak-ct--sticky' ]
+		className: [
+			'ihumbak-ct',
+			`ihumbak-ct--cols-${ cols }`,
+			stickyHeader && 'ihumbak-ct--sticky',
+		]
 			.filter( Boolean )
 			.join( ' ' ),
-		style: {
-			'--ct-cols': Math.min( Math.max( columnCount, 1 ), MAX_COLUMNS ),
-		},
+		style: { '--ct-cols': cols },
 	} );
 
 	const innerBlocksProps = useInnerBlocksProps(
@@ -107,6 +116,24 @@ export default function Edit( {
 
 	const canAddColumn = columnCount > 0 && columnCount < MAX_COLUMNS;
 
+	// The header is the source of truth: the control only reflects its column
+	// count, including one that is not among the offered ones.
+	const columnCountOptions = [
+		...( COLUMN_COUNTS.includes( columnCount )
+			? []
+			: [
+					{
+						value: String( columnCount ),
+						label: String( columnCount ),
+						disabled: true,
+					},
+			  ] ),
+		...COLUMN_COUNTS.map( ( count ) => ( {
+			value: String( count ),
+			label: String( count ),
+		} ) ),
+	];
+
 	return (
 		<>
 			<BlockControls>
@@ -119,9 +146,13 @@ export default function Edit( {
 										'Add service column',
 										'ihumbak-compare-table'
 								  )
-								: __(
-										'A table can have at most 3 service columns',
-										'ihumbak-compare-table'
+								: sprintf(
+										/* translators: %d: maximum number of service columns. */
+										__(
+											'A table can have at most %d service columns',
+											'ihumbak-compare-table'
+										),
+										MAX_COLUMNS
 								  )
 						}
 						disabled={ ! canAddColumn }
@@ -136,6 +167,29 @@ export default function Edit( {
 				<PanelBody
 					title={ __( 'Table settings', 'ihumbak-compare-table' ) }
 				>
+					{ columnCount > 0 && (
+						<SelectControl
+							__nextHasNoMarginBottom
+							__next40pxDefaultSize
+							label={ __(
+								'Service columns',
+								'ihumbak-compare-table'
+							) }
+							help={ __(
+								'Columns are added and removed at the end of the table.',
+								'ihumbak-compare-table'
+							) }
+							value={ String( columnCount ) }
+							options={ columnCountOptions }
+							onChange={ ( value ) =>
+								setColumnCount(
+									registry,
+									clientId,
+									Number( value )
+								)
+							}
+						/>
+					) }
 					<ToggleControl
 						__nextHasNoMarginBottom
 						label={ __( 'Sticky header', 'ihumbak-compare-table' ) }

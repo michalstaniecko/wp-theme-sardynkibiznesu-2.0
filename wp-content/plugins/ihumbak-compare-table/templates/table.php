@@ -9,7 +9,7 @@
  * @var array $args {
  *     @type string $wrapper_attributes Escaped HTML attributes of the root element.
  *     @type string $uid                Unique prefix for IDs of this table instance.
- *     @type int    $cols               Number of service columns (1-3).
+ *     @type int    $cols               Number of service columns (1-4).
  *     @type int    $heading_level      Heading level of section titles (2-6).
  *     @type string $caption            RichText, may be empty.
  *     @type string $feature_label      RichText, may be empty.

@@ -17,9 +17,10 @@ class Renderer {
 
 	/**
 	 * The narrow layout (N equal columns identified by the sticky header) is
-	 * only valid up to 3 service columns, so anything beyond that is dropped.
+	 * only valid up to this many service columns, so anything beyond that is
+	 * dropped. Mirrors MAX_COLUMNS in src/utils/columns.js.
 	 */
-	const MAX_COLUMNS = 3;
+	const MAX_COLUMNS = 4;
 
 	const BLOCK_TABLE   = 'ihumbak/compare-table';
 	const BLOCK_HEADER  = 'ihumbak/compare-header';
@@ -125,7 +126,7 @@ class Renderer {
 		}
 
 		$root = array(
-			'class' => 'ihumbak-ct' . ( $model['sticky'] ? ' ihumbak-ct--sticky' : '' ),
+			'class' => 'ihumbak-ct ihumbak-ct--cols-' . $model['cols'] . ( $model['sticky'] ? ' ihumbak-ct--sticky' : '' ),
 			'style' => '--ct-cols:' . $model['cols'] . ';',
 		);
 

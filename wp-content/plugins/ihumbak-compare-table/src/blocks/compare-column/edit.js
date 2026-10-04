@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useRegistry, useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 import {
@@ -99,9 +99,13 @@ export default function Edit( {
 
 	const canAdd = count < MAX_COLUMNS;
 	const canRemove = count > MIN_COLUMNS;
-	const limitLabel = __(
-		'A table can have at most 3 service columns',
-		'ihumbak-compare-table'
+	const limitLabel = sprintf(
+		/* translators: %d: maximum number of service columns. */
+		__(
+			'A table can have at most %d service columns',
+			'ihumbak-compare-table'
+		),
+		MAX_COLUMNS
 	);
 
 	const blockProps = useBlockProps( { className: 'ihumbak-ct__column' } );

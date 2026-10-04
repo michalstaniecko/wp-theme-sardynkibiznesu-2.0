@@ -5,7 +5,7 @@
   "title": "Compare table",
   "category": "widgets",
   "icon": "editor-table",
-  "description": "Feature comparison table for up to three services, with collapsible sections and tooltips.",
+  "description": "Feature comparison table for up to four services, with collapsible sections and tooltips.",
   "keywords": [
     "comparison",
     "pricing",

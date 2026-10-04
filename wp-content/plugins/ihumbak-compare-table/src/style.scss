@@ -101,6 +101,17 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 	overflow-wrap: anywhere;
 }
 
+// Four service columns: the feature column may get narrower and the service
+// cells tighter, so the header buttons still fit just above the narrow layout.
+.ihumbak-ct--cols-4 {
+	--ct-template: minmax(160px, 1.5fr) repeat(var(--ct-cols), minmax(0, 1fr));
+
+	.ihumbak-ct__column,
+	.ihumbak-ct__value {
+		padding-inline: var(--sb-space-2, 0.5rem);
+	}
+}
+
 // --------------------------------------------------------------------------
 // Header
 // --------------------------------------------------------------------------
@@ -448,6 +459,11 @@ summary.ihumbak-ct__feature-title {
 	display: none;
 }
 
+// Only shown where the buttons do not sit under their column (four services).
+.ihumbak-ct__cta-name {
+	display: none;
+}
+
 // --------------------------------------------------------------------------
 // Narrow layout: N equal columns, the feature label becomes a full-width band
 // above its values, the header keeps only what identifies a column.
@@ -513,8 +529,8 @@ summary.ihumbak-ct__feature-title {
 		padding-inline: var(--sb-space-1, 0.25rem);
 	}
 
-	// Structural overrides only: three buttons have to fit side by side at
-	// ~390px, so they fill their column and may wrap.
+	// Structural overrides only: up to three buttons have to fit side by side
+	// at ~390px, so they fill their column and may wrap.
 	.ihumbak-ct__cta .ihumbak-ct__button {
 		display: flex;
 		align-items: center;
@@ -522,6 +538,49 @@ summary.ihumbak-ct__feature-title {
 		width: 100%;
 		padding-inline: var(--sb-space-2, 0.5rem);
 		overflow-wrap: anywhere;
+	}
+
+	// Four columns of ~85px at ~390px: tighter cells, words may break inside
+	// (hyphenated where the browser can), and the buttons wrap to two per
+	// line, each under the name of its service.
+	.ihumbak-ct--cols-4 {
+		.ihumbak-ct__column,
+		.ihumbak-ct__value {
+			padding-inline: var(--sb-space-1, 0.25rem);
+		}
+
+		.ihumbak-ct__column-image {
+			height: 28px;
+		}
+
+		.ihumbak-ct__column-name,
+		.ihumbak-ct__column-price,
+		.ihumbak-ct__value-text {
+			hyphens: auto;
+		}
+
+		.ihumbak-ct__value {
+			column-gap: var(--sb-space-1, 0.25rem);
+		}
+
+		.ihumbak-ct__cta {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			row-gap: var(--sb-space-3, 0.75rem);
+		}
+
+		.ihumbak-ct__cta-item {
+			flex-direction: column;
+			justify-content: flex-end;
+			gap: var(--sb-space-1, 0.25rem);
+		}
+
+		.ihumbak-ct__cta-name {
+			display: block;
+			font-weight: 600;
+			font-size: var(--sb-font-size-sm, 0.875rem);
+			line-height: var(--sb-line-height-tight, 1.25);
+			text-align: center;
+		}
 	}
 }
 

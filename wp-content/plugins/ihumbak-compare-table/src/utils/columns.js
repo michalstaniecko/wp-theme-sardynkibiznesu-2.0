@@ -11,7 +11,7 @@ import { createBlock } from '@wordpress/blocks';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 
 export const MIN_COLUMNS = 1;
-export const MAX_COLUMNS = 3;
+export const MAX_COLUMNS = 4;
 
 export const TABLE = 'ihumbak/compare-table';
 export const HEADER = 'ihumbak/compare-header';
@@ -216,6 +216,33 @@ export function moveColumn( registry, tableClientId, from, to ) {
 			return next;
 		},
 		header.innerBlocks[ from ].clientId
+	);
+}
+
+/**
+ * Sets the number of service columns by adding empty columns at the end or
+ * removing columns from the end. The count is kept within the limits.
+ * @param {Object} registry      Data registry.
+ * @param {string} tableClientId Client ID of the compare-table.
+ * @param {number} count         Wanted number of service columns.
+ */
+export function setColumnCount( registry, tableClientId, count ) {
+	const current = getColumnCount( registry, tableClientId );
+	const target = Math.min( Math.max( count, MIN_COLUMNS ), MAX_COLUMNS );
+
+	if ( ! current || ! Number.isInteger( target ) || target === current ) {
+		return;
+	}
+
+	changeColumns( registry, tableClientId, ( cells, createCell ) =>
+		target < cells.length
+			? cells.slice( 0, target )
+			: [
+					...cells,
+					...Array.from( { length: target - cells.length }, () =>
+						createCell()
+					),
+			  ]
 	);
 }
 
