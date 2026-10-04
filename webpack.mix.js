@@ -138,6 +138,7 @@ mix.js( 'src/js/index.js', `${themePath}/assets/index.js` )
                 /^current-menu/,   // .current-menu-ancestor, .current-menu-parent, .current-menu-item
 
                 // Newsletter form
+                /^newsletter-form/,
                 /^single-newsletter/,
                 /^notification/,
                 /^error$/,
