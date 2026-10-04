@@ -1,0 +1,554 @@
+// ==========================================================================
+// iHumbak Compare Table - frontend stylesheet (also loaded in the editor)
+//
+// Structural CSS only: layout, the collapse mechanics, the tooltip bubble.
+// Typography, colours and the look of buttons come from the theme. Every
+// var(--sb-*) has a fallback because the tokens do not exist in the editor.
+//
+// The grid rules depend on class names only, never on DOM depth, so the same
+// rules lay out the editor preview, where extra wrappers sit between them.
+//
+// No overflow-x wrapper anywhere: it would break position: sticky and clip
+// the tooltips.
+// ==========================================================================
+
+// Container (not viewport) widths: the table adapts to the content column.
+$ct-narrow: 640px;
+
+$ct-duration: 0.25s;
+
+$ct-border: 1px solid var(--sb-color-border, #dee2e6);
+$ct-pad-y: var(--sb-space-3, 0.75rem);
+$ct-pad-x: var(--sb-space-4, 1rem);
+
+@mixin ct-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+@mixin ct-focus-ring {
+	outline: 2px solid var(--sb-color-primary, currentColor);
+	outline-offset: 2px;
+}
+
+// --------------------------------------------------------------------------
+// Root
+// --------------------------------------------------------------------------
+
+.ihumbak-ct {
+	--ct-cols: 3;
+	--ct-template: minmax(220px, 1.5fr) repeat(var(--ct-cols), minmax(0, 1fr));
+	--ct-sticky-top: calc(var(--sb-header-height, 0px) + var(--wp-admin--admin-bar--height, 0px));
+
+	container-type: inline-size;
+	container-name: ihumbak-ct;
+	// Keeps the sticky header and the tooltips below the site header.
+	isolation: isolate;
+	margin-block: var(--sb-space-8, 2rem);
+	line-height: var(--sb-line-height-normal, 1.5);
+	text-align: left;
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+}
+
+.ihumbak-ct__sr {
+	@include ct-visually-hidden;
+}
+
+.ihumbak-ct__icon {
+	display: block;
+	flex: none;
+	width: 1.25em;
+	height: 1.25em;
+}
+
+.ihumbak-ct__caption {
+	margin-bottom: var(--sb-space-4, 1rem);
+	font-weight: 700;
+	font-size: var(--sb-font-size-xl, 1.25rem);
+	color: var(--sb-color-text-primary, inherit);
+}
+
+// --------------------------------------------------------------------------
+// Shared grid: the header row and every feature row are separate grids that
+// use the same template.
+// --------------------------------------------------------------------------
+
+.ihumbak-ct__header-row,
+.ihumbak-ct__row {
+	display: grid;
+	grid-template-columns: var(--ct-template);
+}
+
+.ihumbak-ct__corner,
+.ihumbak-ct__column,
+.ihumbak-ct__feature,
+.ihumbak-ct__value {
+	min-width: 0;
+	padding: $ct-pad-y $ct-pad-x;
+	overflow-wrap: anywhere;
+}
+
+// --------------------------------------------------------------------------
+// Header
+// --------------------------------------------------------------------------
+
+.ihumbak-ct__header {
+	background-color: var(--sb-color-bg-white, #fff);
+	border-bottom: $ct-border;
+}
+
+.ihumbak-ct--sticky .ihumbak-ct__header {
+	position: sticky;
+	top: var(--ct-sticky-top);
+	// Above the tooltips (2), so an open bubble scrolls under the header.
+	z-index: 3;
+}
+
+.ihumbak-ct__corner {
+	display: flex;
+	align-items: flex-end;
+	font-weight: 600;
+	color: var(--sb-color-text-primary, inherit);
+}
+
+.ihumbak-ct__column {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--sb-space-1, 0.25rem);
+	text-align: center;
+}
+
+.ihumbak-ct__column-image {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 56px;
+	margin-bottom: var(--sb-space-1, 0.25rem);
+
+	img {
+		display: block;
+		width: auto;
+		max-width: 100%;
+		height: auto;
+		max-height: 100%;
+		object-fit: contain;
+	}
+}
+
+.ihumbak-ct__column-name {
+	font-weight: 700;
+	font-size: var(--sb-font-size-lg, 1.125rem);
+	line-height: var(--sb-line-height-tight, 1.25);
+	color: var(--sb-color-text-primary, inherit);
+}
+
+.ihumbak-ct__column-price {
+	font-weight: 600;
+}
+
+.ihumbak-ct__column-price-note {
+	font-size: var(--sb-font-size-sm, 0.875rem);
+	color: var(--sb-color-text-muted, inherit);
+}
+
+.ihumbak-ct__column-button {
+	margin-top: auto;
+	padding-top: var(--sb-space-2, 0.5rem);
+}
+
+.ihumbak-ct__button {
+	max-width: 100%;
+	text-align: center;
+}
+
+// --------------------------------------------------------------------------
+// Section
+// --------------------------------------------------------------------------
+
+.ihumbak-ct__section-head {
+	background-color: var(--sb-color-bg-muted, #efefef);
+	border-bottom: $ct-border;
+}
+
+// Resets the theme's heading margins; the size is the table's own so that the
+// chosen heading level stays a purely semantic setting.
+.ihumbak-ct .ihumbak-ct__section-heading {
+	margin: 0;
+	padding: 0;
+	font-size: var(--sb-font-size-lg, 1.125rem);
+	line-height: var(--sb-line-height-tight, 1.25);
+}
+
+.ihumbak-ct__section-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--sb-space-3, 0.75rem);
+	width: 100%;
+	margin: 0;
+	padding: $ct-pad-y $ct-pad-x;
+	font: inherit;
+	color: inherit;
+	text-align: left;
+	background: none;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+	cursor: pointer;
+	appearance: none;
+
+	&:focus-visible {
+		@include ct-focus-ring;
+		outline-offset: -2px;
+	}
+}
+
+.ihumbak-ct__section-toggle-icon {
+	flex: none;
+	transition: transform $ct-duration ease;
+}
+
+.ihumbak-ct__section.is-open .ihumbak-ct__section-toggle-icon {
+	transform: rotate(180deg);
+}
+
+// Collapse: same grid-template-rows 0fr -> 1fr pattern as blocks/accordion.
+// Open is the default state; a section is closed only when it lacks .is-open.
+.ihumbak-ct__section-body {
+	display: grid;
+	grid-template-rows: 1fr;
+	grid-template-columns: minmax(0, 1fr);
+	transition: grid-template-rows $ct-duration ease;
+}
+
+.ihumbak-ct__section-body-inner {
+	min-height: 0;
+}
+
+// Clipped only while closed or animating, so tooltips of a settled open
+// section are free to leave its box.
+.ihumbak-ct__section.is-animating .ihumbak-ct__section-body-inner {
+	overflow: hidden;
+}
+
+.ihumbak-ct__section:not(.is-open) {
+	.ihumbak-ct__section-body {
+		grid-template-rows: 0fr;
+	}
+
+	.ihumbak-ct__section-body-inner {
+		overflow: hidden;
+		// Takes the hidden rows out of the tab order and the accessibility
+		// tree even before view.js sets `inert`.
+		visibility: hidden;
+		transition: visibility 0s linear $ct-duration;
+	}
+}
+
+// --------------------------------------------------------------------------
+// Row
+// --------------------------------------------------------------------------
+
+.ihumbak-ct__row {
+	border-bottom: $ct-border;
+}
+
+.ihumbak-ct__feature {
+	font-weight: 400;
+	text-align: left;
+}
+
+.ihumbak-ct__feature-title {
+	font-weight: 600;
+	color: var(--sb-color-text-primary, inherit);
+}
+
+summary.ihumbak-ct__feature-title {
+	cursor: pointer;
+
+	&:focus-visible {
+		@include ct-focus-ring;
+	}
+}
+
+.ihumbak-ct__feature-description {
+	font-size: var(--sb-font-size-sm, 0.875rem);
+	color: var(--sb-color-text-secondary, inherit);
+
+	.ihumbak-ct__feature-details & {
+		padding-top: var(--sb-space-2, 0.5rem);
+	}
+
+	> :first-child {
+		margin-top: 0;
+	}
+
+	> :last-child {
+		margin-bottom: 0;
+	}
+}
+
+// --------------------------------------------------------------------------
+// Value
+// --------------------------------------------------------------------------
+
+.ihumbak-ct__value {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+	gap: var(--sb-space-1, 0.25rem) var(--sb-space-2, 0.5rem);
+	text-align: center;
+}
+
+.ihumbak-ct__value-icon {
+	display: inline-flex;
+	flex: none;
+}
+
+.ihumbak-ct__value-icon--minus {
+	color: var(--sb-color-text-muted, inherit);
+}
+
+.ihumbak-ct__value-text {
+	min-width: 0;
+}
+
+// --------------------------------------------------------------------------
+// Tooltip (toggletip)
+// --------------------------------------------------------------------------
+
+.ihumbak-ct__tooltip-toggle {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	// Enlarges the tap target without moving the icon.
+	padding: 0.25rem;
+	margin: -0.25rem;
+	font: inherit;
+	color: var(--sb-color-text-muted, inherit);
+	background: none;
+	border: 0;
+	border-radius: var(--sb-radius-full, 9999px);
+	box-shadow: none;
+	cursor: pointer;
+	appearance: none;
+
+	&:focus-visible {
+		@include ct-focus-ring;
+		outline-offset: 0;
+	}
+
+	&[aria-expanded="true"] {
+		color: var(--sb-color-text-primary, inherit);
+	}
+}
+
+// Positioning context of the bubble, so it opens next to the icon wherever
+// that sits in the cell. Its box is the icon alone: the toggle's padding is
+// cancelled by its negative margin.
+.ihumbak-ct__tooltip-wrap {
+	position: relative;
+	display: inline-flex;
+	flex: none;
+}
+
+.ihumbak-ct__tooltip {
+	position: absolute;
+	// Overlaps the toggle's padding, so the pointer can travel from the icon
+	// to the bubble without leaving both.
+	top: 100%;
+	left: 50%;
+	z-index: 2;
+	width: max-content;
+	max-width: 16rem;
+	max-width: min(16rem, calc(100cqi - 1rem));
+	padding: var(--sb-space-2, 0.5rem) var(--sb-space-3, 0.75rem);
+	font-size: var(--sb-font-size-sm, 0.875rem);
+	font-weight: 400;
+	line-height: var(--sb-line-height-normal, 1.5);
+	color: var(--sb-color-bg-white, #fff);
+	text-align: left;
+	background-color: var(--sb-color-bg-dark, #222);
+	border-radius: var(--sb-radius-md, 8px);
+	box-shadow: var(--sb-shadow-dropdown, 0 10px 15px -3px rgb(0 0 0 / 0.1));
+	// --ct-tip-shift is set by view.js to keep the bubble inside the viewport.
+	transform: translateX(calc(-50% + var(--ct-tip-shift, 0px)));
+	visibility: hidden;
+	opacity: 0;
+	// The delay on hiding lets the pointer travel from the icon to the bubble.
+	transition: opacity 0.15s ease, visibility 0s linear 0.25s;
+}
+
+// Set by view.js when the bubble would leave the viewport at the bottom.
+.ihumbak-ct__tooltip-wrap.is-above > .ihumbak-ct__tooltip {
+	top: auto;
+	bottom: 100%;
+}
+
+// Without JS the bubbles of the outer column grow inwards from the toggle
+// instead of being centred on it, so they cannot stick out of the table.
+.ihumbak-ct__value:last-child .ihumbak-ct__tooltip {
+	right: -0.25rem;
+	left: auto;
+	transform: translateX(var(--ct-tip-shift, 0px));
+}
+
+@mixin ct-tooltip-visible {
+	visibility: visible;
+	opacity: 1;
+	transition-delay: 0s;
+}
+
+.ihumbak-ct__tooltip-toggle:focus-visible ~ .ihumbak-ct__tooltip,
+.ihumbak-ct__tooltip-toggle[aria-expanded="true"] ~ .ihumbak-ct__tooltip {
+	@include ct-tooltip-visible;
+}
+
+// Hover only where it is a real pointer state; on touch screens it sticks
+// after a tap and would fight with the tap toggle.
+@media (hover: hover) {
+	.ihumbak-ct__tooltip-toggle:hover ~ .ihumbak-ct__tooltip,
+	.ihumbak-ct__tooltip:hover {
+		@include ct-tooltip-visible;
+	}
+}
+
+// Set by view.js on Esc: hides a bubble that is open through hover or focus
+// until the pointer or the focus leaves the cell.
+.ihumbak-ct__value.is-tooltip-dismissed .ihumbak-ct__tooltip {
+	visibility: hidden;
+	opacity: 0;
+	transition: none;
+}
+
+// --------------------------------------------------------------------------
+// CTA row under the table (narrow layout only)
+// --------------------------------------------------------------------------
+
+.ihumbak-ct__cta {
+	display: none;
+}
+
+// --------------------------------------------------------------------------
+// Narrow layout: N equal columns, the feature label becomes a full-width band
+// above its values, the header keeps only what identifies a column.
+// --------------------------------------------------------------------------
+
+@container ihumbak-ct (max-width: #{$ct-narrow - 0.02px}) {
+	.ihumbak-ct__header-row,
+	.ihumbak-ct__row,
+	.ihumbak-ct__cta {
+		grid-template-columns: repeat(var(--ct-cols), minmax(0, 1fr));
+	}
+
+	.ihumbak-ct__corner,
+	.ihumbak-ct__column,
+	.ihumbak-ct__feature,
+	.ihumbak-ct__value {
+		padding: var(--sb-space-2, 0.5rem);
+	}
+
+	// Stays in the accessibility tree, so the header row keeps as many cells
+	// as the rows below it.
+	.ihumbak-ct__corner {
+		@include ct-visually-hidden;
+	}
+
+	.ihumbak-ct__column-image {
+		height: 36px;
+	}
+
+	.ihumbak-ct__column-name {
+		font-size: var(--sb-font-size-sm, 0.875rem);
+	}
+
+	.ihumbak-ct__column-price,
+	.ihumbak-ct__value {
+		font-size: var(--sb-font-size-sm, 0.875rem);
+	}
+
+	.ihumbak-ct__column-price-note,
+	.ihumbak-ct__column-button {
+		display: none;
+	}
+
+	.ihumbak-ct__feature {
+		grid-column: 1 / -1;
+		background-color: var(--sb-color-bg-light, #f8f8f8);
+	}
+
+	.ihumbak-ct__feature + .ihumbak-ct__value .ihumbak-ct__tooltip {
+		right: auto;
+		left: -0.25rem;
+		transform: translateX(var(--ct-tip-shift, 0px));
+	}
+
+	.ihumbak-ct__cta {
+		display: grid;
+		margin-top: var(--sb-space-4, 1rem);
+	}
+
+	.ihumbak-ct__cta-item {
+		display: flex;
+		min-width: 0;
+		padding-inline: var(--sb-space-1, 0.25rem);
+	}
+
+	// Structural overrides only: three buttons have to fit side by side at
+	// ~390px, so they fill their column and may wrap.
+	.ihumbak-ct__cta .ihumbak-ct__button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		padding-inline: var(--sb-space-2, 0.5rem);
+		overflow-wrap: anywhere;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ihumbak-ct__section-body,
+	.ihumbak-ct__section-toggle-icon,
+	.ihumbak-ct__tooltip {
+		transition: none;
+	}
+
+	.ihumbak-ct__section:not(.is-open) .ihumbak-ct__section-body-inner {
+		transition: none;
+	}
+}
+
+@media print {
+	.ihumbak-ct--sticky .ihumbak-ct__header {
+		position: static;
+	}
+
+	// !important: has to beat the closed state, which is more specific.
+	.ihumbak-ct .ihumbak-ct__section-body {
+		grid-template-rows: 1fr !important;
+	}
+
+	.ihumbak-ct .ihumbak-ct__section-body-inner {
+		overflow: visible !important;
+		visibility: visible !important;
+	}
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "ihumbak/compare-header",
+  "title": "Compare table header",
+  "category": "widgets",
+  "icon": "table-row-before",
+  "description": "Header row holding one column per compared service.",
+  "parent": [
+    "ihumbak/compare-table"
+  ],
+  "textdomain": "ihumbak-compare-table",
+  "attributes": {},
+  "supports": {
+    "html": false,
+    "reusable": false,
+    "customClassName": false,
+    "lock": false
+  },
+  "editorScript": "file:./index.js"
+}

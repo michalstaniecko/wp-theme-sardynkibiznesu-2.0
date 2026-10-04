@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "ihumbak/compare-value",
+  "title": "Feature value",
+  "category": "widgets",
+  "icon": "yes",
+  "description": "Value of a feature for one service: text, icon, or both, with an optional tooltip.",
+  "parent": [
+    "ihumbak/compare-row"
+  ],
+  "textdomain": "ihumbak-compare-table",
+  "attributes": {
+    "icon": {
+      "type": "string",
+      "enum": [
+        "none",
+        "check",
+        "minus"
+      ],
+      "default": "none"
+    },
+    "text": {
+      "type": "string",
+      "default": ""
+    },
+    "tooltip": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false,
+    "reusable": false,
+    "customClassName": false,
+    "lock": false
+  },
+  "editorScript": "file:./index.js"
+}

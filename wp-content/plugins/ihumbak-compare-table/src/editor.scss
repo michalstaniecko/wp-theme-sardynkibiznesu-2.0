@@ -1,0 +1,158 @@
+// ==========================================================================
+// iHumbak Compare Table - editor-only overrides
+//
+// The editor loads the frontend stylesheet (build/style.css) first, and the
+// edit components print the same BEM classes, so the preview is laid out by
+// the same grid. This file only fixes what differs in the editor: block
+// wrapper margins, behaviour that makes no sense while editing (sticky header,
+// pointer cursors), and the few editor-only controls (.ihumbak-ct-editor__*).
+//
+// The theme's styles are not loaded in the editor, hence the fallbacks.
+// ==========================================================================
+
+$border: 1px solid var(--sb-color-border, #dee2e6);
+$muted: var(--sb-color-text-muted, #757575);
+
+.editor-styles-wrapper .ihumbak-ct {
+	// Every cell is a block; the editor's default block spacing and width
+	// limit would tear the grid apart.
+	.wp-block {
+		max-width: none;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
+	// A sticky header would cover the cell being edited and its toolbar.
+	&.ihumbak-ct--sticky .ihumbak-ct__header {
+		position: static;
+	}
+
+	.ihumbak-ct__caption {
+		margin-top: 0;
+	}
+
+	// ----------------------------------------------------------------------
+	// Header
+	// ----------------------------------------------------------------------
+
+	.ihumbak-ct__corner-label {
+		min-width: 1px;
+	}
+
+	.ihumbak-ct__column-image {
+		.components-button {
+			height: auto;
+		}
+	}
+
+	.ihumbak-ct-editor__image-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		background: none;
+		border: 0;
+		cursor: pointer;
+		appearance: none;
+
+		&:focus-visible {
+			outline: 2px solid var(--wp-admin-theme-color, #3858e9);
+			outline-offset: 2px;
+		}
+	}
+
+	// Stand-in for the theme's .button, which is absent here.
+	.ihumbak-ct__button {
+		display: inline-block;
+		min-width: 6em;
+		padding: 0.375em 1em;
+		font-size: 0.875rem;
+		font-weight: 600;
+		line-height: 1.5;
+		color: inherit;
+		background: none;
+		border: 1px solid currentColor;
+		border-radius: var(--sb-radius-sm, 4px);
+		cursor: text;
+	}
+
+	// ----------------------------------------------------------------------
+	// Section: always expanded, the heading is a text field rather than a
+	// toggle.
+	// ----------------------------------------------------------------------
+
+	.ihumbak-ct__section-toggle {
+		cursor: text;
+	}
+
+	.ihumbak-ct__section-title {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	// An untitled section prints no heading bar on the frontend; keep a faint
+	// field so a title can still be typed.
+	.ihumbak-ct-editor__section-head--empty {
+		background: none;
+		border-bottom: 1px dashed var(--sb-color-border, #dee2e6);
+
+		.ihumbak-ct__section-heading {
+			font-size: 0.875rem;
+			font-weight: 400;
+		}
+	}
+
+	// ----------------------------------------------------------------------
+	// Value: the tooltip is edited in place, under the value.
+	// ----------------------------------------------------------------------
+
+	.ihumbak-ct-editor__tooltip {
+		display: flex;
+		flex: 1 1 100%;
+		align-items: flex-start;
+		justify-content: center;
+		gap: 0.25rem;
+		min-width: 0;
+		font-size: 0.8125rem;
+		line-height: 1.4;
+		color: $muted;
+		text-align: left;
+	}
+
+	.ihumbak-ct-editor__tooltip-icon {
+		flex: none;
+		font-size: 0.875rem;
+	}
+
+	.ihumbak-ct-editor__tooltip-text {
+		min-width: 0;
+	}
+
+	// ----------------------------------------------------------------------
+	// Appenders
+	// ----------------------------------------------------------------------
+
+	.ihumbak-ct-editor__appender {
+		display: flex;
+		padding: 0.25rem 0.5rem;
+	}
+
+	> .ihumbak-ct-editor__appender {
+		justify-content: center;
+		padding: 0.75rem 0;
+	}
+}
+
+// Inspector (outside the canvas): image buttons of a service column.
+.ihumbak-ct-editor__media-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+
+	&:not(:last-child) {
+		margin-bottom: 16px;
+	}
+}
