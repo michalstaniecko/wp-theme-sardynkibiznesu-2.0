@@ -4,6 +4,8 @@ module.exports = {
         './wp-content/themes/sardynkibiznesu-2.0/**/*.php',
         // Plugin files (ihumbak-* custom plugins)
         './wp-content/plugins/ihumbak-*/**/*.php',
+        // ...but not their own toolchains (ihumbak-compare-table has one)
+        '!./wp-content/plugins/ihumbak-*/node_modules/**',
         // JavaScript source
         './src/js/**/*.js',
     ],
