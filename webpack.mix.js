@@ -308,3 +308,7 @@ mix.webpackConfig({
 
 mix.sass( 'src/scss/admin.scss', `${themePath}/assets/admin.css` )
 mix.js( 'src/js/admin.js', `${themePath}/assets/admin.js` )
+
+// webpack-notifier ships an x86 notifier binary that cannot be spawned on
+// Apple Silicon without Rosetta, which made the build exit with code 2.
+mix.disableNotifications();
