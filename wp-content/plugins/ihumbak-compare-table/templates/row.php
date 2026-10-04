@@ -3,7 +3,9 @@
  * Feature row: a row header and one value cell per service column.
  *
  * The variant follows from which fields are filled:
- * - title + description: the description is collapsible (native <details>, no JS);
+ * - title + description: the description is collapsible (native <details>, no JS),
+ *                        with the decorative chevron of the section toggle in
+ *                        place of the native marker;
  * - description only:    always visible;
  * - title only:          plain label.
  *
@@ -24,7 +26,7 @@ $row = $args['row'];
 	<div class="ihumbak-ct__feature" role="rowheader">
 		<?php if ( '' !== $row['title'] && '' !== $row['description'] ) : ?>
 			<details class="ihumbak-ct__feature-details">
-				<summary class="ihumbak-ct__feature-title"><?php echo wp_kses_post( $row['title'] ); ?></summary>
+				<summary class="ihumbak-ct__feature-title"><span class="ihumbak-ct__feature-title-text"><?php echo wp_kses_post( $row['title'] ); ?></span><span class="ihumbak-ct__feature-toggle-icon"><?php echo Renderer::icon( 'chevron' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span></summary>
 				<div class="ihumbak-ct__feature-description"><?php echo wp_kses_post( $row['description'] ); ?></div>
 			</details>
 		<?php elseif ( '' !== $row['title'] ) : ?>

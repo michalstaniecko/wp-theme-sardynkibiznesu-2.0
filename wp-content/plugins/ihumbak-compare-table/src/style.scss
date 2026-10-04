@@ -1,9 +1,12 @@
 // ==========================================================================
 // iHumbak Compare Table - frontend stylesheet (also loaded in the editor)
 //
-// Structural CSS only: layout, the collapse mechanics, the tooltip bubble.
-// Typography, colours and the look of buttons come from the theme. Every
+// Layout, the collapse mechanics, the tooltip bubble and a light typographic
+// scale. The font family and the link colour come from the theme. Every
 // var(--sb-*) has a fallback because the tokens do not exist in the editor.
+//
+// One weight only (regular): hierarchy comes from size, colour and spacing.
+// The theme loads no light (300) face, so nothing here asks for one.
 //
 // The grid rules depend on class names only, never on DOM depth, so the same
 // rules lay out the editor preview, where extra wrappers sit between them.
@@ -18,7 +21,9 @@ $ct-narrow: 640px;
 $ct-duration: 0.25s;
 
 $ct-border: 1px solid var(--sb-color-border, #dee2e6);
-$ct-pad-y: var(--sb-space-3, 0.75rem);
+// Section title bars: same colour, thicker than the row separators.
+$ct-border-strong: 2px solid var(--sb-color-border, #dee2e6);
+$ct-pad-y: var(--sb-space-4, 1rem);
 $ct-pad-x: var(--sb-space-4, 1rem);
 
 @mixin ct-visually-hidden {
@@ -53,13 +58,44 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 	// Keeps the sticky header and the tooltips below the site header.
 	isolation: isolate;
 	margin-block: var(--sb-space-8, 2rem);
+	font-size: var(--sb-font-size-base, 1rem);
 	line-height: var(--sb-line-height-normal, 1.5);
+	color: var(--sb-color-text-secondary, inherit);
 	text-align: left;
 
 	*,
 	*::before,
 	*::after {
 		box-sizing: border-box;
+	}
+
+	// The table is set in the regular weight throughout. !important because
+	// this has to hold against the theme's heading, link and <summary> rules
+	// (some of them !important-adjacent in specificity) and against bold typed
+	// by an editor: <strong>/<b> stay in the markup but are told apart by
+	// colour instead (see below).
+	&,
+	* {
+		font-weight: 400 !important;
+	}
+}
+
+// The one exception: section titles are medium.
+.ihumbak-ct .ihumbak-ct__section-toggle,
+.ihumbak-ct .ihumbak-ct__section-toggle *,
+.ihumbak-ct .ihumbak-ct__section-title {
+	font-weight: 500 !important;
+}
+
+// Emphasis typed by an editor: darker instead of heavier. Not in the tooltip,
+// whose bubble is dark.
+.ihumbak-ct__column-price,
+.ihumbak-ct__column-price-note,
+.ihumbak-ct__feature-description,
+.ihumbak-ct__value-text {
+	strong,
+	b {
+		color: var(--sb-color-text-primary, inherit);
 	}
 }
 
@@ -72,12 +108,14 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 	flex: none;
 	width: 1.25em;
 	height: 1.25em;
+	// Thinner than the 2 of the markup, to sit with regular-weight text.
+	stroke-width: 1.5;
 }
 
 .ihumbak-ct__caption {
 	margin-bottom: var(--sb-space-4, 1rem);
-	font-weight: 700;
-	font-size: var(--sb-font-size-xl, 1.25rem);
+	font-size: var(--sb-font-size-2xl, 1.5rem);
+	line-height: var(--sb-line-height-tight, 1.25);
 	color: var(--sb-color-text-primary, inherit);
 }
 
@@ -99,6 +137,13 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 	min-width: 0;
 	padding: $ct-pad-y $ct-pad-x;
 	overflow-wrap: anywhere;
+}
+
+// Nothing is boxed, so the first column starts on the table's left edge, in
+// line with the caption and the section titles.
+.ihumbak-ct__corner,
+.ihumbak-ct__feature {
+	padding-inline-start: 0;
 }
 
 // Four service columns: the feature column may get narrower and the service
@@ -131,8 +176,8 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 .ihumbak-ct__corner {
 	display: flex;
 	align-items: flex-end;
-	font-weight: 600;
-	color: var(--sb-color-text-primary, inherit);
+	font-size: var(--sb-font-size-sm, 0.875rem);
+	color: var(--sb-color-text-muted, inherit);
 }
 
 .ihumbak-ct__column {
@@ -140,6 +185,7 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 	flex-direction: column;
 	align-items: center;
 	gap: var(--sb-space-1, 0.25rem);
+	padding-bottom: var(--sb-space-5, 1.25rem);
 	text-align: center;
 }
 
@@ -149,7 +195,7 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 	justify-content: center;
 	width: 100%;
 	height: 56px;
-	margin-bottom: var(--sb-space-1, 0.25rem);
+	margin-bottom: var(--sb-space-2, 0.5rem);
 
 	img {
 		display: block;
@@ -162,29 +208,46 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 }
 
 .ihumbak-ct__column-name {
-	font-weight: 700;
 	font-size: var(--sb-font-size-lg, 1.125rem);
 	line-height: var(--sb-line-height-tight, 1.25);
 	color: var(--sb-color-text-primary, inherit);
 }
 
 .ihumbak-ct__column-price {
-	font-weight: 600;
+	font-size: 0.75rem;
+	color: var(--sb-color-text-secondary, inherit);
 }
 
 .ihumbak-ct__column-price-note {
 	font-size: var(--sb-font-size-sm, 0.875rem);
+	line-height: var(--sb-line-height-tight, 1.25);
 	color: var(--sb-color-text-muted, inherit);
 }
 
 .ihumbak-ct__column-button {
 	margin-top: auto;
-	padding-top: var(--sb-space-2, 0.5rem);
 }
 
+// Service link (header and CTA row): a plain underlined text link. Its colour
+// is the theme's link colour, so it matches the links of the article.
 .ihumbak-ct__button {
 	max-width: 100%;
 	text-align: center;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.25em;
+	transition: text-decoration-color $ct-duration ease;
+
+	// Same underline on hover; spelled out because the theme's a:hover resets it.
+	&:hover {
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+	}
+
+	&:focus-visible {
+		@include ct-focus-ring;
+		border-radius: var(--sb-radius-sm, 4px);
+	}
 }
 
 // --------------------------------------------------------------------------
@@ -192,8 +255,7 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 // --------------------------------------------------------------------------
 
 .ihumbak-ct__section-head {
-	background-color: var(--sb-color-bg-muted, #efefef);
-	border-bottom: $ct-border;
+	border-bottom: $ct-border-strong;
 }
 
 // Resets the theme's heading margins; the size is the table's own so that the
@@ -201,7 +263,7 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 .ihumbak-ct .ihumbak-ct__section-heading {
 	margin: 0;
 	padding: 0;
-	font-size: var(--sb-font-size-lg, 1.125rem);
+	font-size: var(--sb-font-size-xl, 1.25rem);
 	line-height: var(--sb-line-height-tight, 1.25);
 }
 
@@ -212,9 +274,12 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 	gap: var(--sb-space-3, 0.75rem);
 	width: 100%;
 	margin: 0;
-	padding: $ct-pad-y $ct-pad-x;
+	// No background to pad: the title sits on the left edge and the space
+	// above it is what separates the sections.
+	padding: var(--sb-space-6, 1.5rem) 0 var(--sb-space-3, 0.75rem);
 	font: inherit;
-	color: inherit;
+	// Set here, not inherited: some theme templates force a heading colour.
+	color: var(--sb-color-text-primary, inherit);
 	text-align: left;
 	background: none;
 	border: 0;
@@ -231,6 +296,7 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 
 .ihumbak-ct__section-toggle-icon {
 	flex: none;
+	color: #000;
 	transition: transform $ct-duration ease;
 }
 
@@ -280,29 +346,82 @@ $ct-pad-x: var(--sb-space-4, 1rem);
 }
 
 .ihumbak-ct__feature {
-	font-weight: 400;
+	// Centred on the row, like the values, when those run to several lines.
+	align-self: center;
 	text-align: left;
 }
 
 .ihumbak-ct__feature-title {
-	font-weight: 600;
 	color: var(--sb-color-text-primary, inherit);
 }
 
+// Expandable feature: the native disclosure marker is replaced by the chevron
+// of the section toggle, in front of the title.
+summary.ihumbak-ct__feature-title,
+.ihumbak-ct__feature-title--toggle {
+	display: flex;
+	align-items: flex-start;
+}
+
 summary.ihumbak-ct__feature-title {
+	// As wide as the title, so the focus ring hugs it.
+	width: fit-content;
+	max-width: 100%;
+	list-style: none;
 	cursor: pointer;
+
+	&::-webkit-details-marker {
+		display: none;
+	}
+
+	&::marker {
+		content: "";
+	}
 
 	&:focus-visible {
 		@include ct-focus-ring;
+		border-radius: var(--sb-radius-sm, 4px);
 	}
 }
 
+.ihumbak-ct__feature-title-text {
+	min-width: 0;
+}
+
+.ihumbak-ct__feature-toggle-icon {
+	display: flex;
+	flex: none;
+	align-items: center;
+	// One line of the title high, so it stays on the first line when the
+	// title wraps.
+	height: 1.5em;
+	// Before the title.
+	order: -1;
+	color: #000;
+	// Points right when closed, down when open.
+	transform: rotate(-90deg);
+	transition: transform $ct-duration ease;
+
+	.ihumbak-ct__icon {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+}
+
+.ihumbak-ct__feature-details[open] .ihumbak-ct__feature-toggle-icon,
+.ihumbak-ct__feature-title--toggle .ihumbak-ct__feature-toggle-icon {
+	transform: none;
+}
+
 .ihumbak-ct__feature-description {
-	font-size: var(--sb-font-size-sm, 0.875rem);
+	font-size: 0.75rem;
 	color: var(--sb-color-text-secondary, inherit);
 
-	.ihumbak-ct__feature-details & {
-		padding-top: var(--sb-space-2, 0.5rem);
+	.ihumbak-ct__feature-details &,
+	.ihumbak-ct__feature-title--toggle + & {
+		padding-top: var(--sb-space-1, 0.25rem);
+		// The width of the chevron, so the text lines up with the title.
+		padding-left: 1.25rem;
 	}
 
 	> :first-child {
@@ -332,6 +451,7 @@ summary.ihumbak-ct__feature-title {
 .ihumbak-ct__value-icon {
 	display: inline-flex;
 	flex: none;
+	color: var(--sb-color-text-primary, inherit);
 }
 
 .ihumbak-ct__value-icon--minus {
@@ -362,6 +482,11 @@ summary.ihumbak-ct__feature-title {
 	box-shadow: none;
 	cursor: pointer;
 	appearance: none;
+
+	.ihumbak-ct__icon {
+		width: 14px;
+		height: 14px;
+	}
 
 	&:focus-visible {
 		@include ct-focus-ring;
@@ -394,7 +519,6 @@ summary.ihumbak-ct__feature-title {
 	max-width: min(16rem, calc(100cqi - 1rem));
 	padding: var(--sb-space-2, 0.5rem) var(--sb-space-3, 0.75rem);
 	font-size: var(--sb-font-size-sm, 0.875rem);
-	font-weight: 400;
 	line-height: var(--sb-line-height-normal, 1.5);
 	color: var(--sb-color-bg-white, #fff);
 	text-align: left;
@@ -480,7 +604,15 @@ summary.ihumbak-ct__feature-title {
 	.ihumbak-ct__column,
 	.ihumbak-ct__feature,
 	.ihumbak-ct__value {
-		padding: var(--sb-space-2, 0.5rem);
+		padding: var(--sb-space-3, 0.75rem) var(--sb-space-2, 0.5rem);
+	}
+
+	.ihumbak-ct__caption {
+		font-size: var(--sb-font-size-xl, 1.25rem);
+	}
+
+	.ihumbak-ct .ihumbak-ct__section-heading {
+		font-size: var(--sb-font-size-lg, 1.125rem);
 	}
 
 	// Stays in the accessibility tree, so the header row keeps as many cells
@@ -497,7 +629,6 @@ summary.ihumbak-ct__feature-title {
 		font-size: var(--sb-font-size-sm, 0.875rem);
 	}
 
-	.ihumbak-ct__column-price,
 	.ihumbak-ct__value {
 		font-size: var(--sb-font-size-sm, 0.875rem);
 	}
@@ -507,9 +638,17 @@ summary.ihumbak-ct__feature-title {
 		display: none;
 	}
 
+	// The label is a line of its own above its values; the two read as one
+	// row because only the row has a separator, and the label is darker and
+	// larger than the values.
 	.ihumbak-ct__feature {
 		grid-column: 1 / -1;
-		background-color: var(--sb-color-bg-light, #f8f8f8);
+		padding-inline: 0;
+		padding-bottom: 0;
+	}
+
+	.ihumbak-ct__value {
+		padding-top: var(--sb-space-2, 0.5rem);
 	}
 
 	.ihumbak-ct__feature + .ihumbak-ct__value .ihumbak-ct__tooltip {
@@ -520,23 +659,22 @@ summary.ihumbak-ct__feature-title {
 
 	.ihumbak-ct__cta {
 		display: grid;
-		margin-top: var(--sb-space-4, 1rem);
+		margin-top: var(--sb-space-5, 1.25rem);
 	}
 
+	// Each link is centred under its column; up to three have to fit side by
+	// side at ~390px, so they are a size smaller and may wrap.
 	.ihumbak-ct__cta-item {
-		display: flex;
-		min-width: 0;
-		padding-inline: var(--sb-space-1, 0.25rem);
-	}
-
-	// Structural overrides only: up to three buttons have to fit side by side
-	// at ~390px, so they fill their column and may wrap.
-	.ihumbak-ct__cta .ihumbak-ct__button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 100%;
-		padding-inline: var(--sb-space-2, 0.5rem);
+		min-width: 0;
+		padding-inline: var(--sb-space-1, 0.25rem);
+		text-align: center;
+	}
+
+	.ihumbak-ct__cta .ihumbak-ct__button {
+		font-size: var(--sb-font-size-sm, 0.875rem);
 		overflow-wrap: anywhere;
 	}
 
@@ -565,7 +703,7 @@ summary.ihumbak-ct__feature-title {
 
 		.ihumbak-ct__cta {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
-			row-gap: var(--sb-space-3, 0.75rem);
+			row-gap: var(--sb-space-5, 1.25rem);
 		}
 
 		.ihumbak-ct__cta-item {
@@ -576,9 +714,9 @@ summary.ihumbak-ct__feature-title {
 
 		.ihumbak-ct__cta-name {
 			display: block;
-			font-weight: 600;
 			font-size: var(--sb-font-size-sm, 0.875rem);
 			line-height: var(--sb-line-height-tight, 1.25);
+			color: var(--sb-color-text-primary, inherit);
 			text-align: center;
 		}
 	}
@@ -587,6 +725,8 @@ summary.ihumbak-ct__feature-title {
 @media (prefers-reduced-motion: reduce) {
 	.ihumbak-ct__section-body,
 	.ihumbak-ct__section-toggle-icon,
+	.ihumbak-ct__feature-toggle-icon,
+	.ihumbak-ct__button,
 	.ihumbak-ct__tooltip {
 		transition: none;
 	}

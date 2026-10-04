@@ -64,18 +64,13 @@ $muted: var(--sb-color-text-muted, #757575);
 		}
 	}
 
-	// Stand-in for the theme's .button, which is absent here.
+	// The service link is a text field here. The underline comes from the
+	// frontend stylesheet; the colour stands in for the theme's link colour,
+	// which is absent in the editor.
 	.ihumbak-ct__button {
 		display: inline-block;
-		min-width: 6em;
-		padding: 0.375em 1em;
-		font-size: 0.875rem;
-		font-weight: 600;
-		line-height: 1.5;
-		color: inherit;
-		background: none;
-		border: 1px solid currentColor;
-		border-radius: var(--sb-radius-sm, 4px);
+		min-width: 4em;
+		color: #008080;
 		cursor: text;
 	}
 
@@ -93,15 +88,26 @@ $muted: var(--sb-color-text-muted, #757575);
 		min-width: 0;
 	}
 
+	// ----------------------------------------------------------------------
+	// Row: the description is always shown, so the chevron points up.
+	// ----------------------------------------------------------------------
+
+	.ihumbak-ct__feature-title-text {
+		flex: 0 1 auto;
+		min-width: 1px;
+	}
+
 	// An untitled section prints no heading bar on the frontend; keep a faint
 	// field so a title can still be typed.
 	.ihumbak-ct-editor__section-head--empty {
-		background: none;
 		border-bottom: 1px dashed var(--sb-color-border, #dee2e6);
+
+		.ihumbak-ct__section-toggle {
+			padding-block: 0.5rem;
+		}
 
 		.ihumbak-ct__section-heading {
 			font-size: 0.875rem;
-			font-weight: 400;
 		}
 	}
 

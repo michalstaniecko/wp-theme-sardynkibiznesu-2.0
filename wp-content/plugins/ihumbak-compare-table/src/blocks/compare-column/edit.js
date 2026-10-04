@@ -387,7 +387,7 @@ export default function Edit( {
 					<div className="ihumbak-ct__column-button">
 						<RichText
 							tagName="span"
-							className="button button-small ihumbak-ct__button"
+							className="ihumbak-ct__button"
 							value={ buttonText }
 							onChange={ ( value ) =>
 								setAttributes( { buttonText: value } )

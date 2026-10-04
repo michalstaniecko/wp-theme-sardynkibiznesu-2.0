@@ -1,9 +1,9 @@
 <?php
 /**
- * Service button, shared by the header and the CTA row.
+ * Service link, shared by the header and the CTA row.
  *
- * Its look comes from the theme (.button .button-small); the plugin adds no
- * colours of its own.
+ * A plain underlined text link: the colour is the theme's link colour, the
+ * underline comes from the plugin's stylesheet (.ihumbak-ct__button).
  *
  * @var array $args {
  *     @type array $button url (already esc_url'd), text (RichText), new_tab, rel, service (plain text).
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $button = $args['button'];
 ?>
 <a
-	class="button button-small ihumbak-ct__button"
+	class="ihumbak-ct__button"
 	href="<?php echo esc_url( $button['url'] ); ?>"
 	<?php if ( $button['new_tab'] ) : ?>
 		target="_blank"

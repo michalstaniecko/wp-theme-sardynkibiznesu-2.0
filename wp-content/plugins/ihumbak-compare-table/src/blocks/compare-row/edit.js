@@ -8,6 +8,7 @@ import {
 } from '@wordpress/block-editor';
 
 import { VALUE } from '../../utils/columns';
+import { chevronIcon } from '../../utils/icons';
 
 export default function Edit( {
 	attributes,
@@ -26,6 +27,7 @@ export default function Edit( {
 	const hasTitle = ! RichText.isEmpty( title );
 	const hasDescription = ! RichText.isEmpty( description );
 	const isActive = isSelected || hasSelectedCell;
+	const isExpandable = hasTitle && hasDescription;
 
 	const blockProps = useBlockProps( { className: 'ihumbak-ct__row' } );
 
@@ -43,18 +45,33 @@ export default function Edit( {
 			<div className="ihumbak-ct__feature">
 				{ /* Both fields are optional; an empty one is only offered while the row is being edited. */ }
 				{ ( hasTitle || isActive || ! hasDescription ) && (
-					<RichText
-						tagName="div"
-						className="ihumbak-ct__feature-title"
-						value={ title }
-						onChange={ ( value ) =>
-							setAttributes( { title: value } )
+					<div
+						className={
+							'ihumbak-ct__feature-title' +
+							( isExpandable
+								? ' ihumbak-ct__feature-title--toggle'
+								: '' )
 						}
-						placeholder={ __(
-							'Feature title (optional)',
-							'ihumbak-compare-table'
+					>
+						<RichText
+							tagName="div"
+							className="ihumbak-ct__feature-title-text"
+							value={ title }
+							onChange={ ( value ) =>
+								setAttributes( { title: value } )
+							}
+							placeholder={ __(
+								'Feature title (optional)',
+								'ihumbak-compare-table'
+							) }
+						/>
+						{ /* Title + description is collapsible on the frontend; shown expanded here. */ }
+						{ isExpandable && (
+							<span className="ihumbak-ct__feature-toggle-icon">
+								{ chevronIcon }
+							</span>
 						) }
-					/>
+					</div>
 				) }
 				{ ( hasDescription || isActive ) && (
 					<RichText
