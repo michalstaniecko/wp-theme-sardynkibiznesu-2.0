@@ -1,0 +1,51 @@
+# Sardynki Biznesu
+
+Portal z wiedzą biznesową: artykuły, strony i elementy treści, które redakcja osadza w tekście.
+
+## Treści
+
+**Opublikowana treść**:
+Wpis lub strona o statusie „opublikowane”, widoczna dla czytelnika. Tylko jej wygląd jest chroniony przy zmianie motywu.
+_Avoid_: treść (bez dookreślenia), content
+
+**Szkic**:
+Wpis lub strona, która nie jest opublikowana. Przed publikacją może wymagać poprawek, bo zmiana motywu nie gwarantuje, że wyświetli się poprawnie.
+_Avoid_: draft, wersja robocza
+
+## Elementy treści
+
+**Przycisk**:
+Wyróżniony link wezwania do działania w treści. Jeden element, choć w starych treściach jest zapisany na trzy różne sposoby.
+_Avoid_: sb_button, button, CTA
+
+**Notka**:
+Wyróżniona ramka z ostrzeżeniem lub uwagą w treści artykułu.
+_Avoid_: notice, alert, cmsmasters_notice
+
+## Nawigacja w artykule
+
+**Spis treści**:
+Lista nagłówków artykułu z odnośnikami do nich, wstawiona przez redaktora w wybranym miejscu treści. W starych artykułach obejmuje tylko nagłówki oznaczone przez autora, w nowych wszystkie nagłówki drugiego i trzeciego poziomu.
+_Avoid_: TOC, menu kotwic, anchor menu
+
+**Kotwica**:
+Stały adres fragmentu artykułu, prowadzący do konkretnego nagłówka. Raz opublikowana jest częścią adresu i nie może się zmienić, bo prowadzą do niej linki.
+_Avoid_: anchor, id nagłówka
+
+## Newsletter
+
+**Newsletter**:
+Lista mailingowa Sardynek Biznesu, na którą czytelnik zapisuje się z portalu.
+_Avoid_: GetResponse, MailerLite, lista (bez dookreślenia)
+
+**Formularz zapisu**:
+Element strony, w którym czytelnik podaje imię i e-mail, żeby zapisać się do newslettera. Może stać w treści, pod artykułem albo w kolumnie bocznej.
+_Avoid_: formularz newslettera, getresponse form, widget newslettera
+
+**Strona podziękowania**:
+Strona, na którą czytelnik trafia po udanym zapisie do newslettera.
+_Avoid_: thank you page, thankyou
+
+**Strefa Sardynek**:
+Osobny serwis z materiałami i kursami, działający poza portalem. Nie jest częścią newslettera ani portalu.
+_Avoid_: strefa (bez dookreślenia)
