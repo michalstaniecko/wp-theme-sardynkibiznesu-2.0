@@ -12,7 +12,7 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
 - **Close**: `gh issue close <number> --comment "..."`
 
-This clone has two remotes: `origin` (GitHub) and `upstream` (Bitbucket). Always pass `--repo michalstaniecko/wp-theme-sardynkibiznesu-2.0` to `gh` so it never targets the wrong remote.
+The canonical repo is `origin` (`michalstaniecko/wp-theme-sardynkibiznesu-2.0`); `gh` infers it from `git remote -v`. Ignore any other remotes (e.g. a legacy Bitbucket `upstream`).
 
 ## Pull requests as a triage surface
 
