@@ -24,7 +24,7 @@ export const checkIcon = (
 
 export const minusIcon = (
 	<svg { ...stroke } className="ihumbak-ct__icon ihumbak-ct__icon--minus">
-		<path d="M6 12h12" />
+		<path d="M7 7l10 10M17 7L7 17" />
 	</svg>
 );
 

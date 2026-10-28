@@ -36,7 +36,7 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 		},
 		{
 			value: 'minus',
-			label: __( 'Minus (no)', 'ihumbak-compare-table' ),
+			label: __( 'X (no)', 'ihumbak-compare-table' ),
 			icon: minusIcon,
 		},
 	];

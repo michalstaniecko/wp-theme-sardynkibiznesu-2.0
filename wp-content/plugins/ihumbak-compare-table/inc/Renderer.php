@@ -222,7 +222,8 @@ class Renderer {
 	public static function icon( string $name ): string {
 		$paths = array(
 			'check'   => '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
-			'minus'   => '<path d="M6 12h12"/>',
+			// Drawn as an X; the stored value stays "minus".
+			'minus'   => '<path d="M7 7l10 10M17 7L7 17"/>',
 			'info'    => '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><path d="M12 7.5v.01"/>',
 			'chevron' => '<path d="M6 9l6 6 6-6"/>',
 		);
