@@ -22,6 +22,10 @@ _Avoid_: sb_button, button, CTA
 Wyróżniona ramka z ostrzeżeniem lub uwagą w treści artykułu.
 _Avoid_: notice, alert, cmsmasters_notice
 
+**Ramka promocyjna**:
+Wyróżnione odesłanie do produktu, darmowego materiału, podcastu lub kontaktu, stawiane w treści albo w kolumnie bocznej. Różni się od Notki, która ostrzega lub zwraca uwagę, a nie zachęca do przejścia dalej.
+_Avoid_: callout, banner, box promocyjny
+
 ## Nawigacja w artykule
 
 **Spis treści**:
@@ -49,3 +53,17 @@ _Avoid_: thank you page, thankyou
 **Strefa Sardynek**:
 Osobny serwis z materiałami i kursami, działający poza portalem. Nie jest częścią newslettera ani portalu.
 _Avoid_: strefa (bez dookreślenia)
+
+## Układ portalu
+
+**Kolumna boczna**:
+Pas obok głównej treści widoku z elementami pomocniczymi, np. spisem treści, najczęściej czytanymi wpisami czy formularzem zapisu. Jej skład zależy od rodzaju widoku (artykuł, lista wpisów, strona, wyniki wyszukiwania), a nie od konkretnego artykułu.
+_Avoid_: sidebar, widgety
+
+**Ramka autora**:
+Element pod artykułem przedstawiający autora tego artykułu: imię, zdjęcie i krótki opis. Pokazuje zawsze autora czytanego artykułu, nie opis serwisu.
+_Avoid_: author box, blurb autora
+
+**Sekcja strony głównej**:
+Samodzielny, edytowalny fragment strony głównej, np. Hero, Najnowsze czy Polecamy. Redakcja może zmieniać ich kolejność i treść.
+_Avoid_: blok strony głównej, moduł
