@@ -218,13 +218,61 @@ final class Run
         if ($this->opt['limit'] !== null) {
             $paths = array_slice($paths, 0, (int) $this->opt['limit'], true);
         }
+        foreach ($this->specialUrls() as $path => $kind) {
+            $paths[$path] = $kind;
+        }
         $this->urls = $paths;
+    }
+
+    /** Special list: /feed/, /page/N/, 404, ?s=, old slugs. */
+    private function specialUrls(): array
+    {
+        $out = ['/feed/' => 'feed'];
+        $max = $this->opt['max-pages'] !== null ? (int) $this->opt['max-pages'] : 50;
+        for ($n = 2; $n <= $max; $n++) {
+            // Without --max-pages, stop at the first page 2.0 does not serve.
+            if ($this->opt['max-pages'] === null && $this->httpA->get($this->opt['a'] . "/page/$n/")['status'] !== 200) {
+                break;
+            }
+            $out["/page/$n/"] = 'paginacja';
+        }
+        $out['/komparator-seo-sprawdzenie-404/'] = '404';
+        $out['/?s=' . rawurlencode($this->opt['search'])] = 'wyszukiwarka';
+        if ($this->opt['old-slugs'] !== null) {
+            $lines = @file($this->opt['old-slugs'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if ($lines === false) {
+                fwrite(STDERR, "Nie można odczytać pliku {$this->opt['old-slugs']}.\n");
+                exit(EXIT_USAGE);
+            }
+            foreach ($lines as $line) {
+                $line = trim($line);
+                if ($line !== '' && $line[0] !== '#') {
+                    $out[url_key($line)] = 'stary slug';
+                }
+            }
+        }
+        return $out;
     }
 
     private function compareUrl(string $path, string $kind): void
     {
         $a = page_facts($this->httpA->fetch($this->opt['a'] . $path), $this->opt['a'], true);
         $b = page_facts($this->httpB->fetch($this->opt['b'] . $path), $this->opt['b'], false);
+        if ($kind === 'feed') {
+            // 2.0 returns 500 here; 3.0 must return 200.
+            if ($b['chain'] !== '200') {
+                $this->block($path, '/feed/ zwraca 200', $a['chain'], $b['chain']);
+            }
+            return;
+        }
+        if ($kind === 'paginacja') {
+            // In 3.0 the post list moves to /blog/ (Redirection rule ^/page/(\d+)/?$ → /blog/page/$1/).
+            $expected = '301 → 200 {BASE}/blog' . $path;
+            if ($b['chain'] !== $expected) {
+                $this->block($path, 'przekierowanie na /blog/page/N/', $a['chain'], $b['chain']);
+            }
+            return;
+        }
         $this->compareSeo($path, $a, $b);
     }
 
