@@ -1,0 +1,189 @@
+#!/usr/bin/env bash
+# Odświeżenie bazy stagingu kopią produkcji (WP-CLI, ręcznie przez SSH na serwerze).
+# Instrukcja: docs/runbooks/paczki-i-staging.md
+#
+# Użycie:
+#   bin/staging-refresh --prod-path <dir> --staging-path <dir> \
+#       --prod-url <url> --staging-url <url> [--dump-dir <dir>] [--keep-dump] [--dry-run] [--yes]
+#
+# Kroki: eksport bazy produkcji → import na stagingu (po wyczyszczeniu jego bazy)
+# → search-replace domeny → ponowne ustawienie opcji stagingowych.
+# Produkcję tylko czyta (`wp db export`). Odmawia, gdy cel nie jest stagingiem.
+# Zmienna WP_CLI podmienia polecenie wp (domyślnie `wp`).
+# Kody wyjścia: 0 = gotowe, 1 = odmowa albo błąd, 2 = błędne użycie.
+
+set -euo pipefail
+
+prod_path= staging_path= prod_url= staging_url=
+dump_dir=${HOME:-.}/staging-refresh
+keep_dump=0 dry_run=0 yes=0
+
+usage() {
+	sed -n '5,7p' "$0" | sed 's/^# \{0,1\}//' >&2
+	exit 2
+}
+die() {
+	echo "staging-refresh: $*" >&2
+	exit 1
+}
+step() { printf '\n== %s\n' "$*"; }
+
+while (($#)); do
+	case $1 in
+		--prod-path | --staging-path | --prod-url | --staging-url | --dump-dir)
+			(($# >= 2)) || usage
+			v=$2
+			case $1 in
+				--prod-path) prod_path=$v ;;
+				--staging-path) staging_path=$v ;;
+				--prod-url) prod_url=${v%/} ;;
+				--staging-url) staging_url=${v%/} ;;
+				--dump-dir) dump_dir=$v ;;
+			esac
+			shift
+			;;
+		--keep-dump) keep_dump=1 ;;
+		--dry-run) dry_run=1 ;;
+		--yes) yes=1 ;;
+		*) usage ;;
+	esac
+	shift
+done
+[[ -n $prod_path && -n $staging_path && -n $prod_url && -n $staging_url ]] || usage
+
+read -r -a WP <<<"${WP_CLI:-wp}"
+# Plugins and themes stay unloaded: the database is all this script needs.
+prod() { "${WP[@]}" --path="$prod_path" --skip-plugins --skip-themes "$@"; }
+staging() { "${WP[@]}" --path="$staging_path" --skip-plugins --skip-themes "$@"; }
+
+# Writes to staging go through here, so --dry-run only prints them.
+run_staging() {
+	if ((dry_run)); then
+		printf '[dry-run] wp --path=%q' "$staging_path"
+		printf ' %q' "$@"
+		printf '\n'
+	else
+		staging "$@"
+	fi
+}
+
+host_of() {
+	local h=${1#*://}
+	echo "${h%%/*}"
+}
+prod_host=$(host_of "$prod_url")
+staging_host=$(host_of "$staging_url")
+[[ $prod_host != "$staging_host" ]] || die "--prod-url i --staging-url mają ten sam host"
+
+# --- Safety checks (read only) -------------------------------------------------
+step "Sprawdzenie celów"
+[[ $prod_path != "$staging_path" ]] || die "--prod-path i --staging-path są takie same"
+
+db_id='global $wpdb; echo DB_HOST, "/", DB_NAME, " ", $wpdb->prefix;'
+prod_db=$(prod eval "$db_id") || die "nie mogę odczytać bazy produkcji ($prod_path)"
+staging_db=$(staging eval "$db_id") || die "nie mogę odczytać bazy stagingu ($staging_path)"
+[[ ${prod_db% *} != "${staging_db% *}" ]] || die "staging używa bazy produkcji (${prod_db% *})"
+[[ ${prod_db#* } == "${staging_db#* }" ]] || die "różne prefiksy tabel: produkcja ${prod_db#* }, staging ${staging_db#* }"
+prefix=${prod_db#* }
+
+staging_env=$(staging eval 'echo wp_get_environment_type();')
+[[ $staging_env == staging ]] || die "cel ma WP_ENVIRONMENT_TYPE='$staging_env', a nie 'staging' (ustaw w wp-config.php stagingu)"
+
+prod_home=$(prod option get home)
+[[ $(host_of "$prod_home") == "$prod_host" ]] || die "home produkcji to $prod_home, nie host z --prod-url ($prod_host)"
+
+echo "produkcja: $prod_path  baza ${prod_db% *}  $prod_url"
+echo "staging:   $staging_path  baza ${staging_db% *}  $staging_url  (prefiks $prefix)"
+
+if ((!dry_run && !yes)); then
+	read -r -p "Nadpisać bazę stagingu kopią produkcji? Wpisz 'tak': " answer || answer=
+	[[ $answer == tak ]] || die "przerwane, nic nie zmieniono"
+fi
+
+# --- 1. Export production ------------------------------------------------------
+step "1. Eksport bazy produkcji"
+dump=$dump_dir/prod-$(date +%Y%m%d-%H%M%S).sql
+if ((dry_run)); then
+	printf '[dry-run] wp --path=%q db export - --single-transaction > %q\n' "$prod_path" "$dump"
+else
+	mkdir -p "$dump_dir"
+	(
+		umask 077
+		prod db export - --single-transaction >"$dump.part"
+	) || die "eksport nieudany; staging bez zmian"
+	tail -n 5 "$dump.part" | grep -q 'Dump completed' || die "zrzut niekompletny ($dump.part); staging bez zmian"
+	mv "$dump.part" "$dump"
+	echo "zrzut: $dump ($(wc -c <"$dump" | tr -d ' ') B)"
+fi
+
+# --- 2. Import into staging ----------------------------------------------------
+step "2. Import na stagingu"
+run_staging db reset --yes
+if ((dry_run)); then
+	printf '[dry-run] wp --path=%q db import - < %q\n' "$staging_path" "$dump"
+else
+	staging db import - <"$dump"
+fi
+
+# --- 3. Domain -----------------------------------------------------------------
+# Host-based pairs keep the scheme and also catch www, protocol-relative and
+# JSON-escaped (\/\/) URLs. E-mail addresses (@host) do not match. guid stays.
+step "3. search-replace domeny $prod_host → $staging_host"
+for from_host in "www.$prod_host" "$prod_host"; do
+	for slashes in '//' '\/\/'; do
+		run_staging search-replace "$slashes$from_host" "$slashes$staging_host" \
+			--all-tables-with-prefix --skip-columns=guid --report-changed-only
+	done
+done
+run_staging option update home "$staging_url"
+run_staging option update siteurl "$staging_url"
+
+# --- 4. Staging options ----------------------------------------------------------
+step "4. Opcje stagingowe"
+# Search engines: "Zniechęcaj wyszukiwarki".
+run_staging option update blog_public 0
+# No mail to real authors and moderators.
+run_staging option update comments_notify 0
+run_staging option update moderation_notify 0
+
+# LiteSpeed: no image optimisation (uploads are prod's via symlink), no crawler,
+# and no purging of prod's Cloudflare zone from staging.
+for key in img_optm-auto img_optm-cron crawler cdn-cloudflare; do
+	if ((dry_run)) || staging option get "litespeed.conf.$key" >/dev/null 2>&1; then
+		run_staging option update "litespeed.conf.$key" 0
+	fi
+done
+
+# wpDiscuz: no notification mail to real readers. Subscriptions are emptied,
+# because wpDiscuz has no switch that stops mail to subscribers.
+if ((dry_run)) || staging option get wc_options >/dev/null 2>&1; then
+	for key in sendMailToMentionedUsers isNotifyOnCommentApprove isFollowActive; do
+		run_staging option patch update wc_options subscription "$key" 0
+	done
+	for table in "${prefix}wc_comments_subscription" "${prefix}wc_follow_users"; do
+		if ((dry_run)) || [[ -n $(staging db query "SHOW TABLES LIKE '$table'" --skip-column-names) ]]; then
+			run_staging db query "TRUNCATE TABLE \`$table\`"
+		fi
+	done
+fi
+
+run_staging cache flush
+if ((!dry_run)) && staging plugin is-active litespeed-cache 2>/dev/null; then
+	"${WP[@]}" --path="$staging_path" litespeed-purge all
+fi
+
+# --- 5. Summary ------------------------------------------------------------------
+if ((dry_run)); then
+	step "Dry run: nic nie zmieniono"
+	exit 0
+fi
+if ((keep_dump)); then
+	echo "zrzut zostaje: $dump"
+else
+	rm -f "$dump"
+fi
+
+step "Gotowe"
+printf 'home        %s\n' "$(staging option get home)"
+printf 'blog_public %s\n' "$(staging option get blog_public)"
+printf 'środowisko  %s\n' "$(staging eval 'echo wp_get_environment_type();')"
