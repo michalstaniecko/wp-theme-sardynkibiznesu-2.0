@@ -1,0 +1,51 @@
+/*
+ * ihumbak/share-buttons (spec #36): next to the tags under the article.
+ * Round icon buttons; the plugin only adds the flex row and [hidden].
+ */
+.wp-block-ihumbak-share-buttons {
+	gap: var(--wp--preset--spacing--2);
+	color: var(--wp--preset--color--text-secondary);
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 600;
+	line-height: var(--wp--custom--line-height--caption);
+
+	& .wp-block-ihumbak-share-buttons__label {
+		letter-spacing: var(--wp--custom--letter-spacing--overline);
+		text-transform: uppercase;
+	}
+
+	& .wp-block-ihumbak-share-buttons__button {
+		box-sizing: border-box;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		padding: 0;
+		border: 1px solid var(--wp--custom--color--border);
+		border-radius: var(--wp--preset--border-radius--full);
+		background: var(--wp--preset--color--surface);
+		color: var(--wp--preset--color--text);
+		cursor: pointer;
+		transition: border-color var(--wp--custom--duration--fast) var(--wp--custom--easing), color var(--wp--custom--duration--fast) var(--wp--custom--easing);
+
+		&:hover {
+			border-color: var(--wp--preset--color--brand);
+			color: var(--wp--preset--color--brand);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--custom--color--focus);
+			outline-offset: 2px;
+		}
+
+		& svg {
+			width: 18px;
+			height: 18px;
+		}
+	}
+
+	& .wp-block-ihumbak-share-buttons__status {
+		color: var(--wp--preset--color--brand);
+	}
+}

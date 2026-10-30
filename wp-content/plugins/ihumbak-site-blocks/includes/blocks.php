@@ -1,10 +1,13 @@
 <?php
 /**
- * Registration of the header blocks and their shared scripts. The `badges` style of
+ * Registration of the site blocks and their shared scripts. The `badges` style of
  * `core/buttons` used by the search bar is registered by ihumbak-content-elements (spec #36).
  *
- * One editor script (no build, wp.element.createElement) serves all blocks; one
- * view script module holds the shared Interactivity store `ihumbak/site-header`.
+ * One editor script (no build, wp.element.createElement) serves the header blocks
+ * and the Query variation (share buttons and author links are PHP-only blocks,
+ * `autoRegister`); one
+ * view script module holds the Interactivity stores `ihumbak/site-header` and
+ * `ihumbak/share-buttons`.
  * Dependencies live in hand-written *.asset.php files next to the scripts.
  */
 
@@ -12,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const IHUMBAK_SITE_BLOCKS = array( 'site-header', 'search-toggle', 'search-bar' );
+const IHUMBAK_SITE_BLOCKS = array( 'site-header', 'search-toggle', 'search-bar', 'share-buttons', 'author-social-links' );
 
 add_action( 'init', 'ihumbak_site_blocks_register' );
 

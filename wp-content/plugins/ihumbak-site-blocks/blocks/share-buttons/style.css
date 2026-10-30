@@ -1,0 +1,11 @@
+/* ihumbak/share-buttons — structural CSS only; the look lives in the theme. */
+.wp-block-ihumbak-share-buttons {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.wp-block-ihumbak-share-buttons [hidden] {
+	display: none !important;
+}

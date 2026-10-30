@@ -47,6 +47,8 @@
 			<!-- wp:group {"className":"sb-article__tags","layout":{"type":"default"}} -->
 			<div class="wp-block-group sb-article__tags">
 				<!-- wp:post-terms {"term":"post_tag","separator":" "} /-->
+
+				<!-- wp:ihumbak/share-buttons /-->
 			</div>
 			<!-- /wp:group -->
 
@@ -63,6 +65,8 @@
 					<!-- wp:post-author-name {"isLink":true,"className":"sb-author-box__name"} /-->
 
 					<!-- wp:post-author-biography {"className":"sb-author-box__bio"} /-->
+
+					<!-- wp:ihumbak/author-social-links /-->
 				</div>
 				<!-- /wp:group -->
 			</section>
@@ -75,6 +79,30 @@
 				<!-- wp:post-navigation-link {"label":"Następny wpis","showTitle":true,"linkLabel":true,"arrow":"arrow"} /-->
 			</nav>
 			<!-- /wp:group -->
+
+			<!-- wp:query {"queryId":1,"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","inherit":false,"sticky":"ignore"},"namespace":"ihumbak/same-category","tagName":"section","className":"sb-related"} -->
+			<section class="wp-block-query sb-related">
+				<!-- wp:heading {"className":"sb-related__title"} -->
+				<h2 class="wp-block-heading sb-related__title">Z tej kategorii</h2>
+				<!-- /wp:heading -->
+
+				<!-- wp:post-template {"className":"sb-related__list","layout":{"type":"default"}} -->
+					<!-- wp:group {"className":"sb-card sb-card--compact","layout":{"type":"default"}} -->
+					<div class="wp-block-group sb-card sb-card--compact">
+						<!-- wp:post-featured-image {"aspectRatio":"16/10","sizeSlug":"medium_large","className":"sb-card__media sb-card__media--compact"} /-->
+
+						<!-- wp:group {"className":"sb-card__body","layout":{"type":"default"}} -->
+						<div class="wp-block-group sb-card__body">
+							<!-- wp:post-title {"level":3,"isLink":true,"className":"sb-card__title"} /-->
+
+							<!-- wp:post-date {"format":"j F Y","className":"sb-meta"} /-->
+						</div>
+						<!-- /wp:group -->
+					</div>
+					<!-- /wp:group -->
+				<!-- /wp:post-template -->
+			</section>
+			<!-- /wp:query -->
 
 			<!-- wp:comments {"legacy":true,"anchor":"komentarze","className":"sb-article__comments"} /-->
 		</article>

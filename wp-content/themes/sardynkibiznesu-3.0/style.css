@@ -353,6 +353,49 @@ Text Domain: sardynkibiznesu-3-0
 		}
 	}
 
+	/* „Z tej kategorii” (Query variation ihumbak/same-category): 3 compact cards. */
+	& .sb-related {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--5);
+
+		& > * {
+			margin-block: 0;
+		}
+
+		& .sb-related__title {
+			font-size: var(--wp--preset--font-size--h-3);
+			line-height: var(--wp--custom--line-height--h-3);
+		}
+
+		& .sb-related__list {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: var(--wp--preset--spacing--5);
+			margin: 0;
+			padding: 0;
+			list-style: none;
+
+			& > li {
+				margin: 0;
+			}
+		}
+
+		& .sb-card--compact {
+			gap: var(--wp--preset--spacing--3);
+			align-content: start;
+		}
+
+		& .sb-card__body {
+			gap: var(--wp--preset--spacing--2);
+		}
+
+		& .sb-card__title {
+			font-size: var(--wp--preset--font-size--body);
+			line-height: var(--wp--custom--line-height--body);
+		}
+	}
+
 	/* Content blocks may ask for wide/full alignment; inside the column they stay within it. */
 	& .sb-article__content :is(.alignwide, .alignfull) {
 		max-width: 100%;
@@ -373,6 +416,16 @@ Text Domain: sardynkibiznesu-3-0
 		& .sb-author-box {
 			flex-direction: column;
 			padding: var(--wp--preset--spacing--5);
+		}
+
+		/* Related cards: one per row, small image beside the title. */
+		& .sb-related .sb-related__list {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		& .sb-related .sb-card--compact {
+			grid-template-columns: 120px minmax(0, 1fr);
+			align-items: start;
 		}
 
 		& .sb-article__post-nav {

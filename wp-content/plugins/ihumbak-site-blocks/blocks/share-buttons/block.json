@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/share-buttons",
+	"title": "Przyciski udostępniania",
+	"category": "theme",
+	"icon": "share",
+	"description": "Udostępnianie bieżącego wpisu: wyślij e-mailem (zawsze), kopiuj link i Web Share (z JS, gdy przeglądarka je obsługuje).",
+	"textdomain": "ihumbak-site-blocks",
+	"usesContext": [ "postId" ],
+	"supports": { "html": false, "interactivity": true, "autoRegister": true },
+	"viewScriptModule": "ihumbak-site-blocks-view",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}
