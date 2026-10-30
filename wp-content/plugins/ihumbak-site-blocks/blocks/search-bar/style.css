@@ -1,0 +1,20 @@
+/*
+ * ihumbak/search-bar — structural CSS only: the bar drops below the header
+ * without moving the page. The look lives in the theme.
+ */
+.wp-block-ihumbak-search-bar {
+	--sb-search-bar-surface: var(--wp--preset--color--surface, #ffffff);
+	position: absolute;
+	inset: 100% 0 auto;
+	z-index: 98;
+	background-color: var(--sb-search-bar-surface);
+}
+
+.wp-block-ihumbak-search-bar[hidden] {
+	display: none;
+}
+
+/* In the editor the bar is always visible and in flow. */
+.editor-styles-wrapper .wp-block-ihumbak-search-bar {
+	position: static;
+}
