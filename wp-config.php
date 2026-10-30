@@ -37,12 +37,14 @@ if (!function_exists('getenv_docker')) {
   }
 }
 
-$protocol = $_SERVER['HTTP_HOST'] === 'localhost' ? 'http://' : 'https://';
+// WP-CLI has no HTTP_HOST; localhost with any port (parallel compose projects) is plain http.
+$host     = $_SERVER['HTTP_HOST'] ?? getenv_docker('WORDPRESS_CLI_HOST', 'localhost');
+$protocol = preg_match('/^localhost(:\d+)?$/', $host) ? 'http://' : 'https://';
 
 define('ENVIRONMENT', 'development');
 
-define('WP_HOME', $protocol . $_SERVER['HTTP_HOST']);
-define('WP_SITEURL', $protocol . $_SERVER['HTTP_HOST']);
+define('WP_HOME', $protocol . $host);
+define('WP_SITEURL', $protocol . $host);
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
