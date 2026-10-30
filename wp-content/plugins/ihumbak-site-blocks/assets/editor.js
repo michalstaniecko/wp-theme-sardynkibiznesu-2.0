@@ -130,4 +130,32 @@
 			],
 		],
 	} );
+
+	/*
+	 * Query variations of the front page sections Hero and Najnowsze (includes/home-queries.php).
+	 * Only named here (block toolbar, List View); they are inserted with the section patterns
+	 * of the theme, so they stay out of the inserter. The server decides which posts show:
+	 * the preview follows core (newest posts, offset 1 for Najnowsze).
+	 */
+	blocks.registerBlockVariation( 'core/query', {
+		name: 'ihumbak/hero',
+		title: __( 'Hero: wpis wyróżniony', 'ihumbak-site-blocks' ),
+		description: __( 'Jeden wpis: najnowszy przypięty, a gdy go nie ma, najnowszy.', 'ihumbak-site-blocks' ),
+		icon: 'star-filled',
+		scope: [],
+		isActive: [ 'namespace' ],
+		allowedControls: [],
+		attributes: { namespace: 'ihumbak/hero' },
+	} );
+
+	blocks.registerBlockVariation( 'core/query', {
+		name: 'ihumbak/latest',
+		title: __( 'Najnowsze po Hero', 'ihumbak-site-blocks' ),
+		description: __( 'Najnowsze wpisy bez wpisu pokazanego w Hero.', 'ihumbak-site-blocks' ),
+		icon: 'list-view',
+		scope: [],
+		isActive: [ 'namespace' ],
+		allowedControls: [ 'taxQuery' ],
+		attributes: { namespace: 'ihumbak/latest' },
+	} );
 } )( window.wp.blocks, window.wp.blockEditor, window.wp.element, window.wp.i18n );
