@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/search-toggle",
+	"title": "Przełącznik wyszukiwania",
+	"category": "theme",
+	"description": "Ikona wyszukiwania w nagłówku: bez JS link do strony wyszukiwania, z JS przełącznik paska wyszukiwania.",
+	"textdomain": "ihumbak-site-blocks",
+	"supports": { "html": false, "interactivity": true },
+	"editorScript": "ihumbak-site-blocks-editor",
+	"viewScriptModule": "ihumbak-site-blocks-view",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

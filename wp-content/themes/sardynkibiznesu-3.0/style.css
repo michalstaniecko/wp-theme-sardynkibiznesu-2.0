@@ -60,6 +60,342 @@ Text Domain: sardynkibiznesu-3-0
 	}
 }
 
+/* Article (template `single`): 680 content column + 320 sidebar (part `sidebar-article`).
+   Below 1024px the sidebar drops under the content. Layer 4: classes on groups. */
+.sb-article {
+	padding-block: var(--wp--preset--spacing--8) 0;
+
+	& .sb-article__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: var(--wp--preset--spacing--12);
+	}
+
+	& .sb-article__grid > *,
+	& .sb-article__main > *,
+	& .sb-article__sidebar > * {
+		margin-block: 0;
+	}
+
+	& .sb-article__main {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--6);
+		min-width: 0;
+		/* Long URLs and unbroken strings in old posts must not cause horizontal scroll at 320px. */
+		overflow-wrap: break-word;
+	}
+
+	& .sb-article__header {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--wp--preset--spacing--4);
+
+		& > * {
+			margin-block: 0;
+		}
+	}
+
+	& .sb-article__breadcrumbs {
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 500;
+		line-height: var(--wp--custom--line-height--caption);
+		color: var(--wp--preset--color--text-secondary);
+
+		& a {
+			color: var(--wp--preset--color--text-secondary);
+			text-decoration: none;
+
+			&:hover {
+				color: var(--wp--preset--color--brand);
+				text-decoration: underline;
+			}
+		}
+	}
+
+	/* Category badge: brand plakietka. */
+	& .sb-article__category {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--wp--preset--spacing--2);
+
+		& a {
+			display: inline-block;
+			padding: var(--wp--preset--spacing--1) var(--wp--preset--spacing--3);
+			border-radius: var(--wp--preset--border-radius--full);
+			background-color: var(--wp--preset--color--brand-soft);
+			color: var(--wp--preset--color--brand);
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--caption);
+			letter-spacing: var(--wp--custom--letter-spacing--overline);
+			text-decoration: none;
+			text-transform: uppercase;
+
+			&:hover {
+				background-color: var(--wp--custom--color--brand-soft-strong);
+			}
+		}
+	}
+
+	/* Compact author: avatar, name, then date · reading time · comments. */
+	& .sb-article__byline {
+		display: flex;
+		align-items: center;
+		gap: var(--wp--preset--spacing--3);
+
+		& > *,
+		& .sb-article__byline-meta > *,
+		& .sb-article__byline-details > * {
+			margin-block: 0;
+		}
+
+		& .wp-block-avatar img {
+			display: block;
+			border-radius: var(--wp--preset--border-radius--full);
+		}
+
+		& .sb-article__byline-author {
+			font-size: var(--wp--preset--font-size--body-sm);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--body-sm);
+
+			& a {
+				color: var(--wp--preset--color--text);
+				text-decoration: none;
+
+				&:hover {
+					color: var(--wp--preset--color--brand);
+				}
+			}
+		}
+
+		& .sb-article__byline-details {
+			display: flex;
+			flex-wrap: wrap;
+			column-gap: var(--wp--preset--spacing--2);
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 500;
+			line-height: var(--wp--custom--line-height--caption);
+			color: var(--wp--preset--color--text-secondary);
+
+			& > * + *::before {
+				content: "·";
+				margin-inline-end: var(--wp--preset--spacing--2);
+			}
+
+			& a {
+				color: var(--wp--preset--color--text-secondary);
+			}
+		}
+	}
+
+	& .wp-block-post-featured-image {
+		margin: 0;
+
+		& img {
+			display: block;
+			width: 100%;
+			height: auto;
+			border-radius: var(--wp--preset--border-radius--lg);
+		}
+	}
+
+	/* Tags (and, later, sharing buttons). Hidden when the post has neither. */
+	& .sb-article__tags {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--wp--preset--spacing--4);
+
+		&:not(:has(*)) {
+			display: none;
+		}
+
+		& > * {
+			margin-block: 0;
+		}
+
+		& .taxonomy-post_tag {
+			display: flex;
+			flex-wrap: wrap;
+			gap: var(--wp--preset--spacing--2);
+		}
+
+		& .taxonomy-post_tag a {
+			display: inline-block;
+			padding: var(--wp--preset--spacing--1) var(--wp--preset--spacing--3);
+			border: 1px solid var(--wp--custom--color--border);
+			border-radius: var(--wp--preset--border-radius--full);
+			color: var(--wp--preset--color--text-secondary);
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 500;
+			line-height: var(--wp--custom--line-height--caption);
+			text-decoration: none;
+
+			&:hover {
+				border-color: var(--wp--preset--color--brand);
+				color: var(--wp--preset--color--brand);
+			}
+		}
+	}
+
+	/* Ramka autora: avatar, name linking to the author archive, biography. */
+	& .sb-author-box {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--wp--preset--spacing--5);
+		padding: var(--wp--preset--spacing--6);
+		border: 1px solid var(--wp--custom--color--border-card);
+		border-radius: var(--wp--preset--border-radius--lg);
+		background-color: var(--wp--preset--color--surface-2);
+
+		& > *,
+		& .sb-author-box__body > * {
+			margin-block: 0;
+		}
+
+		& .wp-block-avatar {
+			flex: none;
+		}
+
+		& .wp-block-avatar img {
+			display: block;
+			border-radius: var(--wp--preset--border-radius--full);
+		}
+
+		& .sb-author-box__body {
+			display: flex;
+			flex-direction: column;
+			gap: var(--wp--preset--spacing--2);
+			min-width: 0;
+		}
+
+		& .sb-author-box__overline {
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--caption);
+			letter-spacing: var(--wp--custom--letter-spacing--overline);
+			text-transform: uppercase;
+			color: var(--wp--preset--color--text-secondary);
+		}
+
+		& .sb-author-box__name {
+			font-size: var(--wp--preset--font-size--h-4);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--h-4);
+
+			& a {
+				color: var(--wp--preset--color--text);
+				text-decoration: none;
+
+				&:hover {
+					color: var(--wp--preset--color--brand);
+					text-decoration: underline;
+				}
+			}
+		}
+
+		& .sb-author-box__bio {
+			font-size: var(--wp--preset--font-size--body-sm);
+			line-height: var(--wp--custom--line-height--body-sm);
+			color: var(--wp--preset--color--text-secondary);
+		}
+	}
+
+	/* Previous / next post. */
+	& .sb-article__post-nav {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--wp--preset--spacing--4);
+		padding-block: var(--wp--preset--spacing--6);
+		border-block: 1px solid var(--wp--custom--color--border);
+
+		& > * {
+			display: flex;
+			gap: var(--wp--preset--spacing--2);
+			margin-block: 0;
+		}
+
+		& .post-navigation-link-next {
+			grid-column: 2;
+			justify-content: flex-end;
+			text-align: end;
+		}
+
+		& a {
+			display: flex;
+			flex-direction: column;
+			gap: var(--wp--preset--spacing--1);
+			color: var(--wp--preset--color--text);
+			text-decoration: none;
+
+			&:hover .post-navigation-link__title {
+				color: var(--wp--preset--color--brand);
+			}
+		}
+
+		& .post-navigation-link__label {
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--caption);
+			letter-spacing: var(--wp--custom--letter-spacing--overline);
+			text-transform: uppercase;
+			color: var(--wp--preset--color--text-secondary);
+		}
+
+		& .post-navigation-link__title {
+			font-size: var(--wp--preset--font-size--body-sm);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--body-sm);
+		}
+	}
+
+	/* Content blocks may ask for wide/full alignment; inside the column they stay within it. */
+	& .sb-article__content :is(.alignwide, .alignfull) {
+		max-width: 100%;
+		margin-inline: 0;
+	}
+}
+
+@media (min-width: 1024px) {
+	.sb-article .sb-article__grid {
+		grid-template-columns: minmax(0, var(--wp--style--global--content-size)) var(--wp--custom--layout--sidebar-width);
+		justify-content: space-between;
+		align-items: start;
+	}
+}
+
+@media (max-width: 767px) {
+	.sb-article {
+		& .sb-author-box {
+			flex-direction: column;
+			padding: var(--wp--preset--spacing--5);
+		}
+
+		& .sb-article__post-nav {
+			grid-template-columns: 1fr;
+
+			& .post-navigation-link-next {
+				grid-column: 1;
+			}
+		}
+	}
+}
+
+/* Sidebar parts: a vertical stack of blocks. */
+.sb-sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--8);
+
+	& > * {
+		margin-block: 0;
+	}
+}
+
 /* Footer (part `footer`): brand, three link columns, bottom bar. Layer 4: classes on groups. */
 .sb-footer {
 	margin-block-start: var(--wp--preset--spacing--24);
@@ -707,6 +1043,8 @@ Text Domain: sardynkibiznesu-3-0
  */
 .sb-search {
 	padding-block: 0;
+	/* The tinted hero sits right under the header (no root block gap). */
+	margin-block-start: 0;
 
 	& > * {
 		margin-block: 0;
@@ -937,31 +1275,6 @@ Text Domain: sardynkibiznesu-3-0
 @media (max-width: 767px) {
 	.sb-category-tiles__grid {
 		grid-template-columns: minmax(0, 1fr);
-	}
-}
-
-/*
- * Plakietki (`core/buttons` style `is-style-badges`, registered by ihumbak-site-blocks):
- * „Często szukane” here, „Popularne” in the search bar. Layer 2: block style CSS in the theme.
- */
-.wp-block-buttons.is-style-badges {
-	gap: var(--wp--preset--spacing--2);
-
-	& .wp-block-button__link {
-		padding: 3px var(--wp--preset--spacing--3);
-		border: 0;
-		border-radius: var(--wp--preset--border-radius--full);
-		background-color: var(--wp--custom--color--surface-3);
-		box-shadow: none;
-		color: var(--wp--preset--color--text-secondary);
-		font-size: var(--wp--preset--font-size--caption);
-		font-weight: 600;
-		line-height: 16px;
-
-		&:hover {
-			background-color: var(--wp--preset--color--brand-soft);
-			color: var(--wp--preset--color--brand);
-		}
 	}
 }
 

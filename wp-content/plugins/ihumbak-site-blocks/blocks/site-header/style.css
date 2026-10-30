@@ -1,0 +1,9 @@
+/*
+ * ihumbak/site-header — structural CSS only; the look (shadow, stickiness, menu)
+ * lives in the theme. Tokens with fallbacks so the block works on any theme.
+ */
+.wp-block-ihumbak-site-header {
+	--sb-header-surface: var(--wp--preset--color--surface, #ffffff);
+	position: relative;
+	background-color: var(--sb-header-surface);
+}

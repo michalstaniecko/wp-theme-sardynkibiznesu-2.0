@@ -1,0 +1,26 @@
+/*
+ * Przycisk: the minimum the plugin's block styles need on any theme. The look
+ * (colours, outline, hover) comes from the theme; here only the download icon.
+ * Theme tokens are mapped once on the main selector with light fallbacks (ADR-0001).
+ * Icon: Lucide "download" (ISC license), drawn with currentColor through a mask.
+ */
+.wp-block-button {
+	--sb-button-icon-gap: var(--wp--preset--spacing--2, 8px);
+	--sb-button-icon-size: 1.25em;
+}
+
+.wp-block-button.is-style-download > .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--sb-button-icon-gap);
+
+	&::before {
+		content: "";
+		flex: none;
+		width: var(--sb-button-icon-size);
+		height: var(--sb-button-icon-size);
+		background-color: currentColor;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/%3E%3Cpolyline points='7 10 12 15 17 10'/%3E%3Cline x1='12' x2='12' y1='15' y2='3'/%3E%3C/svg%3E") center / contain no-repeat;
+	}
+}

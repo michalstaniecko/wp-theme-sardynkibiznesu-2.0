@@ -1,0 +1,50 @@
+/*
+ * Przycisk (`core/button`): variants registered as block styles by ihumbak-content-elements.
+ * Layer 2 of the .sb-* rule: block style CSS lives in the theme. The base (fill = brand)
+ * comes from styles.elements.button in theme.json. The same markup is rendered for the
+ * legacy `sb_button` (outline), `cmsmasters_button` (download) and `acf/sb-button`
+ * (fill, or accent for "blue"), so this file styles all of them.
+ */
+
+/* Obrys: brand text and border on the page background. */
+.wp-block-button.is-style-outline > .wp-block-button__link {
+	padding: var(--wp--preset--spacing--3) var(--wp--preset--spacing--5);
+	border: 1px solid var(--wp--preset--color--brand);
+	background-color: transparent;
+	color: var(--wp--preset--color--brand);
+	box-shadow: none;
+
+	&:hover {
+		border-color: var(--wp--custom--color--brand-hover);
+		background-color: var(--wp--preset--color--brand-soft);
+		color: var(--wp--custom--color--brand-hover);
+	}
+}
+
+/* Akcent: the second CTA colour. accent-text, not accent: white on accent is 3.4:1. */
+.wp-block-button.is-style-accent > .wp-block-button__link {
+	border-color: var(--wp--custom--color--accent-text);
+	background-color: var(--wp--custom--color--accent-text);
+	color: var(--wp--custom--color--on-brand);
+
+	/* No darker accent token: hover keeps the colours (beating the brand-hover of theme.json) and underlines. */
+	&:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+}
+
+/* Ikona pobierania: fill colours; the icon itself comes from the plugin. */
+.wp-block-button.is-style-download > .wp-block-button__link {
+	padding-inline-start: var(--wp--preset--spacing--4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wp-block-button__link {
+		transition:
+			background-color var(--wp--custom--duration--fast) var(--wp--custom--easing),
+			border-color var(--wp--custom--duration--fast) var(--wp--custom--easing),
+			color var(--wp--custom--duration--fast) var(--wp--custom--easing),
+			box-shadow var(--wp--custom--duration--fast) var(--wp--custom--easing);
+	}
+}

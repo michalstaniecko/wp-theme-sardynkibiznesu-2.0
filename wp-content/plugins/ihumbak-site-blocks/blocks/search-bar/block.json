@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/search-bar",
+	"title": "Pasek wyszukiwania",
+	"category": "theme",
+	"description": "Pasek pod nagłówkiem: wyszukiwarka i plakietki „Popularne”. Otwiera go Przełącznik wyszukiwania.",
+	"textdomain": "ihumbak-site-blocks",
+	"supports": { "html": false, "interactivity": true, "multiple": false },
+	"editorScript": "ihumbak-site-blocks-editor",
+	"viewScriptModule": "ihumbak-site-blocks-view",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}
