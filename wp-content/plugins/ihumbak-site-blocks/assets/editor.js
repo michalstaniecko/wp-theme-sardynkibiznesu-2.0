@@ -106,6 +106,7 @@
 		attributes: {
 			namespace: 'ihumbak/same-category',
 			tagName: 'section',
+			className: 'sb-related',
 			query: {
 				perPage: 3,
 				pages: 0,
@@ -117,15 +118,34 @@
 				sticky: 'ignore',
 			},
 		},
+		// Same blocks as the section in templates/single.html of the theme; keep them in step.
 		innerBlocks: [
-			[ 'core/heading', { content: __( 'Z tej kategorii', 'ihumbak-site-blocks' ) } ],
+			[
+				'core/heading',
+				{ content: __( 'Z tej kategorii', 'ihumbak-site-blocks' ), className: 'sb-related__title' },
+			],
 			[
 				'core/post-template',
-				{},
+				{ className: 'sb-related__list', layout: { type: 'default' } },
 				[
-					[ 'core/post-featured-image', { className: 'sb-card__media sb-card__media--compact' } ],
-					[ 'core/post-title', { level: 3, isLink: true } ],
-					[ 'core/post-date' ],
+					[
+						'core/group',
+						{ className: 'sb-card sb-card--compact', layout: { type: 'default' } },
+						[
+							[
+								'core/post-featured-image',
+								{ sizeSlug: 'medium_large', className: 'sb-card__media sb-card__media--compact' },
+							],
+							[
+								'core/group',
+								{ className: 'sb-card__body', layout: { type: 'default' } },
+								[
+									[ 'core/post-title', { level: 3, isLink: true, className: 'sb-card__title' } ],
+									[ 'core/post-date', { format: 'j F Y', className: 'sb-meta' } ],
+								],
+							],
+						],
+					],
 				],
 			],
 		],
