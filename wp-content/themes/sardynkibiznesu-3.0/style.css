@@ -11,3 +11,64 @@ License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: sardynkibiznesu-3-0
 */
+
+/*
+ * Global CSS of theme 3.0. Tokens live in theme.json; this file only uses
+ * --wp--preset--* / --wp--custom--* variables (docs/tokens.md). No @layer,
+ * breakpoints written literally (768 / 1024 / 1280).
+ */
+
+/* Metric-compatible fallback for Montserrat (font-display: swap) to limit CLS.
+   Values computed from Montserrat metrics (UPM 1000, ascender 968, descender -251)
+   against Arial, the same method as capsize / next/font. */
+@font-face {
+	font-family: "Montserrat Fallback";
+	src: local("Arial"), local("ArialMT"), local("Helvetica"), local("Liberation Sans");
+	size-adjust: 113.39%;
+	ascent-override: 85.37%;
+	descent-override: 22.14%;
+	line-gap-override: 0%;
+}
+
+/* Mobile type and page padding (< 768px). */
+@media (max-width: 767px) {
+	:root {
+		--wp--preset--font-size--display: 36px;
+		--wp--preset--font-size--h-1: 30px;
+		--wp--preset--font-size--h-2: 24px;
+		--wp--custom--line-height--display: 44px;
+		--wp--custom--line-height--h-1: 38px;
+		--wp--custom--line-height--h-2: 32px;
+		--wp--style--root--padding-left: var(--wp--preset--spacing--4);
+		--wp--style--root--padding-right: var(--wp--preset--spacing--4);
+	}
+}
+
+/* Article and page copy one step larger on wide screens (>= 1280px): body-lg = lead. */
+@media (min-width: 1280px) {
+	.wp-block-post-content {
+		--wp--preset--font-size--body: 20px;
+		--wp--custom--line-height--body: 32px;
+		--wp--preset--font-size--lead: 22px;
+		--wp--custom--line-height--lead: 34px;
+		font-size: var(--wp--preset--font-size--body);
+		line-height: var(--wp--custom--line-height--body);
+	}
+}
+
+/* Motion: one curve, three durations; all zero for users who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--wp--custom--duration--fast: 0ms;
+		--wp--custom--duration--base: 0ms;
+		--wp--custom--duration--slow: 0ms;
+	}
+
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0ms !important;
+		animation-duration: 0ms !important;
+		scroll-behavior: auto !important;
+	}
+}
