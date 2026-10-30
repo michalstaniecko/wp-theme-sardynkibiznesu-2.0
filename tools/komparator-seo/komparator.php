@@ -251,6 +251,15 @@ final class Run
         if ($a['description'] !== $b['description']) {
             $this->toReview($path, 'description', (string) $a['description'], (string) $b['description']);
         }
+        if ($b['h1'] !== 1) {
+            $this->block($path, 'liczba H1', (string) $a['h1'], (string) $b['h1']);
+        }
+        if ($a['jsonldTypes'] !== $b['jsonldTypes']) {
+            $this->toReview($path, 'JSON-LD typy', implode(', ', $a['jsonldTypes']), implode(', ', $b['jsonldTypes']));
+        }
+        if ($b['graphNonObjects'] > 0) {
+            $this->block($path, '@graph tylko obiekty', 'nie-obiekty: ' . $a['graphNonObjects'], 'nie-obiekty: ' . $b['graphNonObjects']);
+        }
     }
 }
 
@@ -316,7 +325,35 @@ function page_facts(array $r, string $base): array
     $f['description'] = $attr('meta[name="description"]', 'content');
     $f['canonical'] = neutral($attr('link[rel="canonical"]', 'href'), $base);
     $f['robots'] = $attr('meta[name="robots"]', 'content');
+    $f['h1'] = $doc->querySelectorAll('h1')->length;
+    [$f['jsonldTypes'], $f['graphNonObjects']] = jsonld_facts($doc);
     return $f;
+}
+
+/** @return array{0:list<string>,1:int} sorted unique @type values and count of non-object @graph items */
+function jsonld_facts(\Dom\HTMLDocument $doc): array
+{
+    $types = [];
+    $nonObjects = 0;
+    foreach ($doc->querySelectorAll('script[type="application/ld+json"]') as $script) {
+        $data = json_decode($script->textContent, true);
+        if (!is_array($data)) {
+            continue;
+        }
+        $items = isset($data['@graph']) && is_array($data['@graph']) ? $data['@graph'] : (array_is_list($data) ? $data : [$data]);
+        foreach ($items as $item) {
+            if (!is_array($item) || array_is_list($item)) {
+                $nonObjects++;
+                continue;
+            }
+            foreach ((array) ($item['@type'] ?? []) as $t) {
+                $types[] = (string) $t;
+            }
+        }
+    }
+    $types = array_values(array_unique($types));
+    sort($types);
+    return [$types, $nonObjects];
 }
 
 /* --------------------------------------------------------------- report */
