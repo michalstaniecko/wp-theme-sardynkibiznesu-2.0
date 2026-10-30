@@ -206,7 +206,10 @@ final class Run
     public function execute(): void
     {
         $this->collectUrls();
+        $i = 0;
+        $total = count($this->urls);
         foreach ($this->urls as $path => $kind) {
+            fwrite(STDERR, sprintf("[%d/%d] %s\n", ++$i, $total, $path));
             $this->compareUrl($path, $kind);
         }
         $this->compareButtonSignatures();
@@ -225,6 +228,14 @@ final class Run
             foreach ($found as $u) {
                 $paths[url_key($u)] ??= 'sitemap';
             }
+        }
+        // Published content that is not in the sitemap (e.g. noindex), from the 2.0 REST API.
+        $published = rest_links($this->httpA, $this->opt['a']);
+        if ($published === null) {
+            $this->notes[] = 'REST API 2.0 niedostępne: treści spoza sitemap nie zostały sprawdzone.';
+        }
+        foreach ($published ?? [] as $u) {
+            $paths[url_key($u)] ??= 'treść spoza sitemap';
         }
         if ($this->opt['limit'] !== null) {
             $paths = array_slice($paths, 0, (int) $this->opt['limit'], true);
@@ -285,7 +296,7 @@ final class Run
             return;
         }
         $this->compareSeo($path, $a, $b);
-        if ($kind === 'sitemap' && $a['status'] === 200 && ($a['content'] ?? null) !== null) {
+        if (in_array($kind, ['sitemap', 'treść spoza sitemap'], true) && $a['status'] === 200 && ($a['content'] ?? null) !== null) {
             $this->compareContent($path, $a['content'], $b['content'] ?? null);
         }
     }
@@ -406,6 +417,28 @@ function sitemap_urls(Http $http, string $url, int $depth = 0): ?array
     foreach ($doc->getElementsByTagNameNS('*', 'url') as $u) {
         foreach ($u->getElementsByTagNameNS('*', 'loc') as $loc) {
             $out[] = trim($loc->textContent);
+        }
+    }
+    return $out;
+}
+
+/** @return list<string>|null links of all published posts and pages */
+function rest_links(Http $http, string $base): ?array
+{
+    $out = [];
+    foreach (['posts', 'pages'] as $type) {
+        for ($page = 1, $total = 1; $page <= $total; $page++) {
+            $r = $http->get("$base/wp-json/wp/v2/$type?per_page=100&page=$page&_fields=link");
+            $items = json_decode($r['body'], true);
+            if ($r['status'] !== 200 || !is_array($items)) {
+                return null;
+            }
+            $total = (int) ($r['headers']['x-wp-totalpages'] ?? 1);
+            foreach ($items as $item) {
+                if (isset($item['link'])) {
+                    $out[] = $item['link'];
+                }
+            }
         }
     }
     return $out;
@@ -621,8 +654,26 @@ function render_report(Run $run): string
     $out .= "- A (2.0): {$o['a']}\n- B (3.0): {$o['b']}\n- Data: " . date('Y-m-d H:i') . "\n";
     $out .= '- Sprawdzone URL-e: ' . count($run->urls) . "\n- Sprawdzone treści: {$run->contentChecked}\n\n";
     $out .= $verdict . "\n\n";
+    $out .= "Blokują: status i przekierowania, `<title>`, canonical, robots, brakujące Kotwice, H1 ≠ 1 w 3.0, "
+        . "`/feed/` ≠ 200, `@graph` z nie-obiektami, `/page/N/` bez przekierowania na `/blog/page/N/` oraz regresje treści "
+        . "(surowe shortcode'y, zagnieżdżone nagłówki, Przycisk, Notka, Formularz zapisu). "
+        . "Description, typy JSON-LD i nowe Kotwice są tylko do przeglądu. "
+        . "Adres bazowy każdej strony jest zastąpiony przez `{BASE}`.\n\n";
     foreach ($run->notes as $n) {
         $out .= "> $n\n";
+    }
+    $summary = [];
+    foreach (['blocking' => 0, 'review' => 1] as $list => $col) {
+        foreach ($run->$list as $row) {
+            $summary[$row['check']] ??= [0, 0];
+            $summary[$row['check']][$col]++;
+        }
+    }
+    if ($summary) {
+        $out .= "\n## Podsumowanie\n\n| Sprawdzenie | Blokujące | Do przeglądu |\n|---|---|---|\n";
+        foreach ($summary as $check => [$b, $r]) {
+            $out .= '| ' . md_cell($check) . " | $b | $r |\n";
+        }
     }
     $out .= "\n## Różnice blokujące\n\n" . md_table($run->blocking);
     $out .= "\n## Do przeglądu (nie blokują)\n\n" . md_table($run->review);
