@@ -317,6 +317,7 @@
 	},
 	"templateParts": [
 		{ "name": "header", "title": "Nagłówek", "area": "header" },
-		{ "name": "footer", "title": "Stopka", "area": "footer" }
+		{ "name": "footer", "title": "Stopka", "area": "footer" },
+		{ "name": "sidebar-article", "title": "Kolumna boczna: artykuł", "area": "uncategorized" }
 	]
 }
