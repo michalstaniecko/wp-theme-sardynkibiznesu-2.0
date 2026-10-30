@@ -1,0 +1,68 @@
+/*
+ * ihumbak/newsletter-form: structural CSS only (fields in a row or a column,
+ * honeypot off-screen, visually hidden labels). The look lives in the theme.
+ */
+.wp-block-ihumbak-newsletter-form__form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	align-items: flex-end;
+}
+
+.wp-block-ihumbak-newsletter-form__form > p {
+	margin: 0;
+}
+
+.wp-block-ihumbak-newsletter-form__field {
+	flex: 1 1 12rem;
+	min-width: 0;
+}
+
+.wp-block-ihumbak-newsletter-form__field input {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.wp-block-ihumbak-newsletter-form__message,
+.wp-block-ihumbak-newsletter-form__clause {
+	flex-basis: 100%;
+}
+
+.wp-block-ihumbak-newsletter-form__message:empty {
+	display: none;
+}
+
+/* Callout (Kolumna boczna) and stacked: one field per row, full-width button. */
+.ihumbak-newsletter-form--callout .wp-block-ihumbak-newsletter-form__field,
+.ihumbak-newsletter-form--callout .wp-block-ihumbak-newsletter-form__submit,
+.ihumbak-newsletter-form--stacked .wp-block-ihumbak-newsletter-form__submit {
+	flex-basis: 100%;
+}
+
+.ihumbak-newsletter-form--callout .wp-block-ihumbak-newsletter-form__submit button,
+.ihumbak-newsletter-form--stacked .wp-block-ihumbak-newsletter-form__submit button {
+	width: 100%;
+}
+
+.wp-block-ihumbak-newsletter-form__label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+.wp-block-ihumbak-newsletter-form__hp {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.wp-block-ihumbak-newsletter-form__image {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
