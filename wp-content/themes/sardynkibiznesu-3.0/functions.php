@@ -3,8 +3,8 @@
  * Sardynki Biznesu 3.0 — presentation only (ADR-0001).
  *
  * Loads the global stylesheet, preloads the two most used font weights,
- * tunes image attributes (sizes, lazy loading) of template images and formats
- * the result count of the search view.
+ * tunes image attributes (sizes, lazy loading) of template images, formats
+ * the result count of the search view and maps the 2.0 narrow page template.
  * Registers no shortcodes, blocks, post types, meta or settings.
  *
  * @package sardynkibiznesu-3.0
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 const PRELOADED_FONT_WEIGHTS = array( 400, 700 );
 
 /**
- * `sizes` of the article's featured image: the image never exceeds the 680 content
+ * `sizes` of the article's and page's featured image: the image never exceeds the 680 content
  * column (>= 1024px), below that it spans the viewport minus the root padding
  * (24px per side from 768px, 16px below). Core would say "up to 1200px wide".
  */
@@ -31,7 +31,7 @@ add_filter(
 	'render_block_core/post-featured-image',
 	static function ( string $html, array $block ): string {
 		$class_name = $block['attrs']['className'] ?? '';
-		if ( ! in_array( 'sb-article__featured', explode( ' ', $class_name ), true ) ) {
+		if ( ! array_intersect( array( 'sb-article__featured', 'sb-page__featured' ), explode( ' ', $class_name ) ) ) {
 			return $html;
 		}
 		$tags = new \WP_HTML_Tag_Processor( $html );
@@ -186,4 +186,24 @@ add_filter(
 	},
 	10,
 	2
+);
+
+/**
+ * 2.0 page template meta → 3.0 block template. The 18 pages saved with the 2.0 template
+ * „Boxed without sidebar” render with `page-narrow`; their `_wp_page_template` meta stays
+ * as it is, so 2.0 keeps working on the same database (#20).
+ */
+const LEGACY_PAGE_TEMPLATES = array(
+	'templates/boxed-without-sidebar.php' => 'page-narrow.php',
+);
+
+add_filter(
+	'page_template_hierarchy',
+	static function ( array $templates ): array {
+		return array_values(
+			array_unique(
+				array_map( static fn ( string $template ): string => LEGACY_PAGE_TEMPLATES[ $template ] ?? $template, $templates )
+			)
+		);
+	}
 );
