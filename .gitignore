@@ -174,3 +174,6 @@ wp-content/plugins/cookie-notice
 /database
 .playwright-mcp
 db
+
+# Komparator SEO reports (bin/komparator-seo)
+komparator-seo-*.md
