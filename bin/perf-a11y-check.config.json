@@ -61,6 +61,7 @@
       "/wp-content/plugins/convertpro-addon/",
       "/wp-content/plugins/yet-another-stars-rating/",
       "/wp-content/plugins/spreaker-shortcode/",
+      "/wp-content/plugins/wpdiscuz/",
       "/wp-content/plugins/wordpress-seo/",
       "spreaker.com"
     ]
@@ -68,7 +69,7 @@
   "attribution": {
     "_readme": "Przypisanie naruszeń axe i ostrzeżeń audytów obrazów po selektorze/fragmencie HTML z raportu. Pasuje do thirdPartySelectors → wtyczka zewnętrzna, do contentSelectors → treść; obie grupy nie blokują (lista do poprawy redakcyjnej). Reszta = motyw i wtyczki ihumbak-*, blokuje. Selektor Lighthouse obejmuje tylko kilku przodków, więc głęboko zagnieżdżony element treści może trafić do „motyw/wtyczki”: sprawdź listę w „Szczegółach” przed decyzją.",
     "contentSelectors": [".entry-content", ".wp-block-post-content", ".article__content"],
-    "thirdPartySelectors": ["cky-", "cookie-law-info", "cp-popup", "cp-module", "cp_style", "yasr", "spreaker", "wpdiscuz", "wpdcom"]
+    "thirdPartySelectors": ["cky-", "cookie-law-info", "cp-popup", "cp-module", "cp_style", "yasr", "spreaker", "wpdiscuz", "wpdcom", "wpd-"]
   },
   "imageAudits": ["lcp-lazy-loaded", "unsized-images", "uses-responsive-images"]
 }
