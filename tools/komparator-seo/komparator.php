@@ -240,6 +240,17 @@ final class Run
         if ($a['chain'] !== $b['chain']) {
             $this->block($path, 'status / przekierowania', $a['chain'], $b['chain']);
         }
+        if (!$a['html'] || !$b['html']) {
+            return;
+        }
+        foreach (['title', 'canonical', 'robots'] as $key) {
+            if ($a[$key] !== $b[$key]) {
+                $this->block($path, $key, (string) $a[$key], (string) $b[$key]);
+            }
+        }
+        if ($a['description'] !== $b['description']) {
+            $this->toReview($path, 'description', (string) $a['description'], (string) $b['description']);
+        }
     }
 }
 
@@ -285,7 +296,7 @@ function neutral(?string $value, string $base): ?string
 function page_facts(array $r, string $base): array
 {
     $chain = implode(' → ', array_map(
-        fn($c) => $c['status'] . ' ' . neutral(url_key($c['url']), $base),
+        fn($c) => $c['status'] . ' ' . neutral($c['url'], $base),
         array_slice($r['chain'], 1)
     ));
     $f = [
@@ -294,6 +305,17 @@ function page_facts(array $r, string $base): array
         'final' => $r['final'],
         'html' => false,
     ];
+    $type = $r['headers']['content-type'] ?? '';
+    if ($r['body'] === '' || !str_contains($type, 'html')) {
+        return $f;
+    }
+    $doc = \Dom\HTMLDocument::createFromString($r['body'], LIBXML_NOERROR, 'UTF-8');
+    $attr = fn(string $sel, string $name) => $doc->querySelector($sel)?->getAttribute($name);
+    $f['html'] = true;
+    $f['title'] = trim($doc->querySelector('title')?->textContent ?? '');
+    $f['description'] = $attr('meta[name="description"]', 'content');
+    $f['canonical'] = neutral($attr('link[rel="canonical"]', 'href'), $base);
+    $f['robots'] = $attr('meta[name="robots"]', 'content');
     return $f;
 }
 
