@@ -20,6 +20,7 @@ const META_EPISODE = 'sb_podcast_episode';
 const META_DURATION = 'sb_podcast_duration';
 
 add_action( 'init', __NAMESPACE__ . '\\register_meta' );
+add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\enqueue_panel' );
 
 /**
  * Registers both meta keys on posts.
@@ -51,6 +52,23 @@ function register_meta(): void {
 			'description'       => 'Czas trwania odcinka tak, jak ma się wyświetlić, np. 38 min.',
 			'sanitize_callback' => 'sanitize_text_field',
 		)
+	);
+}
+
+/**
+ * The "Podcast" panel in the post editor sidebar (posts only; not in the Site Editor).
+ */
+function enqueue_panel(): void {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || 'post' !== $screen->post_type ) {
+		return;
+	}
+	wp_enqueue_script(
+		'ihumbak-content-elements-podcast-panel',
+		plugins_url( 'assets/podcast-panel.js', IHUMBAK_CONTENT_ELEMENTS_FILE ),
+		array( 'wp-components', 'wp-core-data', 'wp-data', 'wp-editor', 'wp-element', 'wp-plugins' ),
+		IHUMBAK_CONTENT_ELEMENTS_VERSION,
+		true
 	);
 }
 
