@@ -66,7 +66,7 @@ Rollback kodu to ponowna instalacja poprzedniej paczki tym samym poleceniem:
 $WP plugin install ~/deploy/v3.0.0/ihumbak-toc-v3.0.0.zip --force
 ```
 
-Baza się nie zmienia. Rollback przełączenia (motyw 3.0 → 2.0) to osobny skrypt przełączenia, nie ta procedura.
+Baza się nie zmienia. Rollback przełączenia (motyw 3.0 → 2.0) to osobny skrypt przełączenia `bin/switch-theme 2.0`, nie ta procedura (zob. [przelaczenie-3-0.md](przelaczenie-3-0.md)).
 
 ## 5. Odświeżenie stagingu
 
