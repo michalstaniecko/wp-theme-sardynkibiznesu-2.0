@@ -5,7 +5,7 @@
 	"title": "Formularz zapisu",
 	"category": "widgets",
 	"icon": "email-alt",
-	"description": "Zapis do Newslettera (MailerLite). Po zapisie czytelnik trafia na Stronę podziękowania. Działa bez JavaScriptu.",
+	"description": "Zapis do Newslettera (MailerLite). Po zapisie czytelnik trafia na Stronę podziękowania. Z JavaScriptem wysyła się bez przeładowania strony, działa też bez JavaScriptu.",
 	"keywords": [ "newsletter", "mailerlite", "zapis", "formularz" ],
 	"textdomain": "ihumbak-newsletter",
 	"attributes": {
@@ -60,9 +60,11 @@
 		"html": false,
 		"align": [ "wide", "full" ],
 		"anchor": false,
-		"spacing": { "margin": true }
+		"spacing": { "margin": true },
+		"interactivity": true
 	},
 	"editorScript": "ihumbak-newsletter-editor",
+	"viewScriptModule": "ihumbak-newsletter-view",
 	"style": "file:./style.css",
 	"render": "file:./render.php"
 }
