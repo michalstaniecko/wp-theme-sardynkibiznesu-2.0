@@ -39,6 +39,10 @@ Text Domain: sardynkibiznesu-3-0
 		--wp--custom--line-height--display: 44px;
 		--wp--custom--line-height--h-1: 38px;
 		--wp--custom--line-height--h-2: 32px;
+	}
+
+	/* Global styles declare the root padding variables on body, so override them there. */
+	body {
 		--wp--style--root--padding-left: var(--wp--preset--spacing--4);
 		--wp--style--root--padding-right: var(--wp--preset--spacing--4);
 	}
@@ -381,6 +385,7 @@ Text Domain: sardynkibiznesu-3-0
 }
 
 .sb-card__media {
+	aspect-ratio: 16 / 10;
 	margin: 0;
 	overflow: hidden;
 	border: 1px solid var(--wp--custom--color--border-card);
@@ -391,7 +396,8 @@ Text Domain: sardynkibiznesu-3-0
 	& img {
 		display: block;
 		width: 100%;
-		height: auto;
+		height: 100%;
+		object-fit: cover;
 	}
 }
 
