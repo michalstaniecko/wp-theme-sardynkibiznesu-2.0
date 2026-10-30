@@ -22,31 +22,6 @@ defined( 'ABSPATH' ) || exit;
  */
 const PRELOADED_FONT_WEIGHTS = array( 400, 700 );
 
-/**
- * `sizes` of the article's and page's featured image: the image never exceeds the 680 content
- * column (>= 1024px), below that it spans the viewport minus the root padding
- * (24px per side from 768px, 16px below). Core would say "up to 1200px wide".
- */
-const ARTICLE_FEATURED_IMAGE_SIZES = '(min-width: 1024px) 680px, (min-width: 768px) calc(100vw - 48px), calc(100vw - 32px)';
-
-add_filter(
-	'render_block_core/post-featured-image',
-	static function ( string $html, array $block ): string {
-		$class_name = $block['attrs']['className'] ?? '';
-		// The front page hero and featured podcast images are ~680px wide too (7/12 of the 1200 column).
-		if ( ! array_intersect( array( 'sb-article__featured', 'sb-page__featured', 'sb-hero__media', 'sb-podcast__media' ), explode( ' ', $class_name ) ) ) {
-			return $html;
-		}
-		$tags = new \WP_HTML_Tag_Processor( $html );
-		if ( $tags->next_tag( 'img' ) && null !== $tags->get_attribute( 'srcset' ) ) {
-			$tags->set_attribute( 'sizes', ARTICLE_FEATURED_IMAGE_SIZES );
-		}
-		return $tags->get_updated_html();
-	},
-	10,
-	2
-);
-
 add_action(
 	'after_setup_theme',
 	static function (): void {
@@ -106,6 +81,14 @@ add_action(
 );
 
 /**
+ * `sizes` of a ~680px wide image: the article's and page's featured image never exceeds the 680
+ * content column (>= 1024px), below that it spans the viewport minus the root padding (24px per
+ * side from 768px, 16px below). Core would say "up to 1200px wide". The front page hero and the
+ * featured podcast image are ~680px wide too (7/12 of the 1200 column).
+ */
+const WIDE_IMAGE_SIZES = '(min-width: 1024px) 680px, (min-width: 768px) calc(100vw - 48px), calc(100vw - 32px)';
+
+/**
  * `sizes` of the row card image (.sb-card--row): full width minus root padding
  * below 768px (image above text), the 240px column from 768px up.
  */
@@ -117,6 +100,23 @@ const CARD_ROW_IMAGE_SIZES = '(max-width: 767px) calc(100vw - 32px), 240px';
  */
 const CARD_COL_IMAGE_SIZES = '(min-width: 1248px) 384px, (min-width: 768px) calc((100vw - 96px) / 3), calc(100vw - 32px)';
 
+/** className of a core/post-featured-image => `sizes` of its image. */
+const FEATURED_IMAGE_SIZES = array(
+	'sb-article__featured' => WIDE_IMAGE_SIZES,
+	'sb-page__featured'    => WIDE_IMAGE_SIZES,
+	'sb-hero__media'       => WIDE_IMAGE_SIZES,
+	'sb-podcast__media'    => WIDE_IMAGE_SIZES,
+	'sb-card__media--row'  => CARD_ROW_IMAGE_SIZES,
+	'sb-card__media--col'  => CARD_COL_IMAGE_SIZES,
+);
+
+/**
+ * Featured images that are always above the fold, the LCP candidates: the article's image (#47)
+ * and the front page hero (#58). They get fetchpriority="high" and are never lazy, whatever
+ * core's position heuristics decide.
+ */
+const ABOVE_THE_FOLD_IMAGES = array( 'sb-article__featured', 'sb-hero__media' );
+
 /**
  * Lists (/blog/, category, archives, search): only the first two card images can be
  * above the fold, so the rest load lazily (core's default leaves three eager).
@@ -127,20 +127,29 @@ add_filter(
 	'render_block_core/post-featured-image',
 	static function ( string $html, array $block ): string {
 		$classes = explode( ' ', $block['attrs']['className'] ?? '' );
-		if ( in_array( 'sb-card__media--row', $classes, true ) ) {
-			$sizes = CARD_ROW_IMAGE_SIZES;
-		} elseif ( in_array( 'sb-card__media--col', $classes, true ) ) {
-			$sizes = CARD_COL_IMAGE_SIZES;
-		} else {
+		$known   = array_values( array_intersect( $classes, array_keys( FEATURED_IMAGE_SIZES ) ) );
+		if ( ! $known ) {
 			return $html;
 		}
 		$img = new \WP_HTML_Tag_Processor( $html );
-		if ( ! $img->next_tag( 'img' ) || ! $img->get_attribute( 'srcset' ) ) {
+		if ( ! $img->next_tag( 'img' ) ) {
 			return $html;
 		}
-		// Keep core's `auto` keyword (auto-sizes for lazy images) when present.
-		$auto = str_starts_with( (string) $img->get_attribute( 'sizes' ), 'auto,' ) ? 'auto, ' : '';
-		$img->set_attribute( 'sizes', $auto . $sizes );
+		if ( array_intersect( ABOVE_THE_FOLD_IMAGES, $classes ) ) {
+			// Core skips counting an image that already says fetchpriority="high"; count it here, so the
+			// images after it get the same eager/lazy split as when core marked it itself.
+			if ( 'high' !== $img->get_attribute( 'fetchpriority' ) ) {
+				wp_increase_content_media_count();
+			}
+			$img->remove_attribute( 'loading' );
+			$img->set_attribute( 'fetchpriority', 'high' );
+		}
+		if ( $img->get_attribute( 'srcset' ) ) {
+			// Keep core's `auto` keyword (auto-sizes, valid on lazy images only) when present.
+			$lazy = 'lazy' === $img->get_attribute( 'loading' );
+			$auto = $lazy && str_starts_with( (string) $img->get_attribute( 'sizes' ), 'auto,' ) ? 'auto, ' : '';
+			$img->set_attribute( 'sizes', $auto . FEATURED_IMAGE_SIZES[ $known[0] ] );
+		}
 		return $img->get_updated_html();
 	},
 	10,
