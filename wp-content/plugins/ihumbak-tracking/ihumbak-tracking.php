@@ -20,10 +20,11 @@ add_action( 'wp_head', 'ihumbak_tracking_head', 1 );
 add_action( 'wp_body_open', 'ihumbak_tracking_body_open', 1 );
 
 /**
- * Whether anything may be printed on this request.
+ * Whether anything may be printed on this request: only on production
+ * (set WP_ENVIRONMENT_TYPE=local elsewhere) and only for visitors who are not logged in.
  */
 function ihumbak_tracking_is_enabled(): bool {
-	return ! is_user_logged_in();
+	return 'production' === wp_get_environment_type() && ! is_user_logged_in();
 }
 
 function ihumbak_tracking_head(): void {
