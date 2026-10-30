@@ -75,6 +75,15 @@
 		}
 	}
 
+	/* The h3 text is indented inside the link, so the rule stays in one line across both levels. */
+	& .ihumbak-toc__list .ihumbak-toc__list {
+		padding-left: 0;
+	}
+
+	& .ihumbak-toc__list .ihumbak-toc__list .ihumbak-toc__link {
+		padding-left: calc(var(--wp--preset--spacing--4) + var(--wp--preset--spacing--5));
+	}
+
 	& .ihumbak-toc__toggle {
 		display: none;
 	}
