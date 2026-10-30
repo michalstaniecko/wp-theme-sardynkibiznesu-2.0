@@ -193,8 +193,8 @@
 		"blocks": {
 			"core/image": {
 				"lightbox": {
-					"enabled": true,
-					"allowEditing": true
+					"enabled": false,
+					"allowEditing": false
 				}
 			}
 		}
