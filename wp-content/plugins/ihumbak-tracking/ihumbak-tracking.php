@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 const IHUMBAK_TRACKING_OPTION_GTM_ID    = 'ihumbak_tracking_gtm_id';
 const IHUMBAK_TRACKING_OPTION_HEAD_TAGS = 'ihumbak_tracking_head_tags';
 
+require_once __DIR__ . '/includes/settings.php';
+
 add_action( 'wp_head', 'ihumbak_tracking_head', 1 );
 add_action( 'wp_body_open', 'ihumbak_tracking_body_open', 1 );
 
