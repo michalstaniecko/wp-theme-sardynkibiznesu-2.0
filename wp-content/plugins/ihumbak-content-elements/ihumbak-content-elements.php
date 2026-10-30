@@ -17,3 +17,5 @@ const IHUMBAK_CONTENT_ELEMENTS_VERSION = '1.0.0';
 const IHUMBAK_CONTENT_ELEMENTS_FILE    = __FILE__;
 
 require_once __DIR__ . '/includes/button.php';
+require_once __DIR__ . '/includes/badges.php';
+require_once __DIR__ . '/includes/product-card.php';
