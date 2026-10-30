@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/toc",
+	"title": "Spis treści",
+	"category": "text",
+	"icon": "list-view",
+	"description": "Lista nagłówków H2 i H3 wpisu z odnośnikami do ich Kotwic. H3 są zagnieżdżone pod H2.",
+	"keywords": [ "spis treści", "toc", "kotwice", "nagłówki" ],
+	"textdomain": "ihumbak-toc",
+	"usesContext": [ "postId" ],
+	"attributes": {
+		"variant": {
+			"type": "string",
+			"enum": [ "inline", "rail" ],
+			"default": "inline"
+		}
+	},
+	"supports": {
+		"autoRegister": true,
+		"html": false,
+		"reusable": false,
+		"spacing": { "margin": true }
+	},
+	"render": "file:./render.php"
+}

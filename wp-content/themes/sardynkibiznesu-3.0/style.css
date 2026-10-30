@@ -1089,6 +1089,130 @@ Text Domain: sardynkibiznesu-3-0
 	}
 }
 
+/* Kotwice: smooth jump to a heading (not for users who ask for less motion); every target
+   stops below the sticky header (and the admin bar, which is fixed above 600px). */
+@media (prefers-reduced-motion: no-preference) {
+	html {
+		scroll-behavior: smooth;
+	}
+}
+
+:where([id]) {
+	scroll-margin-top: calc(var(--wp--custom--layout--header-height) + var(--wp-admin--admin-bar--height, 0px) + var(--wp--preset--spacing--6));
+}
+
+@media (max-width: 600px) {
+	:where([id]) {
+		scroll-margin-top: calc(var(--wp--custom--layout--header-height) + var(--wp--preset--spacing--6));
+	}
+}
+
+/* Spis treści (ihumbak-toc; same markup for the block, [ihumbak_anchor_toc] and the v1 menu):
+   numbered h2, h3 under a dash. Box with <details> in the content; the rail variant restyles it. */
+.ihumbak-toc {
+	--sb-toc-active: var(--wp--preset--color--brand, #cc0000);
+
+	margin-block: var(--wp--preset--spacing--8);
+	font-family: var(--wp--preset--font-family--sans);
+	border: 1px solid var(--wp--custom--color--border);
+	border-radius: var(--wp--preset--border-radius--lg);
+	background-color: var(--wp--preset--color--surface-2);
+
+	& .ihumbak-toc__summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--wp--preset--spacing--3);
+		padding: var(--wp--preset--spacing--4) var(--wp--preset--spacing--5);
+		font-size: var(--wp--preset--font-size--body);
+		font-weight: 600;
+		line-height: 24px;
+		color: var(--wp--preset--color--text);
+		list-style: none;
+		cursor: pointer;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		/* Chevron, turned up while open. */
+		&::after {
+			content: "";
+			flex: none;
+			width: 8px;
+			height: 8px;
+			margin-inline: 6px;
+			border-right: 2px solid var(--wp--preset--color--text-secondary);
+			border-bottom: 2px solid var(--wp--preset--color--text-secondary);
+			transform: translateY(-2px) rotate(45deg);
+			transition: transform var(--wp--custom--duration--slow) var(--wp--custom--easing);
+		}
+	}
+
+	& .ihumbak-toc__details[open] > .ihumbak-toc__summary {
+		border-bottom: 1px solid var(--wp--custom--color--border);
+
+		&::after {
+			transform: translateY(2px) rotate(-135deg);
+		}
+	}
+
+	& .ihumbak-toc__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		counter-reset: sb-toc;
+	}
+
+	& .ihumbak-toc__details > .ihumbak-toc__list {
+		padding: var(--wp--preset--spacing--3) var(--wp--preset--spacing--5) var(--wp--preset--spacing--4);
+	}
+
+	& .ihumbak-toc__list .ihumbak-toc__list {
+		padding-left: var(--wp--preset--spacing--5);
+	}
+
+	& .ihumbak-toc__item {
+		margin: 0;
+		counter-increment: sb-toc;
+	}
+
+	& .ihumbak-toc__link {
+		display: flex;
+		gap: var(--wp--preset--spacing--2);
+		padding: var(--wp--preset--spacing--2) 0 var(--wp--preset--spacing--2) var(--wp--preset--spacing--3);
+		font-size: var(--wp--preset--font-size--body-sm);
+		font-weight: 500;
+		line-height: 22px;
+		color: var(--wp--preset--color--text-secondary);
+		text-decoration: none;
+		transition: color var(--wp--custom--duration--fast) var(--wp--custom--easing);
+
+		&::before {
+			content: counter(sb-toc) ".";
+			flex: none;
+			min-width: 1.4em;
+			font-weight: 600;
+			font-variant-numeric: tabular-nums;
+			color: var(--wp--custom--color--text-muted);
+		}
+
+		&:hover {
+			color: var(--sb-toc-active);
+		}
+
+		&[aria-current="location"] {
+			font-weight: 600;
+			color: var(--sb-toc-active);
+		}
+	}
+
+	& .ihumbak-toc__list .ihumbak-toc__list .ihumbak-toc__link::before {
+		content: "–";
+		min-width: auto;
+	}
+}
+
 /*
  * Search and 404 (#56). Layer 4: classes on groups in templates/parts.
  * Tinted hero (H1, form, result count) above .sb-layout with sidebar-search.
