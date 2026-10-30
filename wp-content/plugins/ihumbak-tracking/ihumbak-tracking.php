@@ -19,7 +19,18 @@ const IHUMBAK_TRACKING_OPTION_HEAD_TAGS = 'ihumbak_tracking_head_tags';
 add_action( 'wp_head', 'ihumbak_tracking_head', 1 );
 add_action( 'wp_body_open', 'ihumbak_tracking_body_open', 1 );
 
+/**
+ * Whether anything may be printed on this request.
+ */
+function ihumbak_tracking_is_enabled(): bool {
+	return ! is_user_logged_in();
+}
+
 function ihumbak_tracking_head(): void {
+	if ( ! ihumbak_tracking_is_enabled() ) {
+		return;
+	}
+
 	$gtm_id = (string) get_option( IHUMBAK_TRACKING_OPTION_GTM_ID, '' );
 
 	if ( '' !== $gtm_id ) {
@@ -40,7 +51,7 @@ function ihumbak_tracking_head(): void {
 function ihumbak_tracking_body_open(): void {
 	$gtm_id = (string) get_option( IHUMBAK_TRACKING_OPTION_GTM_ID, '' );
 
-	if ( '' === $gtm_id ) {
+	if ( '' === $gtm_id || ! ihumbak_tracking_is_enabled() ) {
 		return;
 	}
 
