@@ -33,7 +33,8 @@ add_action(
  * Per-block CSS: `assets/css/blocks/{namespace}-{block}.css` (e.g. `core-button.css`)
  * loads only on pages that render that block, in the front end and the editor.
  * A `--{part}` suffix splits one block's CSS by component, e.g. `core-group--product.css`
- * (Karta produktu) next to `core-group.css` (Notka, Ramka promocyjna).
+ * (Karta produktu) next to `core-group.css` (Notka, Ramka promocyjna). A part listed in
+ * STYLE_BOUND_PARTS loads in the front end only when the block has one of its block styles.
  */
 add_action(
 	'init',
@@ -41,18 +42,52 @@ add_action(
 		foreach ( glob( get_theme_file_path( 'assets/css/blocks/*.css' ) ) as $path ) {
 			$file  = basename( $path, '.css' );
 			$block = preg_replace( '/-/', '/', explode( '--', $file, 2 )[0], 1 );
-			wp_enqueue_block_style(
-				$block,
-				array(
-					'handle' => "sardynkibiznesu-3-0-{$file}",
-					'src'    => get_theme_file_uri( "assets/css/blocks/{$file}.css" ),
-					'path'   => $path,
-					'ver'    => wp_get_theme()->get( 'Version' ),
-				)
+			$style = array(
+				'handle' => "sardynkibiznesu-3-0-{$file}",
+				'src'    => get_theme_file_uri( "assets/css/blocks/{$file}.css" ),
+				'path'   => $path,
+				'ver'    => wp_get_theme()->get( 'Version' ),
 			);
+
+			if ( isset( STYLE_BOUND_PARTS[ $file ] ) && ! is_admin() ) {
+				enqueue_part_with_block_style( $block, $style, STYLE_BOUND_PARTS[ $file ] );
+			} else {
+				wp_enqueue_block_style( $block, $style );
+			}
 		}
 	}
 );
+
+/**
+ * Per-block CSS parts that only concern some block styles of the block, so that every
+ * core/group on a page doesn't bring them along: part file => classes of those block styles.
+ */
+const STYLE_BOUND_PARTS = array(
+	'core-group--product' => array( 'is-style-product-horizontal', 'is-style-product-compact' ),
+);
+
+/**
+ * Enqueues a stylesheet the first time a block with one of `$classes` renders. Block templates
+ * render before wp_head, so the stylesheet still lands in <head>.
+ *
+ * @param string   $block   Block name.
+ * @param array    $style   Stylesheet: handle, src, path, ver.
+ * @param string[] $classes Block style classes that need the stylesheet.
+ */
+function enqueue_part_with_block_style( string $block, array $style, array $classes ): void {
+	add_filter(
+		"render_block_{$block}",
+		static function ( string $html, array $parsed ) use ( $style, $classes ): string {
+			if ( array_intersect( $classes, explode( ' ', $parsed['attrs']['className'] ?? '' ) ) ) {
+				wp_enqueue_style( $style['handle'], $style['src'], array(), $style['ver'] );
+				wp_style_add_data( $style['handle'], 'path', $style['path'] );
+			}
+			return $html;
+		},
+		10,
+		2
+	);
+}
 
 add_action(
 	'wp_enqueue_scripts',

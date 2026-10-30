@@ -27,7 +27,7 @@ bin/build-packages v3.0.0       # zestaw 3.0
 bin/build-packages v3.0.1 ihumbak-toc   # tylko wybrane katalogi
 ```
 
-- Bez nazw powstaje zestaw 3.0: motyw `sardynkibiznesu-3.0` oraz wtyczki `ihumbak-content-elements`, `ihumbak-toc`, `ihumbak-newsletter`, `ihumbak-site-blocks`, `ihumbak-tracking`. Nazwa to katalog w `wp-content/themes/` albo `wp-content/plugins/`.
+- Bez nazw powstaje zestaw 3.0: motyw `sardynkibiznesu-3.0` oraz wtyczki `ihumbak-content-elements`, `ihumbak-toc`, `ihumbak-newsletter`, `ihumbak-site-blocks`, `ihumbak-tracking`, `ihumbak-tax-calculator`. Nazwa to katalog w `wp-content/themes/` albo `wp-content/plugins/`.
 - Wynik: `dist/<tag>/<nazwa>-<tag>.zip` oraz `dist/<tag>/SHA256SUMS`. Katalog `dist/` jest ignorowany przez git.
 - Zip zawiera dokładnie pliki z tagu (`git archive`), w jednym katalogu głównym o nazwie motywu lub wtyczki. Niezacommitowane zmiany nie trafiają do paczki.
 - Odmowa (kod `1`): nazwa nie jest tagiem (gałąź, commit), w tagu nie ma takiego motywu ani wtyczki, zip dla tego tagu już istnieje. Paczki raz zbudowanej z tagu się nie nadpisuje. Poprawka to nowy tag.

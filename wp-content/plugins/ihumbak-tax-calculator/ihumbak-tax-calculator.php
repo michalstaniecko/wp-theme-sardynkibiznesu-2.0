@@ -2,7 +2,7 @@
 
 /*
  * Plugin Name: iHumbak Tax Calculator
- * Version: 0.4
+ * Version: 0.5
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,13 +21,27 @@ class IHumbak_Tax_Calculator {
     $this->shortcodes_init();
   }
 
+  /**
+   * Registers the assets; the calculator and jQuery load only where the shortcode renders.
+   * The check against the current post puts the stylesheet in <head> on classic themes,
+   * where the shortcode renders after wp_head.
+   */
   function assets() {
-    wp_enqueue_script( 'ihumbak-tax-calculator', plugin_dir_url( __FILE__ ) . 'js/ihumbak-tax-calculator.js', array(
+    wp_register_script( 'ihumbak-tax-calculator', plugin_dir_url( __FILE__ ) . 'js/ihumbak-tax-calculator.js', array(
       'jquery'
     ), 0.4, true );
     //wp_enqueue_script( 'jquery-mask', plugin_dir_url( __FILE__ ) . 'js/jQuery-Mask-Plugin-master/dist/jquery.mask.min.js', array( 'jquery' ), null, true );
     //wp_enqueue_script( 'RobinHerbots-Inputmask', plugin_dir_url( __FILE__ ) . 'js/RobinHerbots-Inputmask/dist/jquery.inputmask.min.js', array( 'jquery' ), null, true );
-    wp_enqueue_style( 'ihumbak-tax-calculator', plugin_dir_url( __FILE__ ) . 'css/ihumbak-tax-calculator.css' );
+    wp_register_style( 'ihumbak-tax-calculator', plugin_dir_url( __FILE__ ) . 'css/ihumbak-tax-calculator.css' );
+
+    if ( is_singular() && has_shortcode( (string) get_post_field( 'post_content', get_queried_object_id() ), 'ihumbak_tax_calculator' ) ) {
+      $this->enqueue_assets();
+    }
+  }
+
+  function enqueue_assets() {
+    wp_enqueue_script( 'ihumbak-tax-calculator' );
+    wp_enqueue_style( 'ihumbak-tax-calculator' );
   }
 
   function shortcodes_init() {
@@ -35,6 +49,8 @@ class IHumbak_Tax_Calculator {
   }
 
   function render( $atts, $content ) {
+    $this->enqueue_assets();
+
     ob_start();
     ?>
     <p>
