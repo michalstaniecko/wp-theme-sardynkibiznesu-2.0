@@ -64,13 +64,18 @@ function authHeaders(auth) {
 }
 
 async function warmCache(url, auth) {
+  // Dwa trafienia na wariant (mobile i desktop, np. LiteSpeed rozróżnia urządzenia); do 3 prób na trafienie.
   for (const ua of Object.values(UA)) {
-    for (let i = 0; i < 2; i++) {
-      try {
-        const res = await fetch(url, { headers: { 'User-Agent': ua, ...authHeaders(auth) } });
-        await res.arrayBuffer();
-      } catch (e) {
-        throw new Error(`Rozgrzewanie cache nie powiodło się dla ${url}: ${e.message}`);
+    for (let hit = 0; hit < 2; hit++) {
+      for (let attempt = 1; ; attempt++) {
+        try {
+          const res = await fetch(url, { headers: { 'User-Agent': ua, ...authHeaders(auth) } });
+          await res.arrayBuffer();
+          break;
+        } catch (e) {
+          if (attempt >= 3) throw new Error(`Rozgrzewanie cache nie powiodło się dla ${url}: ${(e.cause && e.cause.code) || e.message}`);
+          await new Promise((r) => setTimeout(r, 1000 * attempt));
+        }
       }
     }
   }
@@ -86,12 +91,13 @@ function runLighthouse(config, url, file, { desktop, ignoreStatusCode, auth }) {
   if (desktop) args.push('--preset=desktop');
   if (ignoreStatusCode) args.push('--ignore-status-code');
   if (auth) args.push(`--extra-headers=${JSON.stringify(authHeaders(auth))}`);
-  const res = spawnSync('npx', args, { stdio: ['ignore', 'ignore', 'inherit'] });
-  if (res.status !== 0 || !fs.existsSync(file)) {
-    throw new Error(`Lighthouse zakończył się błędem dla ${url} (kod ${res.status})`);
+  const res = spawnSync('npx', args, { stdio: ['ignore', 'ignore', 'pipe'], encoding: 'utf8' });
+  const lhr = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null;
+  if (lhr && lhr.runtimeError) throw new Error(`Lighthouse ${lhr.runtimeError.code}: ${lhr.runtimeError.message}`);
+  if (res.status !== 0 || !lhr) {
+    const lines = (res.stderr || '').trim().split('\n').filter(Boolean);
+    throw new Error(`Lighthouse (kod ${res.status}): ${lines.slice(-1)[0] || 'brak raportu'}`);
   }
-  const lhr = JSON.parse(fs.readFileSync(file, 'utf8'));
-  if (lhr.runtimeError) throw new Error(`Lighthouse: ${lhr.runtimeError.code} dla ${url}: ${lhr.runtimeError.message}`);
   return lhr;
 }
 
@@ -99,11 +105,17 @@ async function measure(config, opts, outDir, urls) {
   for (const u of urls) {
     const url = opts.base + u.path;
     process.stderr.write(`→ ${u.key}: ${url}\n`);
-    await warmCache(url, opts.auth);
-    for (let i = 1; i <= opts.runs; i++) {
-      runLighthouse(config, url, path.join(outDir, `${u.key}-mobile-${i}.json`), { ...u, auth: opts.auth });
+    try {
+      await warmCache(url, opts.auth);
+      for (let i = 1; i <= opts.runs; i++) {
+        runLighthouse(config, url, path.join(outDir, `${u.key}-mobile-${i}.json`), { ...u, auth: opts.auth });
+      }
+      runLighthouse(config, url, path.join(outDir, `${u.key}-desktop-1.json`), { ...u, desktop: true, auth: opts.auth });
+    } catch (e) {
+      // Jeden niedziałający URL nie przerywa pomiaru: trafia do tabeli jako niespełniony.
+      process.stderr.write(`  błąd: ${e.message}\n`);
+      fs.writeFileSync(path.join(outDir, `${u.key}-error.txt`), e.message);
     }
-    runLighthouse(config, url, path.join(outDir, `${u.key}-desktop-1.json`), { ...u, desktop: true, auth: opts.auth });
   }
 }
 
@@ -293,6 +305,12 @@ function evaluate(config, dir, urls) {
   const rows = [];
   const details = [];
   for (const u of urls) {
+    const errorFile = path.join(dir, `${u.key}-error.txt`);
+    if (fs.existsSync(errorFile)) {
+      const msg = fs.readFileSync(errorFile, 'utf8').replace(/\s+/g, ' ').trim();
+      rows.push({ key: u.key, form: 'mobile', label: 'Pomiar', value: `błąd: ${msg}`, limit: '—', change: '—', ok: false, note: '' });
+      continue;
+    }
     const { mobile, desktop } = loadReports(dir, u.key);
     const vm = extract(medianRun(mobile), config);
     rows.push(...rowsFor(u.key, 'mobile', vm, config.baseline.mobile[u.key], config, true));
