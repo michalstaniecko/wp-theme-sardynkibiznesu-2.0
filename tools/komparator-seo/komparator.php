@@ -16,6 +16,14 @@ const EXIT_USAGE = 2;
 /** Content area of a post or page: `.entry-content` in 2.0, `core/post-content` in 3.0. */
 const CONTENT_SELECTOR = '.entry-content, .wp-block-post-content';
 
+/** Przycisk in 2.0: sb_button, cmsmasters_button, acf/sb-button. In 3.0 every record is `.wp-block-button`. */
+const LEGACY_BUTTON_SELECTOR = 'a.button-outline, a.cmsmasters_button, .sb-block-button';
+const BUTTON_SELECTOR = '.wp-block-button';
+
+/** Notka in 2.0: cmsmasters_notice. In 3.0: core/group with the "neutral" style. */
+const LEGACY_NOTKA_SELECTOR = '.cmsmasters_notice';
+const NOTKA_SELECTOR = '.wp-block-group.is-style-neutral';
+
 main($argv);
 
 function main(array $argv): void
@@ -185,6 +193,8 @@ final class Run
     public array $review = [];
     public array $notes = [];
     public int $contentChecked = 0;
+    /** @var array<string,array<string,array{count:int,url:string}>> style => signature => first URL */
+    public array $buttonSignatures = [];
 
     public function __construct(array $opt)
     {
@@ -199,6 +209,7 @@ final class Run
         foreach ($this->urls as $path => $kind) {
             $this->compareUrl($path, $kind);
         }
+        $this->compareButtonSignatures();
     }
 
     private function collectUrls(): void
@@ -274,6 +285,55 @@ final class Run
             return;
         }
         $this->compareSeo($path, $a, $b);
+        if ($kind === 'sitemap' && $a['status'] === 200 && ($a['content'] ?? null) !== null) {
+            $this->compareContent($path, $a['content'], $b['content'] ?? null);
+        }
+    }
+
+    /** Published content: rendered the_content of 2.0 vs 3.0. */
+    private function compareContent(string $path, array $a, ?array $b): void
+    {
+        $this->contentChecked++;
+        if ($b === null) {
+            $this->block($path, 'obszar treści', 'jest', 'nie znaleziono (' . CONTENT_SELECTOR . ')');
+            return;
+        }
+        if ($b['shortcodes']) {
+            $this->block($path, "surowe shortcode'y", implode(', ', $a['shortcodes']), implode(', ', $b['shortcodes']));
+        }
+        if ($b['nestedHeadings'] > 0) {
+            $this->block($path, 'jeden nagłówek zamiast zagnieżdżonego', '', 'zagnieżdżone: ' . $b['nestedHeadings']);
+        }
+        $aButtons = $a['buttonsLegacy'] + count($a['buttons']);
+        if ($aButtons !== count($b['buttons']) || $b['buttonsLegacy'] > 0) {
+            $this->block($path, 'Przycisk', (string) $aButtons, count($b['buttons']) . ($b['buttonsLegacy'] ? " (stary markup: {$b['buttonsLegacy']})" : ''));
+        }
+        foreach ($b['buttons'] as $btn) {
+            $this->buttonSignatures[$btn['style']][$btn['signature']] ??= ['count' => 0, 'url' => $path];
+            $this->buttonSignatures[$btn['style']][$btn['signature']]['count']++;
+        }
+        $aNotices = $a['notices'] + $a['noticesLegacy'];
+        if ($aNotices !== $b['notices'] || $b['noticesLegacy'] > 0) {
+            $this->block($path, 'Notka', (string) $aNotices, $b['notices'] . ($b['noticesLegacy'] ? " (stary markup: {$b['noticesLegacy']})" : ''));
+        }
+        if ($a['forms'] !== $b['workingForms'] || $b['forms'] !== $b['workingForms']) {
+            $this->block($path, 'Formularz zapisu', (string) $a['forms'], "{$b['workingForms']} działających z {$b['forms']}");
+        }
+    }
+
+    /** Przycisk must give identical markup whichever way it was recorded: one signature per style. */
+    private function compareButtonSignatures(): void
+    {
+        foreach ($this->buttonSignatures as $style => $signatures) {
+            if (count($signatures) < 2) {
+                continue;
+            }
+            uasort($signatures, fn($x, $y) => $y['count'] <=> $x['count']);
+            $dominant = array_key_first($signatures);
+            foreach (array_slice($signatures, 1, null, true) as $sig => $info) {
+                $this->block($info['url'], "Przycisk: identyczny markup ($style)", $dominant, $sig);
+            }
+        }
     }
 
     private function block(string $url, string $check, string $a, string $b): void
@@ -393,7 +453,85 @@ function page_facts(array $r, string $base, bool $emulateV1Anchors): array
     }
     $content = $doc->querySelector(CONTENT_SELECTOR);
     $f['anchors'] = $content ? heading_anchors($content) : null;
+    $f['content'] = $content ? content_facts($content, $r['body']) : null;
     return $f;
+}
+
+/** Facts about content elements (Przycisk, Notka, Formularz zapisu) inside the content area. */
+function content_facts(\Dom\Element $content, string $rawHtml): array
+{
+    $count = fn(string $sel) => $content->querySelectorAll($sel)->length;
+    $buttons = [];
+    foreach ($content->querySelectorAll(BUTTON_SELECTOR) as $btn) {
+        $style = 'bez stylu';
+        foreach (class_list($btn) as $c) {
+            if (str_starts_with($c, 'is-style-')) {
+                $style = $c;
+            }
+        }
+        $buttons[] = ['style' => $style, 'signature' => markup_signature($btn)];
+    }
+    $forms = 0;
+    $workingForms = 0;
+    foreach ($content->querySelectorAll('form') as $form) {
+        if (!$form->querySelector('input[type="email"]')) {
+            continue;
+        }
+        $forms++;
+        if (strtolower($form->getAttribute('method') ?? '') === 'post'
+            && str_contains($form->getAttribute('action') ?? '', 'admin-post.php')) {
+            $workingForms++;
+        }
+    }
+    return [
+        'shortcodes' => raw_shortcodes($content),
+        'nestedHeadings' => preg_match_all('/<h[1-6]\b[^>]*>(?:\s|&nbsp;)*<h[1-6]\b/i', $rawHtml),
+        'buttons' => $buttons,
+        'buttonsLegacy' => $count(LEGACY_BUTTON_SELECTOR),
+        'notices' => $count(NOTKA_SELECTOR),
+        'noticesLegacy' => $count(LEGACY_NOTKA_SELECTOR),
+        'forms' => $forms,
+        'workingForms' => $workingForms,
+    ];
+}
+
+/** @return list<string> */
+function class_list(\Dom\Element $el): array
+{
+    return array_values(array_filter(preg_split('/\s+/', $el->getAttribute('class') ?? '')));
+}
+
+/**
+ * Shape of an element subtree: tags and classes, without attribute values,
+ * style variants (is-style-*) and colour/alignment classes (has-*).
+ */
+function markup_signature(\Dom\Element $el): string
+{
+    $classes = array_filter(class_list($el), fn($c) => !str_starts_with($c, 'is-style-') && !str_starts_with($c, 'has-'));
+    sort($classes);
+    $sig = strtolower($el->localName) . ($classes ? '.' . implode('.', $classes) : '');
+    $children = [];
+    for ($child = $el->firstElementChild; $child; $child = $child->nextElementSibling) {
+        $children[] = markup_signature($child);
+    }
+    if (count($children) === 1) {
+        $sig .= ' > ' . $children[0];
+    } elseif ($children) {
+        $sig .= ' > (' . implode(' + ', $children) . ')';
+    }
+    return $sig;
+}
+
+/** @return list<string> shortcode tags left as text, e.g. "[sb_button url=…]" */
+function raw_shortcodes(\Dom\Element $content): array
+{
+    $copy = $content->cloneNode(true);
+    foreach ($copy->querySelectorAll('script, style, code, pre, textarea') as $el) {
+        $el->remove();
+    }
+    $known = 'sardynka|acf|caption|gallery|embed|audio|video|playlist';
+    preg_match_all('/\[\/?(?:[a-z][a-z0-9]*(?:[_-][a-z0-9]+)+|' . $known . ')(?:\s[^\[\]]*)?\]/i', $copy->textContent, $m);
+    return array_values(array_unique($m[0]));
 }
 
 /**
