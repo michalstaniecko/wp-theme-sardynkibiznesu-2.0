@@ -4,9 +4,10 @@
  * Slug: sardynkibiznesu-3-0/listing-posts
  * Categories: posts
  * Inserter: no
- * Description: Główna pętla list (/blog/, kategoria, archiwa): karty .sb-card--row, paginacja i widok pusty.
+ * Description: Główna pętla list (/blog/, kategoria, archiwa, wyszukiwarka): karty .sb-card--row, paginacja i widok pusty.
  *
- * Shared by templates home, category and archive. The query inherits the main
+ * Shared by templates home, category, archive and search; on search the empty
+ * view is the search-empty pattern (tips, category tiles). The query inherits the main
  * query, so pagination, ordering (and later popularity sorting, #55) come from
  * the URL. Card titles are H2: the template's only H1 is the view title.
  *
@@ -50,9 +51,13 @@ defined( 'ABSPATH' ) || exit;
 	<!-- /wp:query-pagination -->
 
 	<!-- wp:query-no-results -->
+	<?php if ( is_search() ) : ?>
+		<!-- wp:pattern {"slug":"sardynkibiznesu-3-0/search-empty"} /-->
+	<?php else : ?>
 		<!-- wp:paragraph -->
 		<p>Nie ma tu jeszcze żadnych wpisów.</p>
 		<!-- /wp:paragraph -->
+	<?php endif; ?>
 	<!-- /wp:query-no-results -->
 </div>
 <!-- /wp:query -->
