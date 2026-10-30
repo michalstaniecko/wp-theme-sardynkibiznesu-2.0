@@ -41,6 +41,42 @@
 			<!-- wp:post-featured-image {"className":"sb-article__featured"} /-->
 
 			<!-- wp:post-content {"className":"sb-article__content","layout":{"type":"default"}} /-->
+
+			<!-- wp:ihumbak/newsletter-form {"layout":"stacked","fields":"name-email"} /-->
+
+			<!-- wp:group {"className":"sb-article__tags","layout":{"type":"default"}} -->
+			<div class="wp-block-group sb-article__tags">
+				<!-- wp:post-terms {"term":"post_tag","separator":" "} /-->
+			</div>
+			<!-- /wp:group -->
+
+			<!-- wp:group {"tagName":"section","className":"sb-author-box","layout":{"type":"default"}} -->
+			<section class="wp-block-group sb-author-box">
+				<!-- wp:avatar {"size":80,"isLink":true,"className":"sb-author-box__avatar"} /-->
+
+				<!-- wp:group {"className":"sb-author-box__body","layout":{"type":"default"}} -->
+				<div class="wp-block-group sb-author-box__body">
+					<!-- wp:paragraph {"className":"sb-author-box__overline"} -->
+					<p class="sb-author-box__overline">Autor</p>
+					<!-- /wp:paragraph -->
+
+					<!-- wp:post-author-name {"isLink":true,"className":"sb-author-box__name"} /-->
+
+					<!-- wp:post-author-biography {"className":"sb-author-box__bio"} /-->
+				</div>
+				<!-- /wp:group -->
+			</section>
+			<!-- /wp:group -->
+
+			<!-- wp:group {"tagName":"nav","className":"sb-article__post-nav","ariaLabel":"Nawigacja wpisów","layout":{"type":"default"}} -->
+			<nav class="wp-block-group sb-article__post-nav" aria-label="Nawigacja wpisów">
+				<!-- wp:post-navigation-link {"type":"previous","label":"Poprzedni wpis","showTitle":true,"linkLabel":true,"arrow":"arrow"} /-->
+
+				<!-- wp:post-navigation-link {"label":"Następny wpis","showTitle":true,"linkLabel":true,"arrow":"arrow"} /-->
+			</nav>
+			<!-- /wp:group -->
+
+			<!-- wp:comments {"legacy":true,"anchor":"komentarze","className":"sb-article__comments"} /-->
 		</article>
 		<!-- /wp:group -->
 

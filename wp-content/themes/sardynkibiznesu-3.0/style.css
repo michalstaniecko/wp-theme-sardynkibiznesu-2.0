@@ -195,6 +195,157 @@ Text Domain: sardynkibiznesu-3-0
 		}
 	}
 
+	/* Tags (and, later, sharing buttons). Hidden when the post has neither. */
+	& .sb-article__tags {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--wp--preset--spacing--4);
+
+		&:not(:has(*)) {
+			display: none;
+		}
+
+		& > * {
+			margin-block: 0;
+		}
+
+		& .taxonomy-post_tag {
+			display: flex;
+			flex-wrap: wrap;
+			gap: var(--wp--preset--spacing--2);
+		}
+
+		& .taxonomy-post_tag a {
+			display: inline-block;
+			padding: var(--wp--preset--spacing--1) var(--wp--preset--spacing--3);
+			border: 1px solid var(--wp--custom--color--border);
+			border-radius: var(--wp--preset--border-radius--full);
+			color: var(--wp--preset--color--text-secondary);
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 500;
+			line-height: var(--wp--custom--line-height--caption);
+			text-decoration: none;
+
+			&:hover {
+				border-color: var(--wp--preset--color--brand);
+				color: var(--wp--preset--color--brand);
+			}
+		}
+	}
+
+	/* Ramka autora: avatar, name linking to the author archive, biography. */
+	& .sb-author-box {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--wp--preset--spacing--5);
+		padding: var(--wp--preset--spacing--6);
+		border: 1px solid var(--wp--custom--color--border-card);
+		border-radius: var(--wp--preset--border-radius--lg);
+		background-color: var(--wp--preset--color--surface-2);
+
+		& > *,
+		& .sb-author-box__body > * {
+			margin-block: 0;
+		}
+
+		& .wp-block-avatar {
+			flex: none;
+		}
+
+		& .wp-block-avatar img {
+			display: block;
+			border-radius: var(--wp--preset--border-radius--full);
+		}
+
+		& .sb-author-box__body {
+			display: flex;
+			flex-direction: column;
+			gap: var(--wp--preset--spacing--2);
+			min-width: 0;
+		}
+
+		& .sb-author-box__overline {
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--caption);
+			letter-spacing: var(--wp--custom--letter-spacing--overline);
+			text-transform: uppercase;
+			color: var(--wp--preset--color--text-secondary);
+		}
+
+		& .sb-author-box__name {
+			font-size: var(--wp--preset--font-size--h-4);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--h-4);
+
+			& a {
+				color: var(--wp--preset--color--text);
+				text-decoration: none;
+
+				&:hover {
+					color: var(--wp--preset--color--brand);
+					text-decoration: underline;
+				}
+			}
+		}
+
+		& .sb-author-box__bio {
+			font-size: var(--wp--preset--font-size--body-sm);
+			line-height: var(--wp--custom--line-height--body-sm);
+			color: var(--wp--preset--color--text-secondary);
+		}
+	}
+
+	/* Previous / next post. */
+	& .sb-article__post-nav {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--wp--preset--spacing--4);
+		padding-block: var(--wp--preset--spacing--6);
+		border-block: 1px solid var(--wp--custom--color--border);
+
+		& > * {
+			display: flex;
+			gap: var(--wp--preset--spacing--2);
+			margin-block: 0;
+		}
+
+		& .post-navigation-link-next {
+			grid-column: 2;
+			justify-content: flex-end;
+			text-align: end;
+		}
+
+		& a {
+			display: flex;
+			flex-direction: column;
+			gap: var(--wp--preset--spacing--1);
+			color: var(--wp--preset--color--text);
+			text-decoration: none;
+
+			&:hover .post-navigation-link__title {
+				color: var(--wp--preset--color--brand);
+			}
+		}
+
+		& .post-navigation-link__label {
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--caption);
+			letter-spacing: var(--wp--custom--letter-spacing--overline);
+			text-transform: uppercase;
+			color: var(--wp--preset--color--text-secondary);
+		}
+
+		& .post-navigation-link__title {
+			font-size: var(--wp--preset--font-size--body-sm);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--body-sm);
+		}
+	}
+
 	/* Content blocks may ask for wide/full alignment; inside the column they stay within it. */
 	& .sb-article__content :is(.alignwide, .alignfull) {
 		max-width: 100%;
@@ -207,6 +358,23 @@ Text Domain: sardynkibiznesu-3-0
 		grid-template-columns: minmax(0, var(--wp--style--global--content-size)) var(--wp--custom--layout--sidebar-width);
 		justify-content: space-between;
 		align-items: start;
+	}
+}
+
+@media (max-width: 767px) {
+	.sb-article {
+		& .sb-author-box {
+			flex-direction: column;
+			padding: var(--wp--preset--spacing--5);
+		}
+
+		& .sb-article__post-nav {
+			grid-template-columns: 1fr;
+
+			& .post-navigation-link-next {
+				grid-column: 1;
+			}
+		}
 	}
 }
 
