@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/wp/7.0/theme.json",
+	"version": 3,
+	"settings": {
+		"blocks": {
+			"core/image": {
+				"lightbox": {
+					"enabled": true,
+					"allowEditing": true
+				}
+			}
+		}
+	},
+	"templateParts": [
+		{ "name": "header", "title": "Nagłówek", "area": "header" },
+		{ "name": "footer", "title": "Stopka", "area": "footer" }
+	]
+}
