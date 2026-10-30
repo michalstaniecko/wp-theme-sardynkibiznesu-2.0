@@ -4,10 +4,15 @@
  * CSS first and scripts one by one, the order a normal page load would give them.
  */
 ( function () {
+	const SCRIPTS_ID = 'ihumbak-wpdiscuz-scripts';
+	const STYLES_ID = 'ihumbak-wpdiscuz-styles';
+	// WordPress appends `-inline-css` to the PHP handle `ihumbak-wpdiscuz-critical`.
+	const CRITICAL_ID = 'ihumbak-wpdiscuz-critical-inline-css';
+
 	const section = document.getElementById( 'comments' );
-	const scripts = document.getElementById( 'ihumbak-wpdiscuz-scripts' );
-	const styles = document.getElementById( 'ihumbak-wpdiscuz-styles' );
-	const critical = document.getElementById( 'ihumbak-wpdiscuz-critical-inline-css' );
+	const scripts = document.getElementById( SCRIPTS_ID );
+	const styles = document.getElementById( STYLES_ID );
+	const critical = document.getElementById( CRITICAL_ID );
 
 	if ( ! section || ! scripts || ! styles ) {
 		return;
@@ -110,7 +115,7 @@
 	}
 
 	[ 'wheel', 'touchmove', 'keydown' ].forEach( ( type ) => {
-		addEventListener( type, () => ( readerMoved = true ), { once: true, passive: true } );
+		addEventListener( type, () => ( readerMoved = true ), { passive: true } );
 	} );
 
 	section.addEventListener( 'focusin', start );
