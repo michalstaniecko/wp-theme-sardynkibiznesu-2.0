@@ -193,8 +193,8 @@
 		"blocks": {
 			"core/image": {
 				"lightbox": {
-					"enabled": true,
-					"allowEditing": true
+					"enabled": false,
+					"allowEditing": false
 				}
 			}
 		}
@@ -318,6 +318,7 @@
 	"templateParts": [
 		{ "name": "header", "title": "Nagłówek", "area": "header" },
 		{ "name": "footer", "title": "Stopka", "area": "footer" },
-		{ "name": "sidebar-listing", "title": "Kolumna boczna — listy wpisów", "area": "uncategorized" }
+		{ "name": "sidebar-listing", "title": "Kolumna boczna — listy wpisów", "area": "uncategorized" },
+		{ "name": "sidebar-article", "title": "Kolumna boczna: artykuł", "area": "uncategorized" }
 	]
 }

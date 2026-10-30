@@ -19,6 +19,30 @@ defined( 'ABSPATH' ) || exit;
  */
 const PRELOADED_FONT_WEIGHTS = array( 400, 700 );
 
+/**
+ * `sizes` of the article's featured image: the image never exceeds the 680 content
+ * column (>= 1024px), below that it spans the viewport minus the root padding
+ * (24px per side from 768px, 16px below). Core would say "up to 1200px wide".
+ */
+const ARTICLE_FEATURED_IMAGE_SIZES = '(min-width: 1024px) 680px, (min-width: 768px) calc(100vw - 48px), calc(100vw - 32px)';
+
+add_filter(
+	'render_block_core/post-featured-image',
+	static function ( string $html, array $block ): string {
+		$class_name = $block['attrs']['className'] ?? '';
+		if ( ! in_array( 'sb-article__featured', explode( ' ', $class_name ), true ) ) {
+			return $html;
+		}
+		$tags = new \WP_HTML_Tag_Processor( $html );
+		if ( $tags->next_tag( 'img' ) && null !== $tags->get_attribute( 'srcset' ) ) {
+			$tags->set_attribute( 'sizes', ARTICLE_FEATURED_IMAGE_SIZES );
+		}
+		return $tags->get_updated_html();
+	},
+	10,
+	2
+);
+
 add_action(
 	'after_setup_theme',
 	static function (): void {
