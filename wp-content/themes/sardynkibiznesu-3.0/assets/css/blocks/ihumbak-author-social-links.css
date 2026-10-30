@@ -1,0 +1,30 @@
+/* ihumbak/author-social-links: icon links under the bio in Ramka autora. */
+.wp-block-ihumbak-author-social-links {
+	& .wp-block-ihumbak-author-social-links__list {
+		gap: var(--wp--preset--spacing--2);
+	}
+
+	& .wp-block-ihumbak-author-social-links__link {
+		box-sizing: border-box;
+		width: 36px;
+		height: 36px;
+		border-radius: var(--wp--preset--border-radius--full);
+		background-color: var(--wp--preset--color--surface);
+		color: var(--wp--preset--color--text-secondary);
+		transition: color var(--wp--custom--duration--fast) var(--wp--custom--easing);
+
+		&:hover {
+			color: var(--wp--preset--color--brand);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--custom--color--focus);
+			outline-offset: 2px;
+		}
+
+		& svg {
+			width: 18px;
+			height: 18px;
+		}
+	}
+}

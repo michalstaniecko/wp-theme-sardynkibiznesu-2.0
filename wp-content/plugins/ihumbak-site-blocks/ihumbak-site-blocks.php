@@ -17,3 +17,4 @@ const IHUMBAK_SITE_BLOCKS_FILE = __FILE__;
 
 require_once __DIR__ . '/includes/blocks.php';
 require_once __DIR__ . '/includes/navigation-overlay.php';
+require_once __DIR__ . '/includes/author-social-links.php';

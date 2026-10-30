@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/author-social-links",
+	"title": "Linki społecznościowe autora",
+	"category": "theme",
+	"icon": "share-alt2",
+	"description": "Strona www i profile autora wpisu (Facebook, Instagram, LinkedIn, YouTube) z pól profilu użytkownika. Nic nie wyświetla, gdy autor ich nie podał.",
+	"textdomain": "ihumbak-site-blocks",
+	"usesContext": [ "postId" ],
+	"supports": { "html": false, "autoRegister": true },
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

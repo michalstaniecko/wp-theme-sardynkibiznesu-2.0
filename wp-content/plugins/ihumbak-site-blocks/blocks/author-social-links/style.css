@@ -1,0 +1,15 @@
+/* ihumbak/author-social-links — structural CSS only; the look lives in the theme. */
+.wp-block-ihumbak-author-social-links__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wp-block-ihumbak-author-social-links__link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
