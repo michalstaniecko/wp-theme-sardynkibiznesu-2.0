@@ -86,4 +86,48 @@
 			return el( InnerBlocks.Content );
 		},
 	} );
+
+	/*
+	 * Query variation „Z tej kategorii”: the server (includes/same-category-query.php)
+	 * narrows it to the current post's categories and drops the current post.
+	 * Without a current post (template editor) the preview lists the newest posts.
+	 */
+	blocks.registerBlockVariation( 'core/query', {
+		name: 'ihumbak/same-category',
+		title: __( 'Z tej kategorii', 'ihumbak-site-blocks' ),
+		description: __(
+			'Wpisy z kategorii bieżącego wpisu, bez niego. Ukryte, gdy nie ma innych wpisów.',
+			'ihumbak-site-blocks'
+		),
+		icon: 'category',
+		scope: [ 'inserter' ],
+		isActive: [ 'namespace' ],
+		allowedControls: [ 'order' ],
+		attributes: {
+			namespace: 'ihumbak/same-category',
+			tagName: 'section',
+			query: {
+				perPage: 3,
+				pages: 0,
+				offset: 0,
+				postType: 'post',
+				order: 'desc',
+				orderBy: 'date',
+				inherit: false,
+				sticky: 'ignore',
+			},
+		},
+		innerBlocks: [
+			[ 'core/heading', { content: __( 'Z tej kategorii', 'ihumbak-site-blocks' ) } ],
+			[
+				'core/post-template',
+				{},
+				[
+					[ 'core/post-featured-image', { aspectRatio: '16/10' } ],
+					[ 'core/post-title', { level: 3, isLink: true } ],
+					[ 'core/post-date' ],
+				],
+			],
+		],
+	} );
 } )( window.wp.blocks, window.wp.blockEditor, window.wp.element, window.wp.i18n );
