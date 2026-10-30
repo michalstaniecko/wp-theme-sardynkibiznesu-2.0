@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/most-read",
+	"title": "Najczęściej czytane",
+	"category": "theme",
+	"icon": "chart-bar",
+	"description": "Ranking najczęściej czytanych wpisów (odsłony GA4 z 30 dni, meta _sb_popularity). W archiwum kategorii zawęża się do niej, na stronie wpisu pomija bieżący wpis. Przed pierwszą synchronizacją: najnowsze wpisy.",
+	"textdomain": "ihumbak-site-blocks",
+	"keywords": [ "popularne", "ranking", "najpopularniejsze" ],
+	"attributes": {
+		"count": { "type": "integer", "default": 5, "minimum": 1, "maximum": 10 },
+		"scope": { "type": "string", "enum": [ "auto", "all" ], "default": "auto" }
+	},
+	"supports": { "html": false, "autoRegister": true },
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

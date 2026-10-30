@@ -1,0 +1,64 @@
+/* ihumbak/most-read („Najczęściej czytane”, .sb-ranking): numbered list of titles in Kolumna boczna. */
+.sb-ranking {
+	--sb-ranking-number: var(--wp--preset--color--brand);
+	--sb-ranking-border: var(--wp--custom--color--border);
+
+	& .sb-ranking__heading {
+		margin: 0 0 var(--wp--preset--spacing--4);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 600;
+		line-height: 16px;
+		letter-spacing: var(--wp--custom--letter-spacing--overline);
+		text-transform: uppercase;
+		color: var(--wp--preset--color--text-secondary);
+	}
+
+	& .sb-ranking__item {
+		display: grid;
+		grid-template-columns: 2rem 1fr;
+		column-gap: var(--wp--preset--spacing--3);
+		align-items: baseline;
+		margin: 0;
+		padding-block: var(--wp--preset--spacing--3);
+		border-top: 1px solid var(--sb-ranking-border);
+
+		&:last-child {
+			border-bottom: 1px solid var(--sb-ranking-border);
+		}
+
+		&::before {
+			content: counter(sb-ranking, decimal-leading-zero);
+			grid-row: span 2;
+			font-size: var(--wp--preset--font-size--h-3);
+			font-weight: 700;
+			line-height: 1;
+			color: var(--sb-ranking-number);
+			font-variant-numeric: tabular-nums;
+		}
+	}
+
+	& .sb-ranking__link {
+		font-size: var(--wp--preset--font-size--body-sm);
+		font-weight: 600;
+		line-height: 20px;
+		color: var(--wp--preset--color--text);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--preset--color--brand);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--custom--color--focus);
+			outline-offset: 2px;
+		}
+	}
+
+	& .sb-ranking__meta {
+		grid-column: 2;
+		margin-block-start: var(--wp--preset--spacing--1);
+		font-size: var(--wp--preset--font-size--caption);
+		line-height: 16px;
+		color: var(--wp--preset--color--text-secondary);
+	}
+}
