@@ -4,7 +4,7 @@
  * `core/buttons` used by the search bar is registered by ihumbak-content-elements (spec #36).
  *
  * One editor script (no build, wp.element.createElement) serves the header blocks
- * and the Query variation (share buttons and author links are PHP-only blocks,
+ * and the Query variation (share buttons, author links, „Najczęściej czytane” and the sort links are PHP-only blocks,
  * `autoRegister`); one
  * view script module holds the Interactivity stores `ihumbak/site-header` and
  * `ihumbak/share-buttons`.
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const IHUMBAK_SITE_BLOCKS = array( 'site-header', 'search-toggle', 'search-bar', 'share-buttons', 'author-social-links' );
+const IHUMBAK_SITE_BLOCKS = array( 'site-header', 'search-toggle', 'search-bar', 'share-buttons', 'author-social-links', 'most-read', 'listing-sort' );
 
 add_action( 'init', 'ihumbak_site_blocks_register' );
 

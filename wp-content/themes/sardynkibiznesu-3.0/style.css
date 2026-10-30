@@ -727,11 +727,6 @@ Text Domain: sardynkibiznesu-3-0
 	}
 }
 
-/* Slot for sorting (#55) stays invisible while empty. */
-.sb-listing__sort:empty {
-	display: none;
-}
-
 /* Row cards (.sb-card--row) separated by borders (.sb-list). */
 .sb-list {
 	display: flex;
@@ -958,11 +953,6 @@ Text Domain: sardynkibiznesu-3-0
 
 	& > * {
 		margin-block: 0;
-	}
-
-	/* Slot for „Najczęściej czytane” (#55) stays invisible while empty. */
-	& .sb-sidebar__most-read:empty {
-		display: none;
 	}
 }
 

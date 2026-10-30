@@ -1,0 +1,40 @@
+/* ihumbak/listing-sort: sort links above the category list, as pills; the active one is filled. */
+.wp-block-ihumbak-listing-sort {
+	& .wp-block-ihumbak-listing-sort__label {
+		font-size: var(--wp--preset--font-size--body-sm);
+		color: var(--wp--preset--color--text-secondary);
+	}
+
+	& .wp-block-ihumbak-listing-sort__link {
+		box-sizing: border-box;
+		display: inline-flex;
+		align-items: center;
+		min-height: 36px;
+		padding: var(--wp--preset--spacing--1) var(--wp--preset--spacing--4);
+		border: 1px solid var(--wp--custom--color--border);
+		border-radius: var(--wp--preset--border-radius--full);
+		font-size: var(--wp--preset--font-size--body-sm);
+		font-weight: 500;
+		line-height: 20px;
+		color: var(--wp--preset--color--text);
+		text-decoration: none;
+		transition: border-color var(--wp--custom--duration--fast) var(--wp--custom--easing), color var(--wp--custom--duration--fast) var(--wp--custom--easing);
+
+		&:hover {
+			border-color: var(--wp--preset--color--brand);
+			color: var(--wp--preset--color--brand);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--custom--color--focus);
+			outline-offset: 2px;
+		}
+
+		&[aria-current] {
+			border-color: var(--wp--preset--color--surface-inverse);
+			background-color: var(--wp--preset--color--surface-inverse);
+			color: var(--wp--custom--color--text-inverse);
+			font-weight: 600;
+		}
+	}
+}

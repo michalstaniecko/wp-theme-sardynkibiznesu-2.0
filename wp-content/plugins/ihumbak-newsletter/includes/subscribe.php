@@ -4,7 +4,7 @@
  *
  * process_submission() holds the whole server-side logic (antispam, validation,
  * MailerLite) and returns a result; the no-JS handler below turns it into a
- * redirect. A JS/REST endpoint (#51) can reuse process_submission() as is.
+ * redirect; the REST endpoint of the JS path (includes/rest.php) turns it into JSON.
  *
  * Antispam without captcha and without a nonce (pages are cached):
  * - honeypot field `ihn_website`: a filled one gets a fake success, no API call;
