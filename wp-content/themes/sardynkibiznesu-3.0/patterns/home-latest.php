@@ -38,7 +38,7 @@ $sb_blog_url = $sb_blog_id ? get_permalink( $sb_blog_id ) : home_url( '/blog/' )
 		<!-- wp:post-template {"className":"sb-grid"} -->
 			<!-- wp:group {"className":"sb-card sb-card--col","layout":{"type":"default"}} -->
 			<div class="wp-block-group sb-card sb-card--col">
-				<!-- wp:post-featured-image {"aspectRatio":"16/10","sizeSlug":"medium_large","className":"sb-card__media sb-card__media--col"} /-->
+				<!-- wp:post-featured-image {"sizeSlug":"medium_large","className":"sb-card__media sb-card__media--col"} /-->
 
 				<!-- wp:group {"className":"sb-card__body","layout":{"type":"default"}} -->
 				<div class="wp-block-group sb-card__body">

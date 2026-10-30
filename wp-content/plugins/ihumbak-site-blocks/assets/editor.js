@@ -123,7 +123,7 @@
 				'core/post-template',
 				{},
 				[
-					[ 'core/post-featured-image', { aspectRatio: '16/10' } ],
+					[ 'core/post-featured-image', { className: 'sb-card__media sb-card__media--compact' } ],
 					[ 'core/post-title', { level: 3, isLink: true } ],
 					[ 'core/post-date' ],
 				],

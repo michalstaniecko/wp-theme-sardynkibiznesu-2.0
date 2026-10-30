@@ -25,7 +25,7 @@ defined( 'ABSPATH' ) || exit;
 		<!-- wp:post-template {"className":"sb-hero__list"} -->
 			<!-- wp:group {"className":"sb-card sb-hero__card","layout":{"type":"default"}} -->
 			<div class="wp-block-group sb-card sb-hero__card">
-				<!-- wp:post-featured-image {"aspectRatio":"16/10","sizeSlug":"large","className":"sb-card__media sb-hero__media"} /-->
+				<!-- wp:post-featured-image {"sizeSlug":"large","className":"sb-card__media sb-hero__media"} /-->
 
 				<!-- wp:group {"className":"sb-card__body sb-hero__body","layout":{"type":"default"}} -->
 				<div class="wp-block-group sb-card__body sb-hero__body">
