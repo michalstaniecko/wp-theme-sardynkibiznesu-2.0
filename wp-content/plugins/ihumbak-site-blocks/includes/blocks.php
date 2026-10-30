@@ -1,6 +1,6 @@
 <?php
 /**
- * Registration of the header blocks, their shared scripts and the `badges` style.
+ * Registration of the site blocks, their shared scripts and the `badges` style.
  *
  * One editor script (no build, wp.element.createElement) serves all blocks; one
  * view script module holds the shared Interactivity store `ihumbak/site-header`.
