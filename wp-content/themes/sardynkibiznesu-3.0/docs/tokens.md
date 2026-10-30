@@ -139,3 +139,4 @@ Redaktor wybiera tylko presety motywu. Wyłączone: domyślna paleta, gradienty 
 - **Domyślne zmienne core.** WordPress nadal wypisuje w `:root` zmienne domyślnych presetów (np. `--wp--preset--color--vivid-red`) dla zgodności wstecznej, mimo wyłączenia ich w edytorze. Nie są częścią kontraktu i nie wolno ich używać.
 - **Przycisk w stylu „Akcent”** ma tło `accent-text`, a nie `accent`: biały tekst na `accent` ma 3,4:1 (poniżej WCAG AA dla 14 px). Brak ciemniejszego tokenu akcentu, więc hover tylko podkreśla tekst.
 - **Logo w stopce** stoi na jasnej „pigułce” (`surface`), bo projekt nie ma wersji odwróconej logo.
+- **Notka** to „Callout neutral” z projektu (`surface-2`) z dodatkową krawędzią `brand` 4 px po lewej, bo samo szare tło za mało odróżniało ostrzeżenie od Ramki promocyjnej (`accent-soft`, `surface-inverse`).
