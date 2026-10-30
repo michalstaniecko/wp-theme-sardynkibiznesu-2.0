@@ -12,6 +12,8 @@
 # reguła Redirection /page/N/ → /blog/page/N/ włączona → cache LiteSpeed.
 # Kierunek 2.0 odwraca każdy krok do stanu sprzed przełączenia i wypisuje wpisy
 # zmienione od przełączenia, które zawierają bloki ihumbak/*.
+# Wtyczka ihumbak-tax-calculator działa pod 2.0 i 3.0: skrypt jej nie przełącza, tylko
+# odmawia przejścia na 3.0, gdy nie jest aktywna.
 # Baza: zmienia tylko powyższe opcje, statusy dwóch stron, status reguły i opcję
 # stanu `sb_theme_switch` (stan sprzed przełączenia, do odwrócenia).
 # Zmienna WP_CLI podmienia polecenie wp (domyślnie `wp`).
@@ -23,6 +25,8 @@ THEME_20=sardynkibiznesu-2.0
 THEME_30=sardynkibiznesu-3.0
 PLUGINS_20=(ihumbak-newsletter-form ihumbak-anchor ihumbak-anchor-2 ihumbak-analytics ihumbak-shortcodes)
 PLUGINS_30=(ihumbak-content-elements ihumbak-toc ihumbak-newsletter ihumbak-site-blocks ihumbak-tracking)
+# Part of the 3.0 packages, but active under both themes: required, never toggled.
+PLUGIN_BOTH=ihumbak-tax-calculator
 RULE_SOURCE='^/page/(\d+)/?$'
 RULE_TARGET='/blog/page/$1/'
 BLOG_SLUG=blog
@@ -228,6 +232,7 @@ if [[ $target == 3.0 ]]; then
 	for p in "${PLUGINS_30[@]}"; do
 		wp_db plugin is-installed "$p" || die "wtyczka $p nie jest zainstalowana (zestaw 3.0)"
 	done
+	wp_db plugin is-active "$PLUGIN_BOTH" || die "wtyczka $PLUGIN_BOTH nie jest aktywna (działa pod 2.0 i 3.0, aktywuj ją przed przełączeniem)"
 
 	[[ $front != "$blog" ]] || die "--front-page i --blog-page to ta sama strona"
 	for id in "$front" "$blog"; do
