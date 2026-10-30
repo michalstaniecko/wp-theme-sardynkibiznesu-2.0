@@ -2,7 +2,8 @@
 /**
  * Sardynki Biznesu 3.0 — presentation only (ADR-0001).
  *
- * Loads the global stylesheet and preloads the two most used font weights.
+ * Loads the global stylesheet, preloads the two most used font weights and
+ * tunes image attributes (sizes, lazy loading) of template images.
  * Registers no shortcodes, blocks, post types, meta or settings.
  *
  * @package sardynkibiznesu-3.0
@@ -86,4 +87,24 @@ add_filter(
 add_filter(
 	'wp_omit_loading_attr_threshold',
 	static fn ( int $threshold ): int => ( is_home() || is_archive() ) ? LISTING_EAGER_IMAGES : $threshold
+);
+
+/**
+ * Ramka autora on top of the author archive (.sb-author__avatar) is above the
+ * fold, so its avatar must not be lazy (core's get_avatar() makes it lazy).
+ */
+add_filter(
+	'render_block_core/avatar',
+	static function ( string $html, array $block ): string {
+		if ( ! str_contains( $block['attrs']['className'] ?? '', 'sb-author__avatar' ) ) {
+			return $html;
+		}
+		$img = new \WP_HTML_Tag_Processor( $html );
+		if ( $img->next_tag( 'img' ) && 'lazy' === $img->get_attribute( 'loading' ) ) {
+			$img->remove_attribute( 'loading' );
+		}
+		return $img->get_updated_html();
+	},
+	10,
+	2
 );
