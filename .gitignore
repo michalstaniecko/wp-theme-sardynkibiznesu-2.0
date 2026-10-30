@@ -177,3 +177,6 @@ db
 
 # Komparator SEO reports (bin/komparator-seo)
 komparator-seo-*.md
+
+# Paczki zip z bin/build-packages
+/dist/
