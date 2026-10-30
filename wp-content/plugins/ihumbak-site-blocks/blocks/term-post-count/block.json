@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/term-post-count",
+	"title": "Liczba wpisów w kategorii",
+	"category": "theme",
+	"icon": "editor-ol",
+	"description": "Liczba wpisów termu z polską odmianą („1 wpis”, „4 wpisy”, „113 wpisów”). Do użycia w szablonie termu (core/terms-query); core/term-count pokazuje samą liczbę.",
+	"textdomain": "ihumbak-site-blocks",
+	"keywords": [ "liczba", "wpisy", "kategoria", "term" ],
+	"ancestor": [ "core/term-template" ],
+	"usesContext": [ "termId", "taxonomy" ],
+	"supports": { "html": false, "autoRegister": true },
+	"render": "file:./render.php"
+}

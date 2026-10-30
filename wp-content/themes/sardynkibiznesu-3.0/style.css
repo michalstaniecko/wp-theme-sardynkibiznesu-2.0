@@ -1557,6 +1557,336 @@ Text Domain: sardynkibiznesu-3-0
 	color: var(--wp--custom--color--brand-on-inverse);
 }
 
+/*
+ * Front page (#58): template `front-page` = H1 (site name) + post content of the front page,
+ * which holds the Sekcje strony głównej (patterns home-*). Layer 4: classes on groups.
+ * Sections are alignwide groups stacked with one rhythm; each has an optional header row
+ * (H2 + „Wszystkie …” link).
+ */
+.sb-home {
+	padding-block: var(--wp--preset--spacing--8) var(--wp--preset--spacing--16);
+
+	& > * {
+		margin-block: 0;
+	}
+}
+
+/* The H1 is the site name (one H1 per template, #30); the header already shows the logo. */
+.sb-home__title {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+.sb-home__sections {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--16);
+
+	/* Core centres children with auto margins, which would shrink flex items to their content. */
+	& > * {
+		width: 100%;
+		margin-block: 0;
+	}
+}
+
+.sb-home-section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--6);
+	min-width: 0;
+
+	& > * {
+		margin-block: 0;
+	}
+}
+
+.sb-home-section__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--wp--preset--spacing--2) var(--wp--preset--spacing--6);
+
+	& > * {
+		margin-block: 0;
+	}
+}
+
+.sb-home-section__title {
+	font-size: var(--wp--preset--font-size--h-2);
+	line-height: var(--wp--custom--line-height--h-2);
+}
+
+.sb-home-section__more a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--wp--preset--spacing--1);
+	min-height: 24px;
+	font-size: var(--wp--preset--font-size--body-sm);
+	font-weight: 600;
+	color: var(--wp--preset--color--brand);
+	text-decoration: none;
+
+	/* Arrow (Lucide arrow-right) as a mask, so it follows the text colour. */
+	&::after {
+		content: "";
+		width: 16px;
+		height: 16px;
+		background-color: currentColor;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+		transition: transform var(--wp--custom--duration--fast) var(--wp--custom--easing);
+	}
+
+	&:hover {
+		text-decoration: underline;
+
+		&::after {
+			transform: translateX(2px);
+		}
+	}
+}
+
+/* Hero: image 7/12, text 5/12 from 1024px; stacked below. */
+.sb-hero__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	& > li {
+		margin: 0;
+	}
+}
+
+.sb-hero__card {
+	gap: var(--wp--preset--spacing--6);
+	align-items: center;
+
+	&:not(:has(.sb-card__media)) {
+		max-width: var(--wp--style--global--content-size);
+	}
+}
+
+.sb-hero__media {
+	border-radius: var(--wp--preset--border-radius--md);
+}
+
+.sb-hero__body {
+	gap: var(--wp--preset--spacing--4);
+}
+
+.sb-card__title.sb-hero__title {
+	font-size: var(--wp--preset--font-size--h-1);
+	font-weight: 700;
+	line-height: var(--wp--custom--line-height--h-1);
+	letter-spacing: var(--wp--custom--letter-spacing--h-1);
+}
+
+.sb-hero__excerpt {
+	font-size: var(--wp--preset--font-size--body);
+	line-height: var(--wp--custom--line-height--body);
+
+	& p {
+		-webkit-line-clamp: 4;
+	}
+}
+
+.sb-hero__author {
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 600;
+	line-height: var(--wp--custom--line-height--caption);
+	color: var(--wp--preset--color--text-secondary);
+}
+
+@media (min-width: 1024px) {
+	.sb-hero__card:has(.sb-card__media) {
+		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		gap: var(--wp--preset--spacing--12);
+	}
+}
+
+/* Column cards (.sb-card--col) in a three-column grid (.sb-grid); one column on phones. */
+.sb-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: var(--wp--preset--spacing--8) var(--wp--preset--spacing--6);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	& > li {
+		margin: 0;
+	}
+}
+
+.sb-card--col {
+	align-content: start;
+
+	& .sb-card__title {
+		font-size: var(--wp--preset--font-size--h-4);
+		line-height: var(--wp--custom--line-height--h-4);
+	}
+}
+
+@media (max-width: 767px) {
+	.sb-grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* Podcast: featured episode 7/12 next to three more episodes and the platforms (5/12). */
+.sb-podcast {
+	display: grid;
+	gap: var(--wp--preset--spacing--8);
+	align-items: start;
+
+	& > *,
+	& .sb-podcast__aside > * {
+		margin-block: 0;
+	}
+}
+
+.sb-podcast-featured .wp-block-post-template,
+.sb-podcast__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	& > li {
+		margin: 0;
+	}
+}
+
+.sb-podcast__aside {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--6);
+}
+
+.sb-podcast__list > li {
+	padding-block: var(--wp--preset--spacing--4);
+	border-top: 1px solid var(--wp--custom--color--border);
+
+	&:first-child {
+		padding-top: 0;
+		border-top: 0;
+	}
+}
+
+.sb-podcast__card {
+	gap: var(--wp--preset--spacing--2);
+
+	& .sb-card__title {
+		font-size: var(--wp--preset--font-size--body);
+		line-height: var(--wp--custom--line-height--body);
+	}
+}
+
+.sb-podcast__card--featured {
+	gap: var(--wp--preset--spacing--4);
+
+	& .sb-card__title {
+		font-size: var(--wp--preset--font-size--h-3);
+		line-height: var(--wp--custom--line-height--h-3);
+	}
+}
+
+/* Episode number and duration (Block Bindings); empty when the episode has no meta. */
+.sb-podcast__meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--wp--preset--spacing--3);
+
+	& > * {
+		margin: 0;
+	}
+
+	& > p:empty,
+	&:not(:has(> p:not(:empty))) {
+		display: none;
+	}
+}
+
+.sb-podcast__episode::before {
+	content: "Odcinek ";
+}
+
+.sb-podcast__duration {
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 500;
+	line-height: var(--wp--custom--line-height--caption);
+	color: var(--wp--preset--color--text-secondary);
+}
+
+.sb-podcast__platforms {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--3);
+	padding-top: var(--wp--preset--spacing--4);
+	border-top: 1px solid var(--wp--custom--color--border);
+
+	& > * {
+		margin-block: 0;
+	}
+}
+
+.sb-podcast__platforms-label {
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 600;
+	line-height: 16px;
+	letter-spacing: var(--wp--custom--letter-spacing--overline);
+	text-transform: uppercase;
+	color: var(--wp--preset--color--text-secondary);
+}
+
+@media (min-width: 1024px) {
+	.sb-podcast {
+		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		gap: var(--wp--preset--spacing--12);
+	}
+}
+
+/* O czym piszemy: category tiles (shared with the empty search view), three columns. */
+.sb-home-topics .sb-category-tiles__grid {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.sb-category-tile__count {
+	margin-top: auto !important;
+	padding-top: var(--wp--preset--spacing--2);
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 600;
+	line-height: var(--wp--custom--line-height--caption);
+	color: var(--wp--preset--color--text-secondary);
+}
+
+@media (max-width: 1023px) {
+	.sb-home-topics .sb-category-tiles__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 767px) {
+	.sb-home {
+		padding-block: var(--wp--preset--spacing--6) var(--wp--preset--spacing--12);
+	}
+
+	.sb-home__sections {
+		gap: var(--wp--preset--spacing--12);
+	}
+
+	.sb-home-topics .sb-category-tiles__grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
 /* Motion: one curve, three durations; all zero for users who ask for less motion. */
 @media (prefers-reduced-motion: reduce) {
 	:root {

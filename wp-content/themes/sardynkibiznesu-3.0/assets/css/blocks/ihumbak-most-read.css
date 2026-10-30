@@ -62,3 +62,41 @@
 		color: var(--wp--preset--color--text-secondary);
 	}
 }
+
+/*
+ * Front page section (#58, class `sb-ranking--home`): the block's H2 looks like the other
+ * section headings, the list runs in two columns from 768px.
+ */
+.sb-ranking.sb-ranking--home {
+	& .sb-ranking__heading {
+		margin-block-end: var(--wp--preset--spacing--6);
+		font-size: var(--wp--preset--font-size--h-2);
+		font-weight: 700;
+		line-height: var(--wp--custom--line-height--h-2);
+		letter-spacing: var(--wp--custom--letter-spacing--h-2);
+		text-transform: none;
+		color: var(--wp--preset--color--text);
+	}
+
+	& .sb-ranking__item {
+		padding-block: var(--wp--preset--spacing--4);
+		border-bottom: 1px solid var(--sb-ranking-border);
+	}
+
+	& .sb-ranking__link {
+		font-size: var(--wp--preset--font-size--body);
+		line-height: var(--wp--custom--line-height--body);
+	}
+}
+
+@media (min-width: 768px) {
+	.sb-ranking.sb-ranking--home .sb-ranking__list {
+		/* Columns, not a grid: the split follows any `count` the editor sets. */
+		columns: 2;
+		column-gap: var(--wp--preset--spacing--12);
+	}
+
+	.sb-ranking.sb-ranking--home .sb-ranking__item {
+		break-inside: avoid;
+	}
+}
