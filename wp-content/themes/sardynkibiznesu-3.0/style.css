@@ -67,6 +67,7 @@ Text Domain: sardynkibiznesu-3-0
 		gap: var(--wp--preset--spacing--12);
 	}
 
+	& .sb-article__grid > *,
 	& .sb-article__main > *,
 	& .sb-article__sidebar > * {
 		margin-block: 0;
@@ -77,6 +78,8 @@ Text Domain: sardynkibiznesu-3-0
 		flex-direction: column;
 		gap: var(--wp--preset--spacing--6);
 		min-width: 0;
+		/* Long URLs and unbroken strings in old posts must not cause horizontal scroll at 320px. */
+		overflow-wrap: break-word;
 	}
 
 	& .sb-article__header {
