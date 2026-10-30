@@ -99,6 +99,7 @@ Kilka dni przed oknem. 2.0 działa bez zmian.
   - [ ] `switch-theme 3.0 --dry-run`, potem `switch-theme 3.0`;
   - [ ] PK1 i PK2 na stagingu (komparator SEO, `bin/perf-a11y-check`, ręczne scenariusze a11y): wszystko przechodzi;
   - [ ] Convert Pro (płatna, poza repo, lokalnie nie do zmierzenia; #39, #68): `bin/perf-a11y-check` z włączoną wtyczką, wynik per URL. `/wp-includes/` liczy się jako zasób własny, więc jQuery dociągnięte przez wtyczkę wraca do budżetu JS (≤ 40 KB, 0 blokujących);
+  - [ ] Wpis z komentarzami przy pełnym zestawie produkcyjnym, w tym Convert Pro (#70): jeśli Convert Pro ładuje jQuery, wpDiscuz nie pobiera go drugi raz, a komentarze (lista, dodanie, odpowiedź, głosowanie, „załaduj więcej”, wejście na `#comment-N`) działają jak przed leniwym ładowaniem;
   - [ ] `switch-theme 2.0`: 2.0 wraca, lista wpisów się wypisuje;
   - [ ] `switch-theme 3.0` jeszcze raz (drugie przełączenie po rollbacku też działa).
 - [ ] Ostatnie `bin/staging-refresh` i bramki tuż przed oknem.
