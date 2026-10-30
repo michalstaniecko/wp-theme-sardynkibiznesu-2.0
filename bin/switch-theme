@@ -1,0 +1,371 @@
+#!/usr/bin/env bash
+# Przełączenie serwisu 2.0 ↔ 3.0 (WP-CLI, ręcznie przez SSH na serwerze).
+# Instrukcja: docs/runbooks/przelaczenie-3-0.md
+#
+# Użycie:
+#   bin/switch-theme 3.0 --path <dir> --front-page <id> --blog-page <id> [--dry-run] [--yes]
+#   bin/switch-theme 2.0 --path <dir> [--dry-run] [--yes]
+#   bin/switch-theme status --path <dir>
+#
+# Kierunek 3.0: zestaw wtyczek 2.0 off → zestaw 3.0 on → motyw 3.0, strona główna
+# i /blog/ (show_on_front, page_on_front, page_for_posts, publikacja szkiców),
+# reguła Redirection /page/N/ → /blog/page/N/ włączona → cache LiteSpeed.
+# Kierunek 2.0 odwraca każdy krok do stanu sprzed przełączenia i wypisuje wpisy
+# zmienione od przełączenia, które zawierają bloki ihumbak/*.
+# Baza: zmienia tylko powyższe opcje, statusy dwóch stron, status reguły i opcję
+# stanu `sb_theme_switch` (stan sprzed przełączenia, do odwrócenia).
+# Zmienna WP_CLI podmienia polecenie wp (domyślnie `wp`).
+# Kody wyjścia: 0 = gotowe, 1 = odmowa albo błąd, 2 = błędne użycie.
+
+set -euo pipefail
+
+THEME_20=sardynkibiznesu-2.0
+THEME_30=sardynkibiznesu-3.0
+PLUGINS_20=(ihumbak-newsletter-form ihumbak-anchor ihumbak-anchor-2 ihumbak-analytics ihumbak-shortcodes)
+PLUGINS_30=(ihumbak-content-elements ihumbak-toc ihumbak-newsletter ihumbak-site-blocks ihumbak-tracking)
+RULE_SOURCE='^/page/(\d+)/?$'
+RULE_TARGET='/blog/page/$1/'
+BLOG_SLUG=blog
+STATE=sb_theme_switch
+
+target= path= front= blog= dry_run=0 yes=0
+
+usage() {
+	sed -n '5,8p' "$0" | sed 's/^# \{0,1\}//' >&2
+	exit 2
+}
+die() {
+	echo "switch-theme: $*" >&2
+	exit 1
+}
+step() { printf '\n== %s\n' "$*"; }
+
+(($#)) || usage
+case $1 in
+	3.0 | 2.0 | status) target=$1 ;;
+	*) usage ;;
+esac
+shift
+while (($#)); do
+	case $1 in
+		--path | --front-page | --blog-page)
+			(($# >= 2)) || usage
+			case $1 in
+				--path) path=$2 ;;
+				--front-page) front=$2 ;;
+				--blog-page) blog=$2 ;;
+			esac
+			shift
+			;;
+		--dry-run) dry_run=1 ;;
+		--yes) yes=1 ;;
+		*) usage ;;
+	esac
+	shift
+done
+[[ -n $path ]] || usage
+if [[ $target == 3.0 ]]; then
+	[[ $front =~ ^[0-9]+$ && $blog =~ ^[0-9]+$ ]] || usage
+elif [[ -n $front || -n $blog ]]; then
+	usage
+fi
+
+read -r -a WP <<<"${WP_CLI:-wp}"
+# Writes load the site as usual (activation hooks, Yoast and LiteSpeed hooks).
+wp_full() { "${WP[@]}" --path="$path" "$@"; }
+# Reads need only the database.
+wp_db() { "${WP[@]}" --path="$path" --skip-plugins --skip-themes "$@"; }
+
+# Read-only PHP with arguments in $args (wp eval takes none, eval-file does).
+php_db() {
+	local code=$1
+	shift
+	wp_db eval-file - "$@" <<<"<?php $code"
+}
+
+# Writes go through here, so --dry-run only prints them.
+run() {
+	if ((dry_run)); then
+		printf '[dry-run] wp'
+		printf ' %q' "$@"
+		printf '\n'
+	else
+		wp_full "$@"
+	fi
+}
+
+in_list() {
+	local x=$1
+	shift
+	local y
+	for y in "$@"; do [[ $x == "$y" ]] && return 0; done
+	return 1
+}
+
+# --- State ------------------------------------------------------------------------
+state_get() { wp_db option pluck "$STATE" "$1" 2>/dev/null || true; }
+state_set() {
+	if ((dry_run)); then
+		echo "[dry-run] $STATE.$1 = $2"
+	else
+		wp_db option patch update "$STATE" "$1" "$2" >/dev/null
+	fi
+}
+# finished = "0" while a switch is in progress, else its end time (GMT).
+done_at() { [[ -n $1 && $1 != 0 ]]; }
+
+php_rule_find='global $wpdb; $t = $wpdb->prefix . "redirection_items";
+if ( $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $t ) ) !== $t ) { exit; }
+foreach ( $wpdb->get_results( $wpdb->prepare( "SELECT id, status, action_code, action_data FROM $t WHERE regex = 1 AND url = %s", $args[0] ) ) as $r ) {
+	echo $r->id, " ", $r->status, " ", $r->action_code, " ", $r->action_data, "\n";
+}'
+
+# Through the plugin's own API (Red_Item), as if changed in its admin screen.
+rule_set() { # <id> <enabled|disabled>
+	local method
+	case $2 in
+		enabled) method=enable ;;
+		disabled) method=disable ;;
+		*) die "nieznany status reguły: '$2'" ;;
+	esac
+	if ((dry_run)); then
+		echo "[dry-run] Redirection: reguła $1 → $2"
+		return
+	fi
+	wp_full eval "\$item = Red_Item::get_by_id( $1 ); if ( ! \$item ) { WP_CLI::error( 'Brak reguły Redirection $1' ); } \$item->$method(); WP_CLI::success( 'Reguła Redirection $1: $2' );"
+}
+
+# Posts (any public content type, synced patterns) changed since $1 (GMT) that
+# contain ihumbak/* blocks. They are the ones to fix by hand after a rollback.
+php_changed='global $wpdb;
+$skip = [ "revision", "nav_menu_item", "attachment", "customize_changeset", "oembed_cache", "user_request",
+	"wp_template", "wp_template_part", "wp_global_styles", "wp_navigation", "wp_font_family", "wp_font_face" ];
+$exclude = array_filter( array_map( "intval", array_slice( $args, 1 ) ) );
+$rows = $wpdb->get_results( $wpdb->prepare(
+	"SELECT ID, post_type, post_status, post_modified_gmt, post_title FROM $wpdb->posts
+	WHERE post_modified_gmt >= %s AND post_content LIKE %s
+	AND post_status NOT IN ( \"trash\", \"auto-draft\", \"inherit\" )
+	AND post_type NOT IN ( " . implode( ",", array_fill( 0, count( $skip ), "%s" ) ) . " )
+	ORDER BY post_modified_gmt DESC",
+	array_merge( [ $args[0], "%" . $wpdb->esc_like( "<!-- wp:ihumbak/" ) . "%" ], $skip )
+) );
+foreach ( $rows as $r ) {
+	if ( in_array( (int) $r->ID, $exclude, true ) ) { continue; }
+	echo implode( "\t", [ $r->ID, $r->post_type, $r->post_status, $r->post_modified_gmt, $r->post_title,
+		admin_url( "post.php?post={$r->ID}&action=edit" ) ] ), "\n";
+}'
+
+list_changed() { # <since GMT> <exclude ids…>
+	local rows
+	rows=$(php_db "$php_changed" "$@") || die "nie mogę odczytać listy wpisów"
+	if [[ -z $rows ]]; then
+		echo "Brak wpisów z blokami ihumbak/* zmienionych od $1 (GMT)."
+	else
+		echo "Wpisy z blokami ihumbak/* zmienione od $1 (GMT) — do ręcznej poprawki w 2.0:"
+		printf 'ID\ttyp\tstatus\tzmiana (GMT)\ttytuł\tedycja\n%s\n' "$rows"
+		echo "Razem: $(wc -l <<<"$rows" | tr -d ' ')"
+	fi
+}
+
+active_plugins() { wp_db plugin list --status=active --field=name; }
+# All writes go through WordPress APIs, so the object cache is already right;
+# only the page cache (LiteSpeed, incl. its CDN purge) has stale HTML.
+purge_cache() {
+	if wp_db plugin is-active litespeed-cache 2>/dev/null; then
+		echo "LiteSpeed: purge all"
+		# The CLI purge asks the web server over HTTP. If that fails the switch
+		# itself is done, so carry on and leave the purge to wp-admin.
+		run litespeed-purge all ||
+			echo "UWAGA: purge LiteSpeed nieudany. Wyczyść ręcznie: wp-admin → LiteSpeed Cache → Toolbox → Purge All." >&2
+	else
+		echo "LiteSpeed nieaktywny, pomijam purge"
+	fi
+}
+
+# --- Safety checks (read only) ------------------------------------------------------
+step "Sprawdzenie celu"
+wp_db core is-installed 2>/dev/null || die "brak WordPressa pod $path"
+home=$(wp_db option get home)
+stylesheet=$(wp_db option get stylesheet)
+s_target=$(state_get target)
+s_finished=$(state_get finished)
+echo "serwis:  $home ($path)"
+echo "motyw:   $stylesheet"
+if [[ -n $s_target ]]; then
+	echo "stan:    przełączenie na $s_target, $(done_at "$s_finished" && echo "zakończone $s_finished" || echo "NIEDOKOŃCZONE")"
+else
+	echo "stan:    brak przełączenia"
+fi
+
+if [[ $target == status ]]; then
+	if [[ $s_target == 3.0 ]]; then
+		list_changed "$(state_get switched_at)" "$(state_get front_page)" "$(state_get blog_page)"
+	fi
+	exit 0
+fi
+
+for t in "$THEME_20" "$THEME_30"; do
+	wp_db theme is-installed "$t" || die "motyw $t nie jest zainstalowany"
+done
+read -r -a active <<<"$(active_plugins | tr '\n' ' ')"
+wp_db plugin is-active redirection || die "wtyczka Redirection nie jest aktywna"
+
+if [[ $target == 3.0 ]]; then
+	resume=0
+	if [[ $s_target == 3.0 ]] && done_at "$s_finished"; then
+		die "serwis jest już przełączony na 3.0 ($s_finished)"
+	elif [[ $s_target == 3.0 ]]; then
+		resume=1
+		echo "Wznawiam niedokończone przełączenie na 3.0 (stan sprzed przełączenia bez zmian)."
+		[[ $(state_get front_page) == "$front" && $(state_get blog_page) == "$blog" ]] ||
+			die "niedokończone przełączenie użyło stron $(state_get front_page)/$(state_get blog_page), a nie $front/$blog"
+	elif [[ $s_target == 2.0 ]] && ! done_at "$s_finished"; then
+		die "niedokończony powrót na 2.0: najpierw dokończ 'switch-theme 2.0'"
+	elif [[ $stylesheet != "$THEME_20" ]]; then
+		die "aktywny motyw to $stylesheet, a nie $THEME_20"
+	fi
+
+	for p in "${PLUGINS_30[@]}"; do
+		wp_db plugin is-installed "$p" || die "wtyczka $p nie jest zainstalowana (zestaw 3.0)"
+	done
+
+	[[ $front != "$blog" ]] || die "--front-page i --blog-page to ta sama strona"
+	for id in "$front" "$blog"; do
+		type=$(wp_db post get "$id" --field=post_type 2>/dev/null) || die "brak strony $id"
+		[[ $type == page ]] || die "$id nie jest stroną (typ $type)"
+		status=$(wp_db post get "$id" --field=post_status)
+		case $status in
+			draft | pending | private | publish) ;;
+			*) die "strona $id ma status $status" ;;
+		esac
+	done
+	[[ $(wp_db post get "$blog" --field=post_parent) == 0 ]] || die "strona $blog ma rodzica, /blog/ musi być na najwyższym poziomie"
+	[[ $(wp_db post get "$blog" --field=post_name) == "$BLOG_SLUG" ]] ||
+		die "strona $blog ma slug '$(wp_db post get "$blog" --field=post_name)', a nie '$BLOG_SLUG' (ustaw go w edytorze)"
+	unique=$(php_db 'echo wp_unique_post_slug( $args[1], (int) $args[0], "publish", "page", 0 );' "$blog" "$BLOG_SLUG")
+	[[ $unique == "$BLOG_SLUG" ]] || die "slug '$BLOG_SLUG' jest zajęty przez inną treść (WordPress nadałby '$unique')"
+else
+	if [[ -z $s_target ]] || { [[ $s_target == 2.0 ]] && done_at "$s_finished"; }; then
+		die "brak przełączenia na 3.0 do odwrócenia (opcja $STATE)"
+	fi
+	[[ $s_target == 2.0 ]] && echo "Wznawiam niedokończony powrót na 2.0."
+	front=$(state_get front_page)
+	blog=$(state_get blog_page)
+	read -r -a before_20 <<<"$(state_get before_active_20)"
+	read -r -a before_30 <<<"$(state_get before_active_30)"
+	for p in ${before_20[@]+"${before_20[@]}"}; do
+		wp_db plugin is-installed "$p" || die "wtyczka $p nie jest zainstalowana (zestaw 2.0)"
+	done
+fi
+
+rules=$(php_db "$php_rule_find" "$RULE_SOURCE")
+[[ -n $rules ]] || die "brak reguły Redirection $RULE_SOURCE (utwórz ją jako wyłączoną)"
+(($(wc -l <<<"$rules") == 1)) || die "więcej niż jedna reguła Redirection $RULE_SOURCE: $(cut -d' ' -f1 <<<"$rules" | tr '\n' ' ')"
+read -r rule_id rule_status rule_code rule_data <<<"$rules"
+[[ $rule_code == 301 && $rule_data == "$RULE_TARGET" ]] ||
+	die "reguła Redirection $rule_id ma cel '$rule_code $rule_data', a nie '301 $RULE_TARGET'"
+echo "reguła:  Redirection $rule_id ($rule_status)"
+
+if ((!dry_run && !yes)); then
+	read -r -p "Przełączyć $home na $target? Wpisz 'tak': " answer || answer=
+	[[ $answer == tak ]] || die "przerwane, nic nie zmieniono"
+fi
+
+# --- 3.0 ---------------------------------------------------------------------------
+if [[ $target == 3.0 ]]; then
+	step "0. Stan sprzed przełączenia (opcja $STATE)"
+	if ((resume)); then
+		echo "bez zmian (wznowienie)"
+	else
+		was_20=() was_30=()
+		for p in "${PLUGINS_20[@]}"; do in_list "$p" ${active[@]+"${active[@]}"} && was_20+=("$p"); done
+		for p in "${PLUGINS_30[@]}"; do in_list "$p" ${active[@]+"${active[@]}"} && was_30+=("$p"); done
+		run option update "$STATE" "$(
+			php_db 'echo wp_json_encode( array_combine(
+				[ "target", "finished", "switched_at", "front_page", "blog_page", "rule_id", "before_theme",
+				  "before_show_on_front", "before_page_on_front", "before_page_for_posts",
+				  "before_front_status", "before_blog_status", "before_rule_status",
+				  "before_active_20", "before_active_30" ],
+				array_merge( [ "3.0", "0", gmdate( "Y-m-d H:i:s" ) ], array_slice( $args, 0, 3 ), [
+					get_option( "stylesheet" ), get_option( "show_on_front" ),
+					get_option( "page_on_front" ), get_option( "page_for_posts" ),
+					get_post_status( (int) $args[0] ), get_post_status( (int) $args[1] ) ],
+					array_slice( $args, 3 ) )
+			) );' "$front" "$blog" "$rule_id" "$rule_status" "${was_20[*]-}" "${was_30[*]-}"
+		)" --format=json --autoload=no
+	fi
+
+	step "1. Zestaw wtyczek 2.0 off"
+	off=()
+	for p in "${PLUGINS_20[@]}"; do in_list "$p" ${active[@]+"${active[@]}"} && off+=("$p"); done
+	if ((${#off[@]})); then run plugin deactivate "${off[@]-}"; else echo "nic do wyłączenia"; fi
+
+	step "2. Zestaw wtyczek 3.0 on"
+	on=()
+	for p in "${PLUGINS_30[@]}"; do in_list "$p" ${active[@]+"${active[@]}"} || on+=("$p"); done
+	if ((${#on[@]})); then run plugin activate "${on[@]-}"; else echo "nic do włączenia"; fi
+
+	step "3. Motyw 3.0, strona główna i /blog/, reguła Redirection"
+	run theme activate "$THEME_30"
+	run option update show_on_front page
+	run option update page_on_front "$front"
+	run option update page_for_posts "$blog"
+	run post update "$front" "$blog" --post_status=publish
+	rule_set "$rule_id" enabled
+
+	step "4. Cache"
+	purge_cache
+
+	state_set finished "$(date -u '+%Y-%m-%d %H:%M:%S')"
+	if ((dry_run)); then
+		step "Dry run: nic nie zmieniono"
+		exit 0
+	fi
+	step "Gotowe: 3.0"
+	printf 'motyw          %s\n' "$(wp_db option get stylesheet)"
+	printf 'show_on_front  %s (strona %s, wpisy %s)\n' "$(wp_db option get show_on_front)" \
+		"$(wp_db option get page_on_front)" "$(wp_db option get page_for_posts)"
+	echo "Dalej: PK1 z runbooka."
+	exit 0
+fi
+
+# --- 2.0 ---------------------------------------------------------------------------
+state_set target 2.0
+state_set finished 0
+
+step "1. Reguła Redirection, strona główna i /blog/, motyw 2.0"
+rule_set "$rule_id" "$(state_get before_rule_status)"
+run option update show_on_front "$(state_get before_show_on_front)"
+run option update page_on_front "$(state_get before_page_on_front)"
+run option update page_for_posts "$(state_get before_page_for_posts)"
+run post update "$front" --post_status="$(state_get before_front_status)"
+run post update "$blog" --post_status="$(state_get before_blog_status)"
+run theme activate "$(state_get before_theme)"
+
+step "2. Zestaw wtyczek 3.0 off"
+off=()
+for p in "${PLUGINS_30[@]}"; do
+	in_list "$p" ${active[@]+"${active[@]}"} && ! in_list "$p" ${before_30[@]+"${before_30[@]}"} && off+=("$p")
+done
+if ((${#off[@]})); then run plugin deactivate "${off[@]-}"; else echo "nic do wyłączenia"; fi
+
+step "3. Zestaw wtyczek 2.0 on"
+on=()
+for p in ${before_20[@]+"${before_20[@]}"}; do in_list "$p" ${active[@]+"${active[@]}"} || on+=("$p"); done
+if ((${#on[@]})); then run plugin activate "${on[@]-}"; else echo "nic do włączenia"; fi
+
+step "4. Cache"
+purge_cache
+
+state_set finished "$(date -u '+%Y-%m-%d %H:%M:%S')"
+
+step "5. Wpisy do poprawki"
+list_changed "$(state_get switched_at)" "$front" "$blog"
+
+if ((dry_run)); then
+	step "Dry run: nic nie zmieniono"
+	exit 0
+fi
+step "Gotowe: 2.0"
+printf 'motyw          %s\n' "$(wp_db option get stylesheet)"
+printf 'show_on_front  %s\n' "$(wp_db option get show_on_front)"
