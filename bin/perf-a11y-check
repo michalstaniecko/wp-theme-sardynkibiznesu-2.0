@@ -63,7 +63,7 @@ function authHeaders(auth) {
   return auth ? { Authorization: 'Basic ' + Buffer.from(auth).toString('base64') } : {};
 }
 
-async function warmCache(url, auth) {
+async function warmCache(url, auth, ignoreStatusCode) {
   // Dwa trafienia na wariant (mobile i desktop, np. LiteSpeed rozróżnia urządzenia); do 3 prób na trafienie.
   for (const ua of Object.values(UA)) {
     for (let hit = 0; hit < 2; hit++) {
@@ -71,9 +71,12 @@ async function warmCache(url, auth) {
         try {
           const res = await fetch(url, { headers: { 'User-Agent': ua, ...authHeaders(auth) } });
           await res.arrayBuffer();
+          if (!res.ok && !ignoreStatusCode) {
+            throw Object.assign(new Error(`HTTP ${res.status}`), { final: true });
+          }
           break;
         } catch (e) {
-          if (attempt >= 3) throw new Error(`Rozgrzewanie cache nie powiodło się dla ${url}: ${(e.cause && e.cause.code) || e.message}`);
+          if (e.final || attempt >= 3) throw new Error(`Rozgrzewanie cache nie powiodło się dla ${url}: ${(e.cause && e.cause.code) || e.message}`);
           await new Promise((r) => setTimeout(r, 1000 * attempt));
         }
       }
@@ -106,7 +109,7 @@ async function measure(config, opts, outDir, urls) {
     const url = opts.base + u.path;
     process.stderr.write(`→ ${u.key}: ${url}\n`);
     try {
-      await warmCache(url, opts.auth);
+      await warmCache(url, opts.auth, u.ignoreStatusCode);
       for (let i = 1; i <= opts.runs; i++) {
         runLighthouse(config, url, path.join(outDir, `${u.key}-mobile-${i}.json`), { ...u, auth: opts.auth });
       }
