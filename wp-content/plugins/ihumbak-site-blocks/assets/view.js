@@ -3,7 +3,7 @@
  * ihumbak/search-toggle, ihumbak/search-bar): `scrolled` state of the frame
  * and the open/closed search bar.
  */
-import { store, getElement } from '@wordpress/interactivity';
+import { store, getElement, withSyncEvent } from '@wordpress/interactivity';
 
 const TOGGLE_SELECTOR = 'button[aria-controls="sb-search-bar"]';
 
@@ -24,6 +24,10 @@ const { state } = store( 'ihumbak/site-header', {
 			state.isSearchOpen = false;
 			document.querySelector( TOGGLE_SELECTOR )?.focus();
 		},
+		// Overlay accordion toggles (see includes/navigation-overlay.php).
+		keepFocusOnPress: withSyncEvent( ( event ) => {
+			event.preventDefault();
+		} ),
 	},
 	callbacks: {
 		hydrate() {
