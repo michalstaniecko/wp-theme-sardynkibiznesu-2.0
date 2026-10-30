@@ -24,7 +24,20 @@ const STYLES = array(
 /** Label of legacy buttons saved without one (as in 2.0). */
 const DEFAULT_LABEL = 'Sprawdź zawartość kursu';
 
+/**
+ * ACF field names of `acf/sb-button` => field keys (2.0 `acf-fields/group_618e5715c16d0.json`).
+ * `data` normally holds values under the names; the keys are a fallback for the
+ * "by key" format ACF also writes.
+ */
+const ACF_FIELDS = array(
+	'sb-block__button--label' => 'field_618e572531fa2',
+	'sb-block__button--url'   => 'field_618e573031fa3',
+	'sb-block__url-outer'     => 'field_61df40c2a9b6b',
+	'sb-block__button-color'  => 'field_65a5aa5ff7a82',
+);
+
 add_action( 'init', __NAMESPACE__ . '\\register_styles' );
+add_action( 'init', __NAMESPACE__ . '\\register_acf_block' );
 add_shortcode( 'sb_button', __NAMESPACE__ . '\\sb_button_shortcode' );
 add_shortcode( 'cmsmasters_button', __NAMESPACE__ . '\\cmsmasters_button_shortcode' );
 
@@ -137,4 +150,57 @@ function cmsmasters_button_shortcode( $atts, $content = null ): string {
 	$text   = trim( wp_kses( (string) $content, 'data' ) );
 
 	return render( $text, (string) $a['button_link'], 'download', (string) $a['button_text_align'], $target );
+}
+
+/**
+ * Registers the dynamic block under its old name, so content saved with ACF renders
+ * without ACF and without migration. Skipped while ACF itself registers the name (2.0).
+ */
+function register_acf_block(): void {
+	if ( \WP_Block_Type_Registry::get_instance()->is_registered( 'acf/sb-button' ) ) {
+		return;
+	}
+	register_block_type( dirname( IHUMBAK_CONTENT_ELEMENTS_FILE ) . '/blocks/sb-button' );
+}
+
+/**
+ * Reads one field of the ACF `data` attribute, by field name or by field key.
+ *
+ * @param array  $data ACF block data.
+ * @param string $name Field name from ACF_FIELDS.
+ * @return mixed
+ */
+function acf_field( array $data, string $name ) {
+	return $data[ $name ] ?? $data[ ACF_FIELDS[ $name ] ] ?? null;
+}
+
+/**
+ * `acf/sb-button` → Przycisk: external URL, or the permalink of the related post computed
+ * at render time; colour "blue" → accent style, otherwise the default fill; block `align`
+ * → justification; new tab with `rel="nofollow"` (as in 2.0).
+ *
+ * @param array $attributes Block attributes.
+ */
+function acf_block_markup( array $attributes ): string {
+	$data = is_array( $attributes['data'] ?? null ) ? $attributes['data'] : array();
+
+	$label = trim( (string) acf_field( $data, 'sb-block__button--label' ) );
+	$url   = trim( (string) acf_field( $data, 'sb-block__url-outer' ) );
+
+	if ( '' === $url ) {
+		$related = acf_field( $data, 'sb-block__button--url' );
+		$post_id = (int) ( is_array( $related ) ? reset( $related ) : $related );
+		$url     = $post_id ? (string) get_permalink( $post_id ) : '';
+	}
+
+	$style = 'blue' === acf_field( $data, 'sb-block__button-color' ) ? 'accent' : '';
+
+	return render(
+		esc_html( '' !== $label ? $label : DEFAULT_LABEL ),
+		'' !== $url ? $url : '#',
+		$style,
+		(string) ( $attributes['align'] ?? '' ),
+		'_blank',
+		'nofollow'
+	);
 }
