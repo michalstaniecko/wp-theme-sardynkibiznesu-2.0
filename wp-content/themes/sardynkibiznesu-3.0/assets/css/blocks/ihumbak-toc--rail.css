@@ -35,7 +35,13 @@
 		background-color: var(--sb-toc-active);
 	}
 
-	& .ihumbak-toc__progress[hidden],
+	/* The progress bar keeps its place (2px + margin) until the store hydrates, so showing it
+	   does not push the list down (layout shift, #61). */
+	& .ihumbak-toc__progress[hidden] {
+		display: block;
+		visibility: hidden;
+	}
+
 	& .ihumbak-toc__toggle[hidden] {
 		display: none;
 	}
