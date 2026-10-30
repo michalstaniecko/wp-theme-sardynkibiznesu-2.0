@@ -60,18 +60,12 @@ Text Domain: sardynkibiznesu-3-0
 	}
 }
 
-/* Article (template `single`): 680 content column + 320 sidebar (part `sidebar-article`).
-   Below 1024px the sidebar drops under the content. Layer 4: classes on groups. */
+/* Article (template `single`): 680 content column + 320 sidebar (part `sidebar-article`), the
+   same .sb-layout grid as pages and lists (main and aside are siblings). Below 1024px the
+   sidebar drops under the content. Layer 4: classes on groups. */
 .sb-article {
 	padding-block: var(--wp--preset--spacing--8) 0;
 
-	& .sb-article__grid {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: var(--wp--preset--spacing--12);
-	}
-
-	& .sb-article__grid > *,
 	& .sb-article__main > *,
 	& .sb-article__sidebar > * {
 		margin-block: 0;
@@ -400,14 +394,6 @@ Text Domain: sardynkibiznesu-3-0
 	& .sb-article__content :is(.alignwide, .alignfull) {
 		max-width: 100%;
 		margin-inline: 0;
-	}
-}
-
-@media (min-width: 1024px) {
-	.sb-article .sb-article__grid {
-		grid-template-columns: minmax(0, var(--wp--style--global--content-size)) var(--wp--custom--layout--sidebar-width);
-		justify-content: space-between;
-		align-items: start;
 	}
 }
 

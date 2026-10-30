@@ -76,6 +76,16 @@ Kilka dni przed oknem. 2.0 działa bez zmian.
   ```
 
 - [ ] Ustawienia `ihumbak-newsletter` i `ihumbak-tracking` wpisane z góry (import newslettera z ACF działa przy aktywacji, sprawdź po przełączeniu).
+- [ ] **Cron systemowy zamiast WP-Cron** (popularność wpisów, #53). `ihumbak-site-blocks` co dzień o 05:00 czasu strony pobiera odsłony z GA4 dla „Najczęściej czytane” i sortowania kategorii. Strony z cache LiteSpeed rzadko uruchamiają WP-Cron, więc na produkcji:
+  - w `wp-config.php`: `define( 'DISABLE_WP_CRON', true );`
+  - w crontabie konta (DirectAdmin → Cron Jobs) wywołanie zaległych zadań co 5 minut. To obejmuje synchronizację o 05:00 i pozostałe zadania WP, np. zaplanowane wpisy, które bez tego przestałyby się publikować:
+
+    ```cron
+    */5 * * * * cd /home/jawagabu/domains/sardynkibiznesu.pl/public_html && wp cron event run --due-now --quiet
+    ```
+
+    Bez WP-CLI na serwerze: `*/5 * * * * curl -s -o /dev/null https://sardynkibiznesu.pl/wp-cron.php?doing_wp_cron`.
+  - sprawdzenie (strefa czasowa serwera może być inna niż strony, liczy się czas strony): `$WP cron event list --hook=ihumbak_site_blocks_popularity_sync` pokazuje najbliższe uruchomienie o 05:00. Następnego dnia `$WP option get sb_popularity_sync` ma świeże `updated_at`. Ręcznie: `$WP sb popularity sync`.
 - [ ] Reguła Redirection (Narzędzia → Przekierowania → Dodaj nowe), **wyłączona**:
   - źródłowy URL `^/page/(\d+)/?$`, opcja „Regex” włączona;
   - docelowy URL `/blog/page/$1/` (dokładnie tak, ścieżka bez domeny);

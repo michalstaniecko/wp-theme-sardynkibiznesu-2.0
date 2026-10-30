@@ -132,9 +132,9 @@ function run_scheduled(): void {
  *
  * @return array<string, mixed>|WP_Error Sync metadata on success.
  */
-function sync( ?Source $source = null ): array|WP_Error {
+function sync(): array|WP_Error {
 	$window = max( 1, (int) apply_filters( 'sb_popularity_window_days', 30 ) );
-	$source = $source ?? new Ga4_Source();
+	$source = new Ga4_Source();
 	$state  = get_option( OPTION );
 	$state  = is_array( $state ) ? $state : array();
 	$now    = time();

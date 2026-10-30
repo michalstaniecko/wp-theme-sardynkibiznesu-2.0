@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/includes/toc-markup.php';
-require_once __DIR__ . '/includes/anchors-v1.php';
+require_once __DIR__ . '/includes/legacy-anchors.php';
 require_once __DIR__ . '/includes/anchors.php';
 require_once __DIR__ . '/includes/rail.php';
 require_once __DIR__ . '/includes/block.php';

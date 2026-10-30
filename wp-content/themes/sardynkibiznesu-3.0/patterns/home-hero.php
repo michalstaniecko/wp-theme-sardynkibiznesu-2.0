@@ -9,7 +9,9 @@
  *
  * core/query with 1 post. Sticky posts are honoured by the query variation
  * `ihumbak/hero` (ihumbak-site-blocks): the newest sticky post, else the newest post.
- * The image is above the fold: never lazy, fetchpriority=high (theme functions.php).
+ * The image is above the fold: the `render_block_core/post-featured-image` filter in theme
+ * functions.php (ABOVE_THE_FOLD_IMAGES, class `sb-hero__media`) removes `loading="lazy"` and sets
+ * fetchpriority="high".
  *
  * @package sardynkibiznesu-3.0
  */

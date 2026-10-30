@@ -232,6 +232,25 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	}
 }
 
+/* Narrow phones (320px): 2 × 16px padding + 182px logo + 2 × 44px buttons leave room for 8px
+   gaps only (24px gaps made the header 350px wide, #48). The logo may still shrink as a last resort. */
+@media (max-width: 399.98px) {
+	.wp-block-ihumbak-site-header .sb-header__inner.sb-header__inner {
+		gap: var(--wp--preset--spacing--2);
+	}
+
+	.sb-header__logo.sb-header__logo {
+		flex-shrink: 1;
+		min-width: 0;
+
+		& img {
+			max-width: 100%;
+			height: auto;
+			aspect-ratio: 182 / 32;
+		}
+	}
+}
+
 /* ---------- Navigation overlay (part navigation-overlay): full screen, accordion ---------- */
 .sb-nav .wp-block-navigation__responsive-container.is-menu-open {
 	background-color: var(--wp--preset--color--surface);

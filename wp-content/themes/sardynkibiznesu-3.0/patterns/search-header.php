@@ -29,7 +29,7 @@ if ( is_404() ) : ?>
 <!-- /wp:heading -->
 <?php endif; ?>
 
-<!-- wp:search {"label":"Czego szukasz?","showLabel":false,"placeholder":"Czego szukasz? Np. RODO, faktura, B2B…","buttonText":"Szukaj","className":"sb-search__form"} /-->
+<!-- wp:search {"label":"Czego szukasz?","showLabel":false,"placeholder":"Np. RODO, faktura, B2B…","buttonText":"Szukaj","className":"sb-search__form"} /-->
 <?php
 if ( is_search() ) :
 	$sb_summary = \SardynkiBiznesu\Theme\search_summary_html( (int) $GLOBALS['wp_query']->found_posts, get_search_query( false ) );

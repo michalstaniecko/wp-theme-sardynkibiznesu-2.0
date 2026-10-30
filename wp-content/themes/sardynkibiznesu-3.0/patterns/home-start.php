@@ -14,7 +14,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use function SardynkiBiznesu\Theme\page_url;
+// Karta produktu markup comes from ihumbak-content-elements (ADR-0001); without it the pattern is empty.
+if ( ! function_exists( 'Ihumbak\\ContentElements\\ProductCard\\cards_markup' ) ) {
+	return;
+}
+
+use function Ihumbak\ContentElements\ProductCard\page_url;
 
 $sb_image = static function ( string $path ): ?string {
 	$page = get_page_by_path( $path );
@@ -61,6 +66,6 @@ $sb_cards = array_map( static fn ( array $card ): array => array_filter( $card, 
 	</div>
 	<!-- /wp:group -->
 
-	<?php echo \SardynkiBiznesu\Theme\product_cards_markup( $sb_cards, 'horizontal' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the helper. ?>
+	<?php echo \Ihumbak\ContentElements\ProductCard\cards_markup( $sb_cards, 'horizontal', get_theme_file_uri( 'assets/images/product-placeholder.svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the helper. ?>
 </section>
 <!-- /wp:group -->

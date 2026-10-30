@@ -22,17 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * A source of page views. Returns rows `[ 'path' => string, 'views' => int ]`
- * plus response flags, or a WP_Error when nothing trustworthy was fetched.
+ * Page views from the GA4 Data API. `fetch()` returns rows `[ 'path' => string, 'views' => int ]`
+ * plus response flags, or a WP_Error when nothing trustworthy was fetched. The API base URL can
+ * be pointed elsewhere (e.g. a local fake in tests) with the `ihumbak_site_blocks_ga4_api_url` filter.
  */
-interface Source {
-	/**
-	 * @return array{rows: list<array{path: string, views: int}>, flags: array<string, bool>}|WP_Error
-	 */
-	public function fetch( int $window_days ): array|WP_Error;
-}
-
-final class Ga4_Source implements Source {
+final class Ga4_Source {
 	const SCOPE       = 'https://www.googleapis.com/auth/analytics.readonly';
 	const TOKEN_URI   = 'https://oauth2.googleapis.com/token';
 	const API_URL     = 'https://analyticsdata.googleapis.com/v1beta';
