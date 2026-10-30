@@ -320,6 +320,7 @@
 		{ "name": "footer", "title": "Stopka", "area": "footer" },
 		{ "name": "sidebar-listing", "title": "Kolumna boczna — listy wpisów", "area": "uncategorized" },
 		{ "name": "sidebar-article", "title": "Kolumna boczna: artykuł", "area": "uncategorized" },
+		{ "name": "sidebar-search", "title": "Kolumna boczna — wyszukiwarka i 404", "area": "uncategorized" },
 		{ "name": "navigation-overlay", "title": "Nakładka menu", "area": "navigation-overlay" }
 	]
 }

@@ -2,8 +2,9 @@
 /**
  * Sardynki Biznesu 3.0 — presentation only (ADR-0001).
  *
- * Loads the global stylesheet, preloads the two most used font weights and
- * tunes image attributes (sizes, lazy loading) of template images.
+ * Loads the global stylesheet, preloads the two most used font weights,
+ * tunes image attributes (sizes, lazy loading) of template images and formats
+ * the result count of the search view.
  * Registers no shortcodes, blocks, post types, meta or settings.
  *
  * @package sardynkibiznesu-3.0
@@ -53,13 +54,15 @@ add_action(
 /**
  * Per-block CSS: `assets/css/blocks/{namespace}-{block}.css` (e.g. `core-button.css`)
  * loads only on pages that render that block, in the front end and the editor.
+ * A `--{part}` suffix splits one block's CSS by component, e.g. `core-group--product.css`
+ * (Karta produktu) next to `core-group.css` (Notka, Ramka promocyjna).
  */
 add_action(
 	'init',
 	static function (): void {
 		foreach ( glob( get_theme_file_path( 'assets/css/blocks/*.css' ) ) as $path ) {
 			$file  = basename( $path, '.css' );
-			$block = preg_replace( '/-/', '/', $file, 1 );
+			$block = preg_replace( '/-/', '/', explode( '--', $file, 2 )[0], 1 );
 			wp_enqueue_block_style(
 				$block,
 				array(
@@ -106,7 +109,7 @@ add_action(
 const CARD_ROW_IMAGE_SIZES = '(max-width: 767px) calc(100vw - 32px), 240px';
 
 /**
- * Lists (/blog/, category, archives): only the first two card images can be
+ * Lists (/blog/, category, archives, search): only the first two card images can be
  * above the fold, so the rest load lazily (core's default leaves three eager).
  */
 const LISTING_EAGER_IMAGES = 2;
@@ -133,8 +136,37 @@ add_filter(
 
 add_filter(
 	'wp_omit_loading_attr_threshold',
-	static fn ( int $threshold ): int => ( is_home() || is_archive() ) ? LISTING_EAGER_IMAGES : $threshold
+	static fn ( int $threshold ): int => ( is_home() || is_archive() || is_search() ) ? LISTING_EAGER_IMAGES : $threshold
 );
+
+/**
+ * Result count line of the search view: "<strong>38 wyników</strong> dla „rodo”",
+ * "<strong>Brak wyników</strong> dla „rodo”"; without „dla …” for an empty query.
+ * Square brackets are encoded too, so a query can never become a shortcode.
+ */
+function search_summary_html( int $found, string $query ): string {
+	if ( 0 === $found ) {
+		$count = 'Brak wyników';
+	} else {
+		$tens = $found % 100;
+		$ones = $found % 10;
+		if ( 1 === $found ) {
+			$noun = 'wynik';
+		} elseif ( $ones >= 2 && $ones <= 4 && ( $tens < 12 || $tens > 14 ) ) {
+			$noun = 'wyniki';
+		} else {
+			$noun = 'wyników';
+		}
+		$count = number_format_i18n( $found ) . ' ' . $noun;
+	}
+
+	$html  = '<strong>' . esc_html( $count ) . '</strong>';
+	$query = trim( $query );
+	if ( '' !== $query ) {
+		$html .= ' dla „' . str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), esc_html( $query ) ) . '”';
+	}
+	return $html;
+}
 
 /**
  * Ramka autora on top of the author archive (.sb-author__avatar) is above the

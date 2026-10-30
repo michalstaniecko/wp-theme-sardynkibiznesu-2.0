@@ -1,0 +1,54 @@
+/*
+ * Plakietka on `core/paragraph`: styles `badge` (default, turquoise: topic), `badge-brand`
+ * (Bestseller, Nowość, Polecane), `badge-success` (Za darmo), `badge-neutral` (content
+ * type), registered by ihumbak-content-elements. Layer 2 of the .sb-* rule.
+ * Scoped to paragraphs: style names may repeat on other blocks.
+ */
+
+p:is(.is-style-badge, .is-style-badge-brand, .is-style-badge-success, .is-style-badge-neutral) {
+	width: fit-content;
+	max-width: 100%;
+	padding: 3px var(--wp--preset--spacing--3);
+	border-radius: var(--wp--preset--border-radius--full);
+	background-color: var(--wp--preset--color--accent-soft);
+	color: var(--wp--custom--color--accent-text);
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 600;
+	line-height: 16px;
+	letter-spacing: var(--wp--custom--letter-spacing--overline);
+	text-transform: uppercase;
+
+	& a {
+		color: inherit;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+/*
+ * In a constrained layout (post content) core centres every child with `margin: auto
+ * !important`, which would centre the pill. Align it with the left edge of the content
+ * column instead.
+ */
+.is-layout-constrained > p:is(.is-style-badge, .is-style-badge-brand, .is-style-badge-success, .is-style-badge-neutral) {
+	margin-inline: max(0px, (100% - var(--wp--style--global--content-size)) / 2) auto !important;
+}
+
+p.is-style-badge-brand {
+	background-color: var(--wp--preset--color--brand-soft);
+	color: var(--wp--preset--color--brand);
+}
+
+p.is-style-badge-success {
+	background-color: transparent;
+	box-shadow: inset 0 0 0 1px var(--wp--custom--color--success);
+	color: var(--wp--custom--color--success);
+}
+
+p.is-style-badge-neutral {
+	background-color: var(--wp--custom--color--surface-3);
+	color: var(--wp--preset--color--text-secondary);
+}

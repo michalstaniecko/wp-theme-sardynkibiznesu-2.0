@@ -1,9 +1,13 @@
 <?php
 /**
- * Registration of the site blocks, their shared scripts and the `badges` style.
+ * Registration of the site blocks and their shared scripts. The `badges` style of
+ * `core/buttons` used by the search bar is registered by ihumbak-content-elements (spec #36).
  *
- * One editor script (no build, wp.element.createElement) serves all blocks; one
- * view script module holds the shared Interactivity store `ihumbak/site-header`.
+ * One editor script (no build, wp.element.createElement) serves the header blocks
+ * and the Query variation (share buttons and author links are PHP-only blocks,
+ * `autoRegister`); one
+ * view script module holds the Interactivity stores `ihumbak/site-header` and
+ * `ihumbak/share-buttons`.
  * Dependencies live in hand-written *.asset.php files next to the scripts.
  */
 
@@ -39,13 +43,4 @@ function ihumbak_site_blocks_register(): void {
 	foreach ( IHUMBAK_SITE_BLOCKS as $block ) {
 		register_block_type( $dir . 'blocks/' . $block );
 	}
-
-	// Popular search terms as pills; CSS lives in the theme (spec #36, layer 2).
-	register_block_style(
-		'core/buttons',
-		array(
-			'name'  => 'badges',
-			'label' => __( 'Plakietki', 'ihumbak-site-blocks' ),
-		)
-	);
 }
