@@ -1,0 +1,59 @@
+/*
+ * Notka and Ramka promocyjna (`core/group`): block styles registered by
+ * ihumbak-content-elements. Layer 2 of the .sb-* rule: block style CSS lives in the theme.
+ * The legacy `[cmsmasters_notice]` renders the same markup as a Notka, so this file
+ * styles old and new Notki alike. Scoped by block: `is-style-accent` is also a
+ * `core/button` style (core-button.css).
+ *
+ * Design system "Callout": neutral / accent / inverse share the box; the Notka adds a
+ * brand edge so a warning never reads as an invitation (Ramka promocyjna).
+ */
+
+.wp-block-group.is-style-neutral,
+.wp-block-group.is-style-accent,
+.wp-block-group.is-style-inverse {
+	box-sizing: border-box;
+	/* Beats `.has-global-padding` (root padding) of constrained groups. */
+	padding: var(--wp--preset--spacing--6);
+	border-radius: var(--wp--preset--border-radius--lg);
+
+	@media (max-width: 767px) {
+		padding: var(--wp--preset--spacing--5);
+	}
+}
+
+/* Notka: quiet grey box with a brand edge, any blocks inside (paragraphs, lists). */
+.wp-block-group.is-style-neutral {
+	border-inline-start: 4px solid var(--wp--preset--color--brand);
+	border-radius: 0 var(--wp--preset--border-radius--md) var(--wp--preset--border-radius--md) 0;
+	background-color: var(--wp--preset--color--surface-2);
+	color: var(--wp--preset--color--text);
+}
+
+/* Ramka promocyjna, akcent: light accent background. */
+.wp-block-group.is-style-accent {
+	background-color: var(--wp--preset--color--accent-soft);
+	color: var(--wp--preset--color--text);
+}
+
+/* Ramka promocyjna, odwrócona: dark background, light text and links. */
+.wp-block-group.is-style-inverse {
+	background-color: var(--wp--preset--color--surface-inverse);
+	color: var(--wp--custom--color--text-inverse);
+
+	& :where(h1, h2, h3, h4, h5, h6) {
+		color: inherit;
+	}
+
+	& a:where(:not(.wp-element-button)) {
+		color: var(--wp--custom--color--text-inverse);
+
+		&:hover {
+			color: var(--wp--custom--color--brand-on-inverse);
+		}
+	}
+
+	& :focus-visible {
+		outline-color: var(--wp--custom--color--text-inverse);
+	}
+}
