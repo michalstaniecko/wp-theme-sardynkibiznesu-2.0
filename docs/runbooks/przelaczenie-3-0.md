@@ -40,6 +40,7 @@ Zawsze najpierw `--dry-run`: wykonuje tylko kontrole i wypisuje zmiany, nic nie 
   - serwis jest już na 3.0 albo powrót na 2.0 jest niedokończony;
   - aktywny motyw to nie `sardynkibiznesu-2.0`;
   - brakuje którejś wtyczki zestawu 3.0;
+  - `ihumbak-tax-calculator` nie jest zainstalowana albo nie jest aktywna;
   - `--front-page` / `--blog-page` to nie strony, to ta sama strona, strona jest w koszu;
   - strona `/blog/` ma rodzica albo slug inny niż `blog`, albo slug `blog` jest zajęty przez inną treść;
 - kierunek `2.0`: nie było przełączenia na 3.0 (brak opcji `sb_theme_switch`).
@@ -48,7 +49,7 @@ Zawsze najpierw `--dry-run`: wykonuje tylko kontrole i wypisuje zmiany, nic nie 
 
 0. Zapisuje stan sprzed przełączenia w opcji `sb_theme_switch`: czas przełączenia (GMT), motyw, `show_on_front` / `page_on_front` / `page_for_posts`, statusy obu stron, status reguły i to, które wtyczki z obu zestawów były aktywne.
 1. Wyłącza aktywne wtyczki zestawu 2.0: `ihumbak-newsletter-form`, `ihumbak-anchor`, `ihumbak-anchor-2`, `ihumbak-analytics`, `ihumbak-shortcodes`.
-2. Włącza zestaw 3.0: `ihumbak-content-elements`, `ihumbak-toc`, `ihumbak-newsletter`, `ihumbak-site-blocks`, `ihumbak-tracking`.
+2. Włącza zestaw 3.0: `ihumbak-content-elements`, `ihumbak-toc`, `ihumbak-newsletter`, `ihumbak-site-blocks`, `ihumbak-tracking`. Szóstej wtyczki z paczek, `ihumbak-tax-calculator`, skrypt nie przełącza w żadnym kierunku: działa pod 2.0 i 3.0 (`/kalkulator-vat/`), więc ma być aktywna już przed oknem.
 3. Włącza motyw `sardynkibiznesu-3.0`, ustawia `show_on_front=page`, `page_on_front`, `page_for_posts`, publikuje obie strony i włącza regułę Redirection `/page/N/` → `/blog/page/N/`.
 4. Czyści cache LiteSpeed (`wp litespeed-purge all`).
 
@@ -67,7 +68,7 @@ Zawsze najpierw `--dry-run`: wykonuje tylko kontrole i wypisuje zmiany, nic nie 
 Kilka dni przed oknem. 2.0 działa bez zmian.
 
 - [ ] Etap A zakończony: 2.0 na WP 7.1.3 i PHP 8.4, po 1–2 tygodniach obserwacji.
-- [ ] Paczki 3.0 zainstalowane, nieaktywne ([paczki-i-staging.md](paczki-i-staging.md), p. 1–3).
+- [ ] Paczki 3.0 zainstalowane, nieaktywne ([paczki-i-staging.md](paczki-i-staging.md), p. 1–3). Wyjątek: `ihumbak-tax-calculator` zostaje aktywna, bo działa też pod 2.0.
 - [ ] Site Editor w podglądzie motywu: `/wp-admin/site-editor.php?wp_theme_preview=sardynkibiznesu-3.0`. Części szablonów, menu `wp_navigation`, Sekcje strony głównej.
 - [ ] Strona główna i `/blog/` jako **szkice** (typ strona). `/blog/`: slug `blog` (panel „Odnośnik” w edytorze), bez rodzica. Zanotuj oba ID:
 
