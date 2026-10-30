@@ -47,7 +47,7 @@ Element strony, w którym czytelnik podaje imię i e-mail, żeby zapisać się d
 _Avoid_: formularz newslettera, getresponse form, widget newslettera
 
 **Strona podziękowania**:
-Strona, na którą czytelnik trafia po udanym zapisie do newslettera.
+Strona, na którą czytelnik trafia po wysłaniu formularza zapisu; prosi o potwierdzenie adresu e-mail.
 _Avoid_: thank you page, thankyou
 
 **Strefa Sardynek**:
