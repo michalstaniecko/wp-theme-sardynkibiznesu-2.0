@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       iHumbak Site Blocks
- * Description:       Page frame blocks of theme 3.0: sticky site header, search toggle and search bar (Interactivity API), the accordion filter of the navigation overlay, share buttons, author social links, the Query variation „Z tej kategorii” and the daily GA4 sync of post popularity (`_sb_popularity`).
- * Version:           1.2.0
+ * Description:       Page frame blocks of theme 3.0: sticky site header, search toggle and search bar (Interactivity API), the accordion filter of the navigation overlay, share buttons, author social links, the Query variation „Z tej kategorii”, the daily GA4 sync of post popularity (`_sb_popularity`), the „Najczęściej czytane” ranking and the popularity sort of category archives.
+ * Version:           1.3.0
  * Requires at least: 7.0
  * Requires PHP:      8.3
  * Author:            iHumbak
@@ -20,3 +20,5 @@ require_once __DIR__ . '/includes/navigation-overlay.php';
 require_once __DIR__ . '/includes/author-social-links.php';
 require_once __DIR__ . '/includes/same-category-query.php';
 require_once __DIR__ . '/includes/popularity.php';
+require_once __DIR__ . '/includes/most-read.php';
+require_once __DIR__ . '/includes/listing-sort.php';

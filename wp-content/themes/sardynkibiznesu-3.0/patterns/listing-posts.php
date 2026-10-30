@@ -8,8 +8,8 @@
  *
  * Shared by templates home, category, archive and search; on search the empty
  * view is the search-empty pattern (tips, category tiles). The query inherits the main
- * query, so pagination, ordering (and later popularity sorting, #55) come from
- * the URL. Card titles are H2: the template's only H1 is the view title.
+ * query, so pagination and ordering (incl. `?sort=popular|oldest` on categories,
+ * ihumbak-site-blocks) come from the URL. Card titles are H2: the template's only H1 is the view title.
  *
  * @package sardynkibiznesu-3.0
  */
