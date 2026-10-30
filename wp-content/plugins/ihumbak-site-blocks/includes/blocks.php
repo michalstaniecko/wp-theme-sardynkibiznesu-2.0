@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const IHUMBAK_SITE_BLOCKS = array( 'site-header', 'search-toggle', 'search-bar' );
+const IHUMBAK_SITE_BLOCKS = array( 'site-header', 'search-toggle', 'search-bar', 'share-buttons' );
 
 add_action( 'init', 'ihumbak_site_blocks_register' );
 
