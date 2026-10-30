@@ -50,3 +50,40 @@ add_action(
 	},
 	1
 );
+
+/**
+ * `sizes` of the row card image (.sb-card--row): full width minus root padding
+ * below 768px (image above text), the 240px column from 768px up.
+ */
+const CARD_ROW_IMAGE_SIZES = '(max-width: 767px) calc(100vw - 32px), 240px';
+
+/**
+ * Lists (/blog/, category, archives): only the first two card images can be
+ * above the fold, so the rest load lazily (core's default leaves three eager).
+ */
+const LISTING_EAGER_IMAGES = 2;
+
+add_filter(
+	'render_block_core/post-featured-image',
+	static function ( string $html, array $block ): string {
+		$classes = $block['attrs']['className'] ?? '';
+		if ( ! str_contains( $classes, 'sb-card__media--row' ) ) {
+			return $html;
+		}
+		$img = new \WP_HTML_Tag_Processor( $html );
+		if ( ! $img->next_tag( 'img' ) || ! $img->get_attribute( 'srcset' ) ) {
+			return $html;
+		}
+		// Keep core's `auto` keyword (auto-sizes for lazy images) when present.
+		$auto = str_starts_with( (string) $img->get_attribute( 'sizes' ), 'auto,' ) ? 'auto, ' : '';
+		$img->set_attribute( 'sizes', $auto . CARD_ROW_IMAGE_SIZES );
+		return $img->get_updated_html();
+	},
+	10,
+	2
+);
+
+add_filter(
+	'wp_omit_loading_attr_threshold',
+	static fn ( int $threshold ): int => ( is_home() || is_archive() ) ? LISTING_EAGER_IMAGES : $threshold
+);
