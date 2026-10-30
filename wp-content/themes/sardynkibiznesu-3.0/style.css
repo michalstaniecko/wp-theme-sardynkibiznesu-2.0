@@ -186,8 +186,11 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 			color: var(--wp--preset--color--text-secondary);
 		}
 
+		/* Core sets width: auto and min-width: 200px on open, hence !important. Auto would shrink to the parent item. */
 		& .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
-			min-width: 240px;
+			width: max-content !important;
+			min-width: 240px !important;
+			max-width: 360px;
 			padding: var(--wp--preset--spacing--2);
 			gap: 0;
 			border: 1px solid var(--wp--custom--color--border);
@@ -219,15 +222,25 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 
 		& .wp-block-navigation__submenu-container .wp-block-navigation__submenu-icon {
 			position: absolute;
+			z-index: 1;
 			right: var(--wp--preset--spacing--3);
-			transform: rotate(-90deg);
+			/* Core already turns the svg by -90deg; together they point left, towards the third level. */
+			transform: rotate(180deg);
 			pointer-events: auto;
 		}
 
-		/* Third level: next to the dropdown, as in the design. */
-		& .wp-block-navigation__submenu-container .wp-block-navigation__submenu-container {
+		/* Third level: next to the dropdown, as in the design, but to its left: the menu sits at the right
+		   of the header and two wide dropdowns do not fit on that side. Raised specificity to beat core. */
+		& .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
 			top: calc(-1 * var(--wp--preset--spacing--2));
-			left: calc(100% + var(--wp--preset--spacing--1));
+			right: calc(100% + var(--wp--preset--spacing--1));
+			left: auto;
+
+			/* Core's hover bridge over the gap, moved to the side that faces the dropdown. */
+			&::before {
+				right: auto;
+				left: 100%;
+			}
 		}
 	}
 }
