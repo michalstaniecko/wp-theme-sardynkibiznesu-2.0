@@ -700,6 +700,271 @@ Text Domain: sardynkibiznesu-3-0
 	}
 }
 
+/*
+ * Search and 404 (#56). Layer 4: classes on groups in templates/parts.
+ * Tinted hero (H1, form, result count) above .sb-layout with sidebar-search.
+ * The empty search view and 404 use one column: the sidebar part follows the content.
+ */
+.sb-search {
+	padding-block: 0;
+
+	& > * {
+		margin-block: 0;
+	}
+
+	& > .sb-layout {
+		padding-block: var(--wp--preset--spacing--12) 0;
+	}
+}
+
+.sb-search__hero {
+	padding-block: var(--wp--preset--spacing--10);
+}
+
+.sb-search__hero-inner {
+	display: grid;
+	gap: var(--wp--preset--spacing--5);
+
+	& > * {
+		max-width: 760px;
+		margin-block: 0;
+	}
+}
+
+.sb-search__title {
+	font-size: var(--wp--preset--font-size--h-1);
+	line-height: var(--wp--custom--line-height--h-1);
+}
+
+.sb-search__summary {
+	font-size: var(--wp--preset--font-size--body);
+	line-height: var(--wp--custom--line-height--body);
+	color: var(--wp--preset--color--text-secondary);
+
+	& strong {
+		font-weight: 600;
+		color: var(--wp--preset--color--text);
+	}
+}
+
+/* core/search: field and button side by side, stacked on phones. */
+.sb-search__form {
+	& .wp-block-search__inside-wrapper {
+		gap: var(--wp--preset--spacing--3);
+	}
+
+	& .wp-block-search__input {
+		min-height: 52px;
+		padding: var(--wp--preset--spacing--3) var(--wp--preset--spacing--4);
+		border: 1px solid var(--wp--custom--color--border-control);
+		border-radius: var(--wp--preset--border-radius--md);
+		background-color: var(--wp--preset--color--surface);
+		color: var(--wp--preset--color--text);
+		font-size: var(--wp--preset--font-size--body);
+
+		&::placeholder {
+			color: var(--wp--custom--color--text-muted);
+		}
+
+		&:focus {
+			outline: none;
+			border-color: var(--wp--custom--color--accent);
+			box-shadow: 0 0 0 3px var(--wp--preset--color--accent-soft);
+		}
+	}
+
+	& .wp-block-search__button {
+		min-height: 52px;
+		margin: 0;
+		padding-inline: var(--wp--preset--spacing--8);
+	}
+}
+
+@media (max-width: 767px) {
+	.sb-search__title {
+		font-size: var(--wp--preset--font-size--h-2);
+		line-height: var(--wp--custom--line-height--h-2);
+	}
+
+	.sb-search__form .wp-block-search__inside-wrapper {
+		flex-direction: column;
+	}
+}
+
+/* One column: 404 always, search when the query has no results. */
+.sb-layout--stacked,
+.sb-search .sb-layout:has(.wp-block-query-no-results) {
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--wp--preset--spacing--10);
+
+	& > * {
+		max-width: 760px;
+	}
+}
+
+.sb-search .wp-block-query-no-results {
+	display: grid;
+	gap: var(--wp--preset--spacing--10);
+
+	& > * {
+		margin-block: 0;
+	}
+}
+
+/* Kolumna boczna of search and 404 (part sidebar-search). */
+.sb-sidebar-search {
+	display: grid;
+	gap: var(--wp--preset--spacing--8);
+
+	& > * {
+		margin-block: 0;
+	}
+}
+
+/* Tips of the empty view. */
+.sb-search-tips {
+	display: grid;
+	gap: var(--wp--preset--spacing--3);
+	color: var(--wp--preset--color--text-secondary);
+
+	& > * {
+		margin-block: 0;
+	}
+
+	& ul {
+		display: grid;
+		gap: var(--wp--preset--spacing--1);
+		padding-inline-start: var(--wp--preset--spacing--6);
+	}
+}
+
+.sb-search-tips__title {
+	font-size: var(--wp--preset--font-size--h-2);
+	line-height: var(--wp--custom--line-height--h-2);
+	color: var(--wp--preset--color--text);
+}
+
+/* Kafle kategorii: two columns of bordered tiles, one on phones; the whole tile is the link. */
+.sb-category-tiles__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--wp--preset--spacing--4);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	& > li {
+		margin: 0;
+	}
+}
+
+.sb-category-tile {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: var(--wp--preset--spacing--2);
+	height: 100%;
+	box-sizing: border-box;
+	padding: var(--wp--preset--spacing--6);
+	border: 1px solid var(--wp--custom--color--border);
+	border-radius: var(--wp--preset--border-radius--lg);
+	background-color: var(--wp--preset--color--surface);
+	transition: box-shadow var(--wp--custom--duration--base) var(--wp--custom--easing), border-color var(--wp--custom--duration--base) var(--wp--custom--easing);
+
+	& > * {
+		margin-block: 0;
+	}
+
+	&:hover {
+		border-color: var(--wp--custom--color--border-card);
+		box-shadow: var(--wp--preset--shadow--md);
+	}
+}
+
+.sb-category-tile__name {
+	font-size: var(--wp--preset--font-size--h-4);
+	font-weight: 600;
+	line-height: var(--wp--custom--line-height--h-4);
+
+	& a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--wp--preset--spacing--2);
+		color: var(--wp--preset--color--text);
+		text-decoration: none;
+
+		/* Arrow (Lucide arrow-right) as a mask, so it follows the text colour. */
+		&::before {
+			content: "";
+			order: 1;
+			flex: none;
+			width: 18px;
+			height: 18px;
+			background-color: var(--wp--preset--color--text-secondary);
+			mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+			transition: transform var(--wp--custom--duration--fast) var(--wp--custom--easing), background-color var(--wp--custom--duration--fast) var(--wp--custom--easing);
+		}
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+		}
+	}
+}
+
+.sb-category-tile:hover .sb-category-tile__name a {
+	color: var(--wp--preset--color--brand);
+
+	&::before {
+		background-color: var(--wp--preset--color--brand);
+		transform: translateX(2px);
+	}
+}
+
+.sb-category-tile__desc {
+	font-size: var(--wp--preset--font-size--body-sm);
+	line-height: var(--wp--custom--line-height--body-sm);
+	color: var(--wp--preset--color--text-secondary);
+
+	& > * {
+		margin: 0;
+	}
+}
+
+@media (max-width: 767px) {
+	.sb-category-tiles__grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/*
+ * Plakietki (`core/buttons` style `is-style-badges`, registered by ihumbak-site-blocks):
+ * „Często szukane” here, „Popularne” in the search bar. Layer 2: block style CSS in the theme.
+ */
+.wp-block-buttons.is-style-badges {
+	gap: var(--wp--preset--spacing--2);
+
+	& .wp-block-button__link {
+		padding: 3px var(--wp--preset--spacing--3);
+		border: 0;
+		border-radius: var(--wp--preset--border-radius--full);
+		background-color: var(--wp--custom--color--surface-3);
+		box-shadow: none;
+		color: var(--wp--preset--color--text-secondary);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 600;
+		line-height: 16px;
+
+		&:hover {
+			background-color: var(--wp--preset--color--brand-soft);
+			color: var(--wp--preset--color--brand);
+		}
+	}
+}
+
 /* Motion: one curve, three durations; all zero for users who ask for less motion. */
 @media (prefers-reduced-motion: reduce) {
 	:root {
