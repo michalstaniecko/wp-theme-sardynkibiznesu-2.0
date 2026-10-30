@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "acf/sb-button",
+	"title": "Przycisk (stary blok ACF)",
+	"category": "design",
+	"description": "Przycisk zapisany w 2.0 blokiem ACF. Renderuje ten sam markup co core/button; nowe przyciski wstawiaj jako core/button.",
+	"keywords": [ "button", "przycisk" ],
+	"textdomain": "ihumbak-content-elements",
+	"attributes": {
+		"name": { "type": "string" },
+		"data": { "type": "object", "default": {} },
+		"align": { "type": "string" },
+		"mode": { "type": "string" },
+		"id": { "type": "string" }
+	},
+	"supports": {
+		"autoRegister": true,
+		"inserter": false,
+		"html": false,
+		"reusable": false
+	},
+	"render": "file:./render.php"
+}
