@@ -123,13 +123,19 @@
 		height: 100%;
 	}
 
+	/* Later sidebar blocks keep their own z-indexes (card badges, product box) inside themselves,
+	   so none of them can come out above the rail. */
+	.ihumbak-toc--rail ~ * {
+		isolation: isolate;
+	}
+
 	.ihumbak-toc.ihumbak-toc--rail {
 		position: sticky;
 		top: calc(var(--wp--custom--layout--header-height) + var(--wp-admin--admin-bar--height, 0px) + var(--wp--preset--spacing--6));
 		z-index: 1;
 		display: flex;
 		flex-direction: column;
-		max-height: 60vh;
+		max-height: max(40vh, 280px);
 		background-color: var(--wp--preset--color--surface);
 
 		/* Covers the gap under the site header, so sidebar blocks passing under the rail do not
