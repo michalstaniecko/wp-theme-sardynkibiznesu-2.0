@@ -30,6 +30,424 @@ Text Domain: sardynkibiznesu-3-0
 	line-gap-override: 0%;
 }
 
+/*
+ * Header (part `header`) and navigation overlay (part `navigation-overlay`).
+ * Here rather than in a per-block file: every template has the header, and a separate
+ * file would be one more render-blocking request on every page (#68). Decisions: #29.
+ *
+ * Core workarounds (spec #36, accepted):
+ * - core hides the menu only below 600px; the 1024px threshold is forced here;
+ * - core copies the nav className onto inner <ul>s and renders the overlay inside
+ *   the header <nav>, so desktop dropdown styles stay in @media (min-width: 1024px);
+ * - `body .is-layout-flex > * { margin: 0 }` needs raised specificity;
+ * - the hover-mode chevron is a separate <button>, the click-mode chevron a <span>.
+ */
+
+/* ---------- Frame: sticky + scrolled ---------- */
+header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
+	position: sticky;
+	top: var(--wp-admin--admin-bar--height, 0px);
+	z-index: 100;
+}
+
+/* The admin bar is not fixed below 600px, so the header sticks to the top there. */
+@media (max-width: 600px) {
+	header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
+		top: 0;
+	}
+}
+
+.wp-block-ihumbak-site-header {
+	background-color: var(--wp--preset--color--surface);
+	border-bottom: 1px solid var(--wp--custom--color--border);
+	transition: box-shadow var(--wp--custom--duration--slow) var(--wp--custom--easing);
+
+	&[data-state="scrolled"] {
+		box-shadow: var(--wp--preset--shadow--md);
+	}
+
+	/* Above the search bar (z-index 98), so dropdowns open over it. */
+	& .sb-header__inner.sb-header__inner {
+		position: relative;
+		z-index: 99;
+		box-sizing: border-box;
+		justify-content: flex-start;
+		gap: var(--wp--preset--spacing--6);
+		max-width: var(--wp--style--global--wide-size);
+		height: var(--wp--custom--layout--header-height);
+		margin: 0 auto;
+		padding: 0 var(--wp--preset--spacing--6);
+	}
+
+	& .sb-header__actions.sb-header__actions {
+		gap: var(--wp--preset--spacing--2);
+	}
+
+	& .sb-header__cta .wp-block-button__link {
+		padding: var(--wp--preset--spacing--2) var(--wp--preset--spacing--4);
+		font-size: var(--wp--preset--font-size--body-sm);
+		line-height: 20px;
+	}
+
+	& :focus-visible {
+		outline: 2px solid var(--wp--custom--color--focus);
+		outline-offset: 2px;
+	}
+}
+
+.sb-header__logo.sb-header__logo {
+	flex-shrink: 0;
+	margin: 0;
+
+	& img {
+		display: block;
+		height: 32px;
+		width: auto;
+	}
+}
+
+/* Icon button: search toggle (link without JS, button with JS). */
+.sb-icon-button {
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	border-radius: var(--wp--preset--border-radius--md);
+	background: transparent;
+	color: var(--wp--preset--color--text);
+	cursor: pointer;
+	transition: background-color var(--wp--custom--duration--fast) var(--wp--custom--easing), color var(--wp--custom--duration--fast) var(--wp--custom--easing);
+
+	&:hover {
+		background-color: var(--wp--preset--color--surface-2);
+		color: var(--wp--preset--color--brand);
+	}
+
+	&[aria-expanded="true"] {
+		background-color: var(--wp--preset--color--brand-soft);
+		color: var(--wp--preset--color--brand);
+	}
+
+	& svg {
+		display: block;
+		width: 22px;
+		height: 22px;
+	}
+
+	& span {
+		display: contents;
+	}
+}
+
+/* ---------- Desktop menu (core/navigation, hover) ---------- */
+.sb-header__inner > .sb-nav.sb-nav {
+	margin-left: auto;
+}
+
+.sb-nav {
+	font-family: var(--wp--preset--font-family--sans);
+	font-size: var(--wp--preset--font-size--body-sm);
+	font-weight: 500;
+	line-height: 20px;
+}
+
+@media (min-width: 1024px) {
+	.sb-nav {
+		& .wp-block-navigation__container {
+			gap: var(--wp--preset--spacing--1);
+		}
+
+		& > .wp-block-navigation__responsive-container .wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content {
+			display: inline-flex;
+			align-items: center;
+			height: 40px;
+			padding: 0 var(--wp--preset--spacing--3);
+			border-radius: var(--wp--preset--border-radius--md);
+			color: var(--wp--preset--color--text);
+			text-decoration: none;
+		}
+
+		& .wp-block-navigation-item__content:hover,
+		& .wp-block-navigation-item__content[aria-current="page"] {
+			color: var(--wp--preset--color--brand);
+			background-color: var(--wp--preset--color--surface-2);
+		}
+
+		/* The chevron is a separate <button> next to the link: pull it to the label. */
+		& .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-icon {
+			position: relative;
+			z-index: 1;
+			margin-left: -10px;
+			margin-right: var(--wp--preset--spacing--1);
+			color: var(--wp--preset--color--text-secondary);
+		}
+
+		& .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
+			min-width: 240px;
+			padding: var(--wp--preset--spacing--2);
+			gap: 0;
+			border: 1px solid var(--wp--custom--color--border);
+			border-radius: var(--wp--preset--border-radius--lg);
+			box-shadow: var(--wp--preset--shadow--lg);
+			background-color: var(--wp--preset--color--surface);
+		}
+
+		& .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			height: 44px;
+			padding: 0 var(--wp--preset--spacing--3);
+			border-radius: var(--wp--preset--border-radius--md);
+			color: var(--wp--preset--color--text);
+			text-decoration: none;
+		}
+
+		& .wp-block-navigation__submenu-container .has-child {
+			display: flex;
+			align-items: center;
+		}
+
+		& .wp-block-navigation__submenu-container .wp-block-navigation__submenu-icon {
+			position: absolute;
+			right: var(--wp--preset--spacing--3);
+			transform: rotate(-90deg);
+			pointer-events: auto;
+		}
+
+		/* Third level: next to the dropdown, as in the design. */
+		& .wp-block-navigation__submenu-container .wp-block-navigation__submenu-container {
+			top: calc(-1 * var(--wp--preset--spacing--2));
+			left: calc(100% + var(--wp--preset--spacing--1));
+		}
+	}
+}
+
+/* ---------- Threshold: the design hides the menu below 1024px, core below 600px ---------- */
+@media (min-width: 600px) and (max-width: 1023.98px) {
+	.sb-nav .wp-block-navigation__responsive-container-open:not(.always-shown) {
+		display: flex;
+	}
+
+	.sb-nav .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+		display: none;
+	}
+}
+
+@media (max-width: 1023.98px) {
+	.wp-block-ihumbak-site-header .sb-header__inner.sb-header__inner {
+		padding: 0 var(--wp--preset--spacing--4);
+	}
+
+	.sb-header__actions > .sb-header__cta.sb-header__cta {
+		display: none;
+	}
+
+	/* Menu button after the search icon, as in the design. */
+	.sb-header__inner > .sb-nav.sb-nav {
+		order: 3;
+		margin-left: 0;
+	}
+
+	.sb-header__inner > .sb-header__actions.sb-header__actions {
+		margin-left: auto;
+	}
+
+	.sb-nav .wp-block-navigation__responsive-container-open {
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+	}
+}
+
+/* Narrow phones (320px): 2 × 16px padding + 182px logo + 2 × 44px buttons leave room for 8px
+   gaps only (24px gaps made the header 350px wide, #48). The logo may still shrink as a last resort. */
+@media (max-width: 399.98px) {
+	.wp-block-ihumbak-site-header .sb-header__inner.sb-header__inner {
+		gap: var(--wp--preset--spacing--2);
+	}
+
+	.sb-header__logo.sb-header__logo {
+		flex-shrink: 1;
+		min-width: 0;
+
+		& img {
+			max-width: 100%;
+			height: auto;
+			aspect-ratio: 182 / 32;
+		}
+	}
+}
+
+/* ---------- Navigation overlay (part navigation-overlay): full screen, accordion ---------- */
+.sb-nav .wp-block-navigation__responsive-container.is-menu-open {
+	background-color: var(--wp--preset--color--surface);
+	color: var(--wp--preset--color--text);
+
+	& .wp-block-navigation__responsive-container-content {
+		min-height: 100%;
+	}
+}
+
+.sb-mobile-nav {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+	background-color: var(--wp--preset--color--surface);
+
+	& .sb-mobile-nav__top.sb-mobile-nav__top {
+		box-sizing: border-box;
+		height: var(--wp--custom--layout--header-height);
+		margin: 0;
+		padding: 0 var(--wp--preset--spacing--4);
+		border-bottom: 1px solid var(--wp--custom--color--border);
+	}
+
+	& .wp-block-navigation-overlay-close {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		margin-right: calc(-1 * var(--wp--preset--spacing--2));
+		border: 0;
+		border-radius: var(--wp--preset--border-radius--md);
+		background-color: var(--wp--preset--color--brand-soft);
+		color: var(--wp--preset--color--brand);
+		cursor: pointer;
+	}
+
+	& .sb-mobile-nav__footer.sb-mobile-nav__footer {
+		margin-top: auto;
+		padding: var(--wp--preset--spacing--4);
+		border-top: 1px solid var(--wp--custom--color--border);
+
+		& .wp-block-buttons {
+			gap: var(--wp--preset--spacing--3);
+		}
+	}
+
+	& :focus-visible {
+		outline: 2px solid var(--wp--custom--color--focus);
+		outline-offset: -2px;
+	}
+}
+
+.sb-mobile-nav .sb-mobile-nav__list.sb-mobile-nav__list {
+	margin: 0;
+	padding: var(--wp--preset--spacing--2) 0;
+	font-family: var(--wp--preset--font-family--sans);
+	font-size: var(--wp--preset--font-size--body);
+	font-weight: 600;
+	line-height: 24px;
+
+	& .wp-block-navigation__container {
+		width: 100%;
+		gap: 0;
+	}
+
+	& .wp-block-navigation-item {
+		flex-wrap: wrap;
+		width: 100%;
+	}
+
+	& .wp-block-navigation-item__content {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		min-height: 52px;
+		padding: 0 var(--wp--preset--spacing--4);
+		border: 0;
+		background: none;
+		color: var(--wp--preset--color--text);
+		font: inherit;
+		text-align: left;
+		text-decoration: none;
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--wp--preset--color--surface-2);
+		}
+	}
+
+	& a[aria-current="page"] {
+		color: var(--wp--preset--color--brand);
+		box-shadow: inset 3px 0 0 var(--wp--preset--color--brand);
+	}
+
+	/* The click-mode chevron is a <span> after the button: lay it over the button's right edge. */
+	& .has-child {
+		position: relative;
+	}
+
+	& .has-child > .wp-block-navigation__submenu-icon {
+		position: absolute;
+		top: 0;
+		right: var(--wp--preset--spacing--4);
+		display: flex;
+		align-items: center;
+		height: 52px;
+		color: var(--wp--preset--color--text-secondary);
+		pointer-events: none;
+		transition: transform var(--wp--custom--duration--slow) var(--wp--custom--easing);
+	}
+
+	& .has-child > [aria-expanded="true"] + .wp-block-navigation__submenu-icon {
+		transform: rotate(180deg);
+		color: var(--wp--preset--color--brand);
+	}
+
+	/* Accordion: submenus in flow, shown only for aria-expanded="true" (ihumbak-site-blocks filter). */
+	& .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
+		position: static;
+		display: none;
+		width: 100%;
+		min-width: 0;
+		height: auto;
+		margin: 0;
+		padding: var(--wp--preset--spacing--1) 0 var(--wp--preset--spacing--2);
+		border: 0;
+		box-shadow: none;
+		background-color: var(--wp--preset--color--surface-2);
+		opacity: 1;
+		visibility: visible;
+		overflow: visible;
+	}
+
+	& .wp-block-navigation-submenu__toggle[aria-expanded="true"] ~ .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
+		display: flex;
+		flex-direction: column;
+	}
+
+	& .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+		min-height: 44px;
+		padding-left: var(--wp--preset--spacing--8);
+		font-size: var(--wp--preset--font-size--body-sm);
+		line-height: 20px;
+	}
+
+	& .wp-block-navigation__submenu-container .has-child > .wp-block-navigation__submenu-icon {
+		height: 44px;
+	}
+
+	& .wp-block-navigation__submenu-container .wp-block-navigation__submenu-container {
+		padding: 0;
+		background-color: var(--wp--custom--color--surface-3);
+
+		& .wp-block-navigation-item__content {
+			padding-left: var(--wp--preset--spacing--12);
+			font-weight: 400;
+		}
+	}
+}
+
 /* Mobile type and page padding (< 768px). */
 @media (max-width: 767px) {
 	:root {
