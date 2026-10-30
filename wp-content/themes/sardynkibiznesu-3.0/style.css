@@ -1455,6 +1455,118 @@ Text Domain: sardynkibiznesu-3-0
 	}
 }
 
+/* Pages: `page` (680 content + Kolumna boczna `sidebar-page`, grid from .sb-layout) and
+   `page-narrow` (one 680 column, Spis treści inline). Layer 4: classes on groups. */
+.sb-page {
+	padding-block: var(--wp--preset--spacing--8) 0;
+	/* Long URLs and unbroken strings in old pages must not cause horizontal scroll at 320px. */
+	overflow-wrap: break-word;
+
+	& .sb-page__main {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--6);
+
+		& > * {
+			margin-block: 0;
+		}
+	}
+
+	& .sb-page__header {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--4);
+
+		& > * {
+			margin-block: 0;
+		}
+	}
+
+	& .sb-page__breadcrumbs {
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 500;
+		line-height: var(--wp--custom--line-height--caption);
+		color: var(--wp--preset--color--text-secondary);
+
+		& a {
+			color: var(--wp--preset--color--text-secondary);
+			text-decoration: none;
+
+			&:hover {
+				color: var(--wp--preset--color--brand);
+				text-decoration: underline;
+			}
+		}
+	}
+
+	& .sb-page__featured {
+		margin-block: 0;
+
+		& img {
+			border: 1px solid var(--wp--custom--color--border-card);
+			border-radius: var(--wp--preset--border-radius--sm);
+		}
+	}
+
+	/* Content blocks may ask for wide/full alignment; next to the sidebar they stay in the column. */
+	& .sb-page__content :is(.alignwide, .alignfull) {
+		max-width: 100%;
+		margin-inline: 0;
+	}
+}
+
+/* Narrow page: header, image, Spis treści and content share the 680 column (constrained). */
+.sb-page--narrow {
+	& > .sb-page__header,
+	& > .sb-page__featured,
+	& > .ihumbak-toc {
+		margin-block: 0 var(--wp--preset--spacing--6);
+	}
+}
+
+/* „Zacznij od tych wpisów” (pattern start-posts in sidebar-page): grey box, compact cards. */
+.sb-start-posts {
+	padding: var(--wp--preset--spacing--6);
+	border-radius: var(--wp--preset--border-radius--lg);
+	background-color: var(--wp--preset--color--surface-2);
+
+	& > * {
+		margin-block: 0;
+	}
+
+	& .sb-sidebar__heading {
+		margin-block-end: var(--wp--preset--spacing--2);
+	}
+
+	& .sb-card--mini {
+		gap: var(--wp--preset--spacing--2);
+		padding-block: var(--wp--preset--spacing--4);
+
+		& + .sb-card--mini {
+			border-top: 1px solid var(--wp--custom--color--border);
+		}
+
+		&:last-child {
+			padding-block-end: 0;
+		}
+	}
+
+	& .sb-meta p.is-style-badge {
+		position: relative;
+		z-index: 1;
+	}
+
+	& .sb-card__title {
+		font-size: var(--wp--preset--font-size--body);
+		line-height: var(--wp--custom--line-height--body);
+	}
+}
+
+/* Eyebrow on a dark Ramka promocyjna: the accent text colour lacks contrast there. */
+.wp-block-group.is-style-inverse .sb-sidebar__eyebrow {
+	color: var(--wp--custom--color--brand-on-inverse);
+}
+
 /* Motion: one curve, three durations; all zero for users who ask for less motion. */
 @media (prefers-reduced-motion: reduce) {
 	:root {

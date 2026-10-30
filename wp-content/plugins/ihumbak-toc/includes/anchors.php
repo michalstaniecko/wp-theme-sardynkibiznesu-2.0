@@ -47,14 +47,21 @@ function render_shortcode(): string {
  *
  * @param int    $post_id            Post whose headings are listed.
  * @param string $wrapper_attributes Extra attributes for the <nav>, e.g. get_block_wrapper_attributes().
+ * @param bool   $unless_in_content  Outside the content only: print nothing when the post's content
+ *                                   already shows a Spis treści (its own block, shortcode or v1 menu),
+ *                                   so a template-placed list never doubles it.
  */
-function toc_for_post( int $post_id, string $wrapper_attributes = '' ): string {
+function toc_for_post( int $post_id, string $wrapper_attributes = '', bool $unless_in_content = false ): string {
 	if ( ! $post_id ) {
 		return '';
 	}
 
 	if ( doing_filter( 'the_content' ) && get_the_ID() === $post_id ) {
 		return PLACEHOLDER_PREFIX . base64_encode( $wrapper_attributes ) . PLACEHOLDER_SUFFIX;
+	}
+
+	if ( $unless_in_content && content_shows_toc( $post_id ) ) {
+		return '';
 	}
 
 	return add_wrapper_attributes( render_toc( headings_for_post( $post_id ) ), $wrapper_attributes );
@@ -99,6 +106,31 @@ function headings_for_post( int $post_id ): array {
 }
 
 /**
+ * Whether the post's rendered content contains a Spis treści of its own.
+ * Renders the content once when it has not run yet in this request (see headings_for_post()).
+ */
+function content_shows_toc( int $post_id ): bool {
+	headings_for_post( $post_id );
+
+	return (bool) remembered_toc_in_content( $post_id );
+}
+
+/**
+ * Whether a post's the_content in this request printed a Spis treści.
+ *
+ * @param bool|null $shows To remember; null reads.
+ */
+function remembered_toc_in_content( int $post_id, ?bool $shows = null ): ?bool {
+	static $seen = array();
+
+	if ( null !== $shows ) {
+		$seen[ $post_id ] = $shows;
+	}
+
+	return $seen[ $post_id ] ?? null;
+}
+
+/**
  * Headings seen in a post's the_content during this request.
  *
  * @param array<int, array{level: int, id: string, text: string}>|null $headings To remember; null reads.
@@ -128,6 +160,8 @@ function finish_content( $content ) {
 	$post_id = (int) get_the_ID();
 	if ( $post_id ) {
 		remembered_headings( $post_id, $headings );
+		// Placeholders of the block / shortcode, or the v1 menu already printed at priority 25.
+		remembered_toc_in_content( $post_id, str_contains( $content, PLACEHOLDER_PREFIX ) || str_contains( $content, '<nav class="ihumbak-toc' ) );
 	}
 
 	if ( ! str_contains( $content, PLACEHOLDER_PREFIX ) ) {
