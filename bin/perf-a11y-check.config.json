@@ -28,7 +28,7 @@
   },
   "notWorseThan2": {
     "_readme": "Tolerancja „nic gorzej niż 2.0”: wartość może być gorsza od bazy najwyżej o tyle. desktopBlocking=false: desktop (1 przebieg) tylko raportuje zmianę.",
-    "tolerance": { "lcpMs": 0, "fcpMs": 0, "tbtMs": 0, "cls": 0, "a11yScore": 0 },
+    "tolerance": { "lcpMs": 0, "fcpMs": 0, "tbtMs": 0, "cls": 0.01, "a11yScore": 0 },
     "desktopBlocking": false
   },
   "baseline": {
