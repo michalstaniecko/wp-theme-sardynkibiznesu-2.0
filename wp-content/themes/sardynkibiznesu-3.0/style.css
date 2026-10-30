@@ -196,12 +196,12 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 			background-color: var(--wp--preset--color--surface);
 		}
 
+		/* Padding comes from core (0.5em 1em) and adds to min-height (content-box); longer labels grow the row. */
 		& .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
 			display: flex;
 			align-items: center;
 			width: 100%;
-			height: 44px;
-			padding: 0 var(--wp--preset--spacing--3);
+			min-height: 44px;
 			border-radius: var(--wp--preset--border-radius--md);
 			color: var(--wp--preset--color--text);
 			text-decoration: none;
@@ -210,6 +210,11 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 		& .wp-block-navigation__submenu-container .has-child {
 			display: flex;
 			align-items: center;
+		}
+
+		/* Keeps wrapped labels clear of the chevron; raised specificity to beat core's padding. */
+		& .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container .has-child.has-child > .wp-block-navigation-item__content {
+			padding-right: var(--wp--preset--spacing--8);
 		}
 
 		& .wp-block-navigation__submenu-container .wp-block-navigation__submenu-icon {
