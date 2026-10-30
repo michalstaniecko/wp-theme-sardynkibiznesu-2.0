@@ -1,6 +1,6 @@
 /*
  * core/buttons style `badges` (registered by ihumbak-site-blocks): links as pills,
- * e.g. popular search terms. Loaded with core/buttons (wp_enqueue_block_style).
+ * e.g. popular search terms. Loaded with core/buttons (per-block CSS, functions.php).
  */
 .wp-block-buttons.is-style-badges {
 	gap: var(--wp--preset--spacing--2);

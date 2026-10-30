@@ -15,7 +15,7 @@ Filtr `render_block_core/navigation` w `ihumbak-site-blocks` (`includes/navigati
 - [ ] Kliknięcie **innej sekcji poniżej** otwartej rozwija tę sekcję i zwija poprzednią. To ten sam przypadek, który naprawia `data-wp-on--mousedown` na przyciskach sekcji.
 - [ ] Trzeci poziom (np. Twórczość → Przydatne programy) rozwija się wewnątrz drugiego.
 - [ ] Klawiatura w nakładce: Tab przechodzi po sekcjach, a Enter i Spacja je rozwijają. Fokus nie wychodzi poza nakładkę.
-- [ ] Escape zamyka nakładkę i oddaje fokus przyciskowi menu.
+- [ ] Escape zamyka nakładkę i oddaje fokus przyciskowi menu. Gdy jakaś sekcja jest otwarta, pierwszy Escape zwija tę sekcję, a dopiero drugi zamyka nakładkę (zachowanie core).
 - [ ] W źródle strony każde `li.wp-block-navigation-submenu` w nakładce ma w `data-wp-context` własne `"overlayOpenedBy":{"click":false,…}`.
 
 ## 2. Klawiatura i mysz w nagłówku (desktop)

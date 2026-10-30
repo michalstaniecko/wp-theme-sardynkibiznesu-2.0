@@ -1,6 +1,6 @@
 /*
  * Search bar below the header (ihumbak/search-bar): core/search + popular terms.
- * Loaded with ihumbak/search-bar (wp_enqueue_block_style). Decisions: #29.
+ * Loaded with ihumbak/search-bar (per-block CSS, functions.php). Decisions: #29.
  */
 .wp-block-ihumbak-search-bar {
 	border-bottom: 1px solid var(--wp--custom--color--border);

@@ -1,6 +1,6 @@
 /*
  * Header (part `header`) and navigation overlay (part `navigation-overlay`).
- * Loaded with ihumbak/site-header (wp_enqueue_block_style). Decisions: #29.
+ * Loaded with ihumbak/site-header (per-block CSS, functions.php). Decisions: #29.
  *
  * Core workarounds (spec #36, accepted):
  * - core hides the menu only below 600px; the 1024px threshold is forced here;
