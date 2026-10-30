@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+# Paczki zip motywu i wtyczek z tagu gita (git archive), do instalacji
+# `wp theme|plugin install <zip> --force`. Instrukcja: docs/runbooks/paczki-i-staging.md
+#
+# Użycie:
+#   bin/build-packages <tag> [--out <katalog>] [nazwa…]
+#   bin/build-packages --list <tag>
+#
+# Bez nazw buduje zestaw 3.0 (DEFAULT_PACKAGES). Nazwa to katalog motywu
+# w wp-content/themes/ albo wtyczki w wp-content/plugins/.
+# Wynik: <out>/<tag>/<nazwa>-<tag>.zip + SHA256SUMS (domyślnie out = dist/).
+# Kody wyjścia: 0 = gotowe, 1 = odmowa (brak tagu, nieznana paczka, zip już jest), 2 = błędne użycie.
+
+set -euo pipefail
+
+DEFAULT_PACKAGES=(
+	sardynkibiznesu-3.0
+	ihumbak-content-elements
+	ihumbak-toc
+	ihumbak-newsletter
+	ihumbak-site-blocks
+	ihumbak-tracking
+)
+
+usage() {
+	sed -n '5,8p' "$0" | sed 's/^# \{0,1\}//' >&2
+	exit 2
+}
+
+die() {
+	echo "build-packages: $*" >&2
+	exit 1
+}
+
+# Prints "theme" or "plugin" for a package present at the tag, nothing otherwise.
+package_type() {
+	local ref=$1 name=$2
+	if git cat-file -e "$ref:wp-content/themes/$name/style.css" 2>/dev/null; then
+		echo theme
+	elif git cat-file -e "$ref:wp-content/plugins/$name" 2>/dev/null; then
+		echo plugin
+	fi
+}
+
+package_path() {
+	case $1 in
+		theme) echo "wp-content/themes/$2" ;;
+		plugin) echo "wp-content/plugins/$2" ;;
+	esac
+}
+
+sha256() {
+	if command -v sha256sum >/dev/null; then sha256sum "$@"; else shasum -a 256 "$@"; fi
+}
+
+list=0
+out=dist
+tag=
+names=()
+while (($#)); do
+	case $1 in
+		--list) list=1 ;;
+		--out) (($# >= 2)) || usage; out=$2; shift ;;
+		--out=*) out=${1#--out=} ;;
+		-h | --help) usage ;;
+		-*) usage ;;
+		*) if [[ -z $tag ]]; then tag=$1; else names+=("$1"); fi ;;
+	esac
+	shift
+done
+[[ -n $tag ]] || usage
+((${#names[@]})) || names=("${DEFAULT_PACKAGES[@]}")
+
+git rev-parse --git-dir >/dev/null 2>&1 || die "uruchom w repozytorium gita"
+# Only tags: a package must always be reproducible from a fixed, named point.
+ref=refs/tags/$tag
+git rev-parse -q --verify "$ref^{commit}" >/dev/null || die "'$tag' nie jest tagiem (git tag $tag <commit>)"
+commit=$(git rev-parse "$ref^{commit}")
+
+types=()
+missing=()
+for name in "${names[@]}"; do
+	type=$(package_type "$commit" "$name")
+	[[ -n $type ]] || missing+=("$name")
+	types+=("${type:-missing}")
+done
+
+if ((list)); then
+	for i in "${!names[@]}"; do
+		printf '%-6s %s\n' "${types[$i]}" "${names[$i]}"
+	done
+	((${#missing[@]} == 0)) || exit 1
+	exit 0
+fi
+
+((${#missing[@]} == 0)) || die "w tagu $tag nie ma motywu ani wtyczki: ${missing[*]}"
+
+dir=$out/$tag
+for name in "${names[@]}"; do
+	[[ ! -e $dir/$name-$tag.zip ]] || die "$dir/$name-$tag.zip już istnieje; paczki z tagu się nie nadpisuje"
+done
+mkdir -p "$dir"
+
+for i in "${!names[@]}"; do
+	name=${names[$i]}
+	zip=$dir/$name-$tag.zip
+	# The zip's single top-level directory decides where WordPress installs it.
+	git archive --format=zip --prefix="$name/" -o "$zip.part" "$commit:$(package_path "${types[$i]}" "$name")"
+	mv "$zip.part" "$zip"
+	printf '%-6s %s\n' "${types[$i]}" "$zip"
+done
+
+(cd "$dir" && sha256 -- *.zip >SHA256SUMS)
+echo "SHA256SUMS: $dir/SHA256SUMS (commit $commit)"
