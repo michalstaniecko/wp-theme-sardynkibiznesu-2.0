@@ -137,4 +137,5 @@ Redaktor wybiera tylko presety motywu. Wyłączone: domyślna paleta, gradienty 
 - **Skala odstępów** zawiera tylko kroki z projektu (1–6, 8, 10, 12, 16, 24), bez wypełniania luk.
 - **Nagłówki kolumn stopki** w projekcie mają `mark-gray` (2,2:1 na `surface-inverse`, poniżej WCAG AA); motyw używa `text-muted` (5:1).
 - **Domyślne zmienne core.** WordPress nadal wypisuje w `:root` zmienne domyślnych presetów (np. `--wp--preset--color--vivid-red`) dla zgodności wstecznej, mimo wyłączenia ich w edytorze. Nie są częścią kontraktu i nie wolno ich używać.
+- **Przycisk w stylu „Akcent”** ma tło `accent-text`, a nie `accent`: biały tekst na `accent` ma 3,4:1 (poniżej WCAG AA dla 14 px). Brak ciemniejszego tokenu akcentu, więc hover tylko podkreśla tekst.
 - **Logo w stopce** stoi na jasnej „pigułce” (`surface`), bo projekt nie ma wersji odwróconej logo.
