@@ -16,6 +16,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// Karta produktu markup comes from ihumbak-content-elements (ADR-0001); without it the pattern is empty.
+if ( ! function_exists( 'Ihumbak\\ContentElements\\ProductCard\\cards_markup' ) ) {
+	return;
+}
+
 $sb_cards = array(
 	array(
 		'label'       => 'Za darmo',
@@ -46,4 +51,4 @@ $sb_cards = array(
 	),
 );
 
-echo \SardynkiBiznesu\Theme\product_cards_markup( $sb_cards, 'compact' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the helper.
+echo \Ihumbak\ContentElements\ProductCard\cards_markup( $sb_cards, 'compact' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the helper.

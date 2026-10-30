@@ -1,12 +1,13 @@
 <?php
 /**
- * Sardynki Biznesu 3.0 — presentation only (ADR-0001).
+ * Sardynki Biznesu 3.0 — presentation layer (ADR-0001).
  *
- * Loads the global stylesheet, preloads the two most used font weights,
- * tunes image attributes (sizes, lazy loading) of template images, formats
- * the result count of the search view, maps the 2.0 narrow page template, builds the
- * Karta produktu markup of patterns and registers the pattern category of the Sekcje
- * strony głównej. Registers no shortcodes, blocks, post types, meta or settings.
+ * Loads the global and per-block stylesheets, preloads the two most used font weights,
+ * tunes image attributes (sizes, lazy loading, fetch priority) of template images, formats
+ * the result count of the search view and registers the pattern category of the Sekcje
+ * strony głównej. Everything that must survive a theme change (content compatibility with
+ * 2.0, Karta produktu markup, blocks, shortcodes, meta, settings) lives in the ihumbak-*
+ * plugins; patterns call plugin functions only behind `function_exists()`.
  *
  * @package sardynkibiznesu-3.0
  */
@@ -199,77 +200,6 @@ add_filter(
 	10,
 	2
 );
-
-/**
- * 2.0 page template meta → 3.0 block template. The 18 pages saved with the 2.0 template
- * „Boxed without sidebar” render with `page-narrow`; their `_wp_page_template` meta stays
- * as it is, so 2.0 keeps working on the same database (#20).
- */
-const LEGACY_PAGE_TEMPLATES = array(
-	'templates/boxed-without-sidebar.php' => 'page-narrow.php',
-);
-
-add_filter(
-	'page_template_hierarchy',
-	static function ( array $templates ): array {
-		return array_values(
-			array_unique(
-				array_map( static fn ( string $template ): string => LEGACY_PAGE_TEMPLATES[ $template ] ?? $template, $templates )
-			)
-		);
-	}
-);
-
-/**
- * Block markup of a grid of Karty produktu (core blocks only, spec #36), shared by the
- * patterns product-cards-* and the Sekcje strony głównej „Polecamy na start” / „Darmowe
- * narzędzia”. The card CSS (core-group--product.css) selects children by position, so
- * every card has the same structure: [image,] badge, body (category, H3, text, button).
- *
- * @param array<int, array{label: string, label_style: string, category: string, title: string, desc: string, button: string, outline?: bool, url?: string, category_url?: string, image?: string}> $cards
- * @param string $variant `horizontal` (image, 2 columns) or `compact` (no image, 3 columns).
- */
-function product_cards_markup( array $cards, string $variant ): string {
-	$horizontal = 'horizontal' === $variant;
-	$grid       = $horizontal
-		? '{"type":"grid","columnCount":2,"minimumColumnWidth":"22rem"}'
-		: '{"type":"grid","columnCount":3,"minimumColumnWidth":"16rem"}';
-	$style      = $horizontal ? 'product-horizontal' : 'product-compact';
-	$placeholder = get_theme_file_uri( 'assets/images/product-placeholder.svg' );
-
-	$out = "<!-- wp:group {\"layout\":$grid} -->\n<div class=\"wp-block-group\">\n";
-	foreach ( $cards as $card ) {
-		$url      = esc_url( $card['url'] ?? '#' );
-		$cat_url  = esc_url( $card['category_url'] ?? ( $card['url'] ?? '#' ) );
-		$label    = esc_attr( $card['label_style'] );
-		$button   = ! empty( $card['outline'] )
-			? "\t\t\t\t<!-- wp:button {\"className\":\"is-style-outline\"} -->\n\t\t\t\t<div class=\"wp-block-button is-style-outline\">"
-			: "\t\t\t\t<!-- wp:button -->\n\t\t\t\t<div class=\"wp-block-button\">";
-		$out .= "\t<!-- wp:group {\"className\":\"is-style-$style\",\"layout\":{\"type\":\"default\"}} -->\n\t<div class=\"wp-block-group is-style-$style\">\n";
-		if ( $horizontal ) {
-			$out .= "\t\t<!-- wp:image {\"sizeSlug\":\"large\",\"linkDestination\":\"none\"} -->\n"
-				. "\t\t<figure class=\"wp-block-image size-large\"><img src=\"" . esc_url( $card['image'] ?? $placeholder ) . "\" alt=\"\"/></figure>\n"
-				. "\t\t<!-- /wp:image -->\n\n";
-		}
-		$out .= "\t\t<!-- wp:paragraph {\"className\":\"is-style-$label\"} -->\n\t\t<p class=\"is-style-$label\">" . esc_html( $card['label'] ) . "</p>\n\t\t<!-- /wp:paragraph -->\n\n"
-			. "\t\t<!-- wp:group {\"layout\":{\"type\":\"default\"}} -->\n\t\t<div class=\"wp-block-group\">\n"
-			. "\t\t\t<!-- wp:paragraph -->\n\t\t\t<p><a href=\"$cat_url\">" . esc_html( $card['category'] ) . "</a></p>\n\t\t\t<!-- /wp:paragraph -->\n\n"
-			. "\t\t\t<!-- wp:heading {\"level\":3} -->\n\t\t\t<h3 class=\"wp-block-heading\"><a href=\"$url\">" . esc_html( $card['title'] ) . "</a></h3>\n\t\t\t<!-- /wp:heading -->\n\n"
-			. "\t\t\t<!-- wp:paragraph -->\n\t\t\t<p>" . esc_html( $card['desc'] ) . "</p>\n\t\t\t<!-- /wp:paragraph -->\n\n"
-			. "\t\t\t<!-- wp:buttons -->\n\t\t\t<div class=\"wp-block-buttons\">\n"
-			. $button . "<a class=\"wp-block-button__link wp-element-button\" href=\"$url\">" . esc_html( $card['button'] ) . "</a></div>\n\t\t\t\t<!-- /wp:button -->\n"
-			. "\t\t\t</div>\n\t\t\t<!-- /wp:buttons -->\n"
-			. "\t\t</div>\n\t\t<!-- /wp:group -->\n"
-			. "\t</div>\n\t<!-- /wp:group -->\n";
-	}
-	return $out . "</div>\n<!-- /wp:group -->\n";
-}
-
-/** Permalink of a published page by path, or the plain URL of that path when the page is missing. */
-function page_url( string $path ): string {
-	$page = get_page_by_path( $path );
-	return $page && 'publish' === $page->post_status ? (string) get_permalink( $page ) : home_url( '/' . trim( $path, '/' ) . '/' );
-}
 
 /**
  * Sekcje strony głównej (#58): slugs of the section patterns `home-{slug}` in their default

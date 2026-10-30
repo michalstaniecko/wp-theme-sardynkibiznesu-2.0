@@ -9,13 +9,18 @@
  *
  * Karta produktu = core blocks only, no block of its own and no prices (spec #36).
  * The `product-horizontal` group style and the Plakietka paragraph styles are registered
- * by ihumbak-content-elements; their CSS is in assets/css/blocks/. Markup: product_cards_markup()
- * in functions.php (shared with the Sekcje strony głównej).
+ * by ihumbak-content-elements; their CSS is in assets/css/blocks/. Markup: cards_markup() in
+ * ihumbak-content-elements (shared with the Sekcje strony głównej).
  *
  * @package sardynkibiznesu-3.0
  */
 
 defined( 'ABSPATH' ) || exit;
+
+// Karta produktu markup comes from ihumbak-content-elements (ADR-0001); without it the pattern is empty.
+if ( ! function_exists( 'Ihumbak\\ContentElements\\ProductCard\\cards_markup' ) ) {
+	return;
+}
 
 $sb_cards = array(
 	array(
@@ -38,4 +43,4 @@ $sb_cards = array(
 	),
 );
 
-echo \SardynkiBiznesu\Theme\product_cards_markup( $sb_cards, 'horizontal' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the helper.
+echo \Ihumbak\ContentElements\ProductCard\cards_markup( $sb_cards, 'horizontal', get_theme_file_uri( 'assets/images/product-placeholder.svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in the helper.
