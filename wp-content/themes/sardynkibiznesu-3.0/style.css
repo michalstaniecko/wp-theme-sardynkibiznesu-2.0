@@ -56,6 +56,177 @@ Text Domain: sardynkibiznesu-3-0
 	}
 }
 
+/* Footer (part `footer`): brand, three link columns, bottom bar. Layer 4: classes on groups. */
+.sb-footer {
+	margin-block-start: var(--wp--preset--spacing--24);
+	background-color: var(--wp--preset--color--surface-inverse);
+	color: var(--wp--custom--color--text-inverse);
+
+	& .sb-footer__inner {
+		box-sizing: border-box;
+		display: grid;
+		gap: var(--wp--preset--spacing--12);
+		max-width: var(--wp--style--global--wide-size);
+		margin-inline: auto;
+		padding: var(--wp--preset--spacing--16) var(--wp--preset--spacing--6) var(--wp--preset--spacing--8);
+	}
+
+	& .sb-footer__grid {
+		display: grid;
+		grid-template-columns: 1.4fr 1fr 1fr 1fr;
+		gap: var(--wp--preset--spacing--8);
+	}
+
+	& .sb-footer__brand {
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--4);
+		max-width: var(--wp--custom--layout--sidebar-width);
+	}
+
+	& .sb-footer__brand > * {
+		margin: 0;
+	}
+
+	/* The logo has no inverse version yet: it sits on a light pill. */
+	& .sb-footer__logo a {
+		display: inline-flex;
+		padding: var(--wp--preset--spacing--2) var(--wp--preset--spacing--3);
+		background-color: var(--wp--preset--color--surface);
+		border-radius: var(--wp--preset--border-radius--md);
+	}
+
+	& .sb-footer__logo img {
+		display: block;
+		max-width: 100%;
+		height: 32px;
+		width: auto;
+	}
+
+	& .sb-footer__tagline {
+		font-size: var(--wp--preset--font-size--body-sm);
+		line-height: var(--wp--custom--line-height--body-sm);
+		color: var(--wp--custom--color--surface-3);
+	}
+
+	/* Button on a dark ground: inverse variant only, never solid brand red (2.7:1). */
+	& .sb-footer__cta .wp-block-button__link {
+		background-color: transparent;
+		color: var(--wp--custom--color--text-inverse);
+		border-color: var(--wp--custom--color--brand-on-inverse);
+		box-shadow: none;
+
+		&:hover {
+			background-color: var(--wp--custom--color--brand-on-inverse);
+			color: var(--wp--preset--color--surface-inverse);
+			border-color: var(--wp--custom--color--brand-on-inverse);
+		}
+	}
+
+	& .sb-footer__column > * {
+		margin: 0;
+	}
+
+	& .sb-footer__heading {
+		margin: 0 0 var(--wp--preset--spacing--4);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 600;
+		line-height: 16px;
+		letter-spacing: var(--wp--custom--letter-spacing--overline);
+		text-transform: uppercase;
+		/* Deviation: design uses mark-gray (2.2:1 on surface-inverse); text-muted gives 5:1 (WCAG AA). */
+		color: var(--wp--custom--color--text-muted);
+	}
+
+	& .sb-footer__links {
+		display: grid;
+		gap: var(--wp--preset--spacing--3);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		& a {
+			font-size: var(--wp--preset--font-size--body-sm);
+			font-weight: 500;
+			line-height: 20px;
+			color: var(--wp--custom--color--text-inverse);
+			text-decoration: none;
+			transition: color var(--wp--custom--duration--fast) var(--wp--custom--easing);
+
+			&:hover {
+				color: var(--wp--custom--color--brand-on-inverse);
+			}
+		}
+	}
+
+	& .sb-footer__bottom {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--wp--preset--spacing--4);
+		padding-top: var(--wp--preset--spacing--6);
+		border-top: 1px solid var(--wp--custom--color--surface-inverse-2);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 500;
+		line-height: var(--wp--custom--line-height--caption);
+		color: var(--wp--custom--color--surface-3);
+
+		& > * {
+			margin: 0;
+		}
+
+		& a {
+			color: var(--wp--custom--color--surface-3);
+			text-decoration: underline;
+			text-underline-offset: 3px;
+
+			&:hover {
+				color: var(--wp--custom--color--brand-on-inverse);
+			}
+		}
+	}
+
+	/* CookieYes "revisit consent" trigger styled as a text link. */
+	& .sb-footer__cookies .wp-block-button__link {
+		padding: 0;
+		background: none;
+		border: 0;
+		box-shadow: none;
+		font: inherit;
+		color: var(--wp--custom--color--surface-3);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		cursor: pointer;
+
+		&:hover {
+			color: var(--wp--custom--color--brand-on-inverse);
+		}
+	}
+
+	& :focus-visible {
+		outline: 2px solid var(--wp--custom--color--focus);
+		outline-offset: 2px;
+	}
+}
+
+@media (max-width: 767px) {
+	.sb-footer {
+		& .sb-footer__inner {
+			padding: var(--wp--preset--spacing--12) var(--wp--preset--spacing--4) var(--wp--preset--spacing--6);
+		}
+
+		& .sb-footer__grid {
+			grid-template-columns: 1fr 1fr;
+		}
+
+		& .sb-footer__brand {
+			grid-column: 1 / -1;
+			max-width: none;
+		}
+	}
+}
+
 /* Motion: one curve, three durations; all zero for users who ask for less motion. */
 @media (prefers-reduced-motion: reduce) {
 	:root {
