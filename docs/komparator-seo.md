@@ -1,16 +1,16 @@
 # Komparator SEO 2.0 ↔ 3.0
 
-Skrypt `tools/komparator-seo/komparator.php` porównuje wyrenderowane strony dwóch adresów bazowych: **A** (motyw 2.0, wzorzec) i **B** (motyw 3.0, sprawdzany). Gdy znajdzie regresję SEO albo regresję treści, kończy się kodem `1` i blokuje przełączenie (spec #36, ticket #60). Uruchamia się go ręcznie, z dowolnego komputera z dostępem do obu adresów.
+Skrypt `bin/komparator-seo` porównuje wyrenderowane strony dwóch adresów bazowych: **A** (motyw 2.0, wzorzec) i **B** (motyw 3.0, sprawdzany). Gdy znajdzie regresję SEO albo regresję treści, kończy się kodem `1` i blokuje przełączenie (spec #36, ticket #60). Uruchamia się go ręcznie, z dowolnego komputera z dostępem do obu adresów.
 
 ## Wymagania
 
 - PHP 8.4+ z rozszerzeniami `dom` i `curl` (parser HTML5 `Dom\HTMLDocument`). Bez Composera i bez zależności.
-- Bez lokalnego PHP: `docker run --rm -v "$PWD":/app -w /app php:8.4-cli php tools/komparator-seo/komparator.php …` (obraz `php:8.4-cli` ma `dom` i `curl`).
+- Bez lokalnego PHP: `docker run --rm -v "$PWD":/app -w /app php:8.4-cli php bin/komparator-seo …` (obraz `php:8.4-cli` ma `dom` i `curl`).
 
 ## Uruchomienie
 
 ```bash
-php tools/komparator-seo/komparator.php \
+bin/komparator-seo \
   --a=https://sardynkibiznesu.pl \
   --b=https://staging.sardynkibiznesu.pl --auth-b=uzytkownik:haslo \
   --old-slugs=stare-slugi.txt

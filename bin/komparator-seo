@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * Komparator SEO 2.0 ↔ 3.0 i porównanie treści.
@@ -55,7 +56,7 @@ function main(array $argv): void
 function usage(): string
 {
     return <<<TXT
-Użycie: php tools/komparator-seo/komparator.php --a=URL_2.0 --b=URL_3.0 [opcje]
+Użycie: bin/komparator-seo --a=URL_2.0 --b=URL_3.0 [opcje]
 
   --a=URL            adres bazowy 2.0 (wzorzec), np. https://sardynkibiznesu.pl
   --b=URL            adres bazowy 3.0 (sprawdzany), np. https://staging.sardynkibiznesu.pl
@@ -416,14 +417,16 @@ function sitemap_urls(Http $http, string $url, int $depth = 0): ?array
     if (!@$doc->loadXML($r['body'])) {
         return null;
     }
+    // Only <loc> in the sitemap namespace: Yoast also lists images as <image:loc>.
+    $ns = 'http://www.sitemaps.org/schemas/sitemap/0.9';
     $out = [];
-    foreach ($doc->getElementsByTagNameNS('*', 'sitemap') as $sm) {
-        foreach ($sm->getElementsByTagNameNS('*', 'loc') as $loc) {
+    foreach ($doc->getElementsByTagNameNS($ns, 'sitemap') as $sm) {
+        foreach ($sm->getElementsByTagNameNS($ns, 'loc') as $loc) {
             $out = array_merge($out, sitemap_urls($http, trim($loc->textContent), $depth + 1) ?? []);
         }
     }
-    foreach ($doc->getElementsByTagNameNS('*', 'url') as $u) {
-        foreach ($u->getElementsByTagNameNS('*', 'loc') as $loc) {
+    foreach ($doc->getElementsByTagNameNS($ns, 'url') as $u) {
+        foreach ($u->getElementsByTagNameNS($ns, 'loc') as $loc) {
             $out[] = trim($loc->textContent);
         }
     }
