@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /** After wpDiscuz and its add-ons have enqueued, and after everything else has printed. */
-const LATE = 1000;
+const LATE_PRIORITY = 1000;
 
 /**
  * Until the stylesheets arrive: what only they hide stays hidden (a11y), icons don't fill the
@@ -30,7 +30,7 @@ const LATE = 1000;
  */
 const CRITICAL_CSS = ':where(#wpd-editor-source-code-wrapper,#wpd-editor-source-code-wrapper-bg,#wpdcom .wpdiscuz-hidden,#wpdcom .wpdiscuz-sort-buttons,.lity-hide){display:none}:where(#wpdcom .wpd-comment-share){position:absolute;visibility:hidden}:where(#wpdcom svg){max-width:32px;max-height:32px}:where(#wpdcom){min-height:400px}';
 
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\defer_assets', LATE );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\defer_assets', LATE_PRIORITY );
 
 function defer_assets(): void {
 	if ( ! defined( 'WPDISCUZ_DIR_NAME' ) ) {
@@ -79,7 +79,7 @@ function defer_assets(): void {
 		static function () use ( $scripts ): void {
 			printf( '<template id="ihumbak-wpdiscuz-scripts">%s</template>' . "\n", captured( wp_scripts(), $scripts ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup printed by WordPress.
 		},
-		LATE
+		LATE_PRIORITY
 	);
 }
 
