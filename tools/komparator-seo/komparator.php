@@ -24,7 +24,15 @@ const BUTTON_SELECTOR = '.wp-block-button';
 const LEGACY_NOTKA_SELECTOR = '.cmsmasters_notice';
 const NOTKA_SELECTOR = '.wp-block-group.is-style-neutral';
 
-main($argv);
+/**
+ * Formularz zapisu that 2.0 appends to every article through a `the_content` filter
+ * (ihumbak-newsletter-form). 3.0 has it in the template instead, so it is not counted.
+ */
+const NEWSLETTER_FILTER_FORM_SELECTOR = 'form.getresponse-form';
+
+if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
+    main($argv);
+}
 
 function main(array $argv): void
 {
@@ -507,7 +515,7 @@ function content_facts(\Dom\Element $content, string $rawHtml): array
     $forms = 0;
     $workingForms = 0;
     foreach ($content->querySelectorAll('form') as $form) {
-        if (!$form->querySelector('input[type="email"]')) {
+        if (!$form->querySelector('input[type="email"]') || $form->matches(NEWSLETTER_FILTER_FORM_SELECTOR)) {
             continue;
         }
         $forms++;
