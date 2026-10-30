@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/listing-sort",
+	"title": "Sortowanie wpisów",
+	"category": "theme",
+	"icon": "sort",
+	"description": "Linki sortowania archiwum kategorii: najnowsze, najczęściej czytane, najstarsze. Działa bez JS; poza archiwum kategorii nic nie wyświetla.",
+	"textdomain": "ihumbak-site-blocks",
+	"keywords": [ "sortuj", "kolejność", "popularne" ],
+	"supports": { "html": false, "multiple": false, "autoRegister": true },
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

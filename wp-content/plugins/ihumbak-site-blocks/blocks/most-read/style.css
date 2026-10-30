@@ -1,0 +1,11 @@
+/* ihumbak/most-read — structural CSS only; the look lives in the theme. */
+.sb-ranking__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: sb-ranking;
+}
+
+.sb-ranking__item {
+	counter-increment: sb-ranking;
+}

@@ -66,6 +66,37 @@ function register_meta(): void {
 }
 
 /**
+ * Has a sync ever succeeded? Before that the meta is missing or all 0.
+ */
+function is_synced(): bool {
+	$state = get_option( OPTION );
+	return is_array( $state ) && ! empty( $state['updated_at'] );
+}
+
+/**
+ * WP_Query ordering „by popularity”: `meta_value_num DESC`, then `date DESC`.
+ * Before the first successful sync it is plain date order, because posts that
+ * existed before the plugin have no meta row yet and a `meta_key` query would drop them.
+ *
+ * @return array<string, mixed>
+ */
+function order_args(): array {
+	if ( ! is_synced() ) {
+		return array(
+			'orderby' => 'date',
+			'order'   => 'DESC',
+		);
+	}
+	return array(
+		'meta_key' => META, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- the popularity contract (spec #36).
+		'orderby'  => array(
+			'meta_value_num' => 'DESC',
+			'date'           => 'DESC',
+		),
+	);
+}
+
+/**
  * Newly published posts get 0 so they show up in popularity queries right away.
  */
 function on_publish( string $new_status, string $old_status, \WP_Post $post ): void {
