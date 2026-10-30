@@ -13,9 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const IHUMBAK_TRACKING_OPTION_GTM_ID = 'ihumbak_tracking_gtm_id';
+const IHUMBAK_TRACKING_OPTION_GTM_ID    = 'ihumbak_tracking_gtm_id';
+const IHUMBAK_TRACKING_OPTION_HEAD_TAGS = 'ihumbak_tracking_head_tags';
 
 add_action( 'wp_head', 'ihumbak_tracking_head', 1 );
+add_action( 'wp_body_open', 'ihumbak_tracking_body_open', 1 );
 
 function ihumbak_tracking_head(): void {
 	$gtm_id = (string) get_option( IHUMBAK_TRACKING_OPTION_GTM_ID, '' );
@@ -26,4 +28,26 @@ function ihumbak_tracking_head(): void {
 			esc_js( $gtm_id )
 		);
 	}
+
+	$head_tags = (string) get_option( IHUMBAK_TRACKING_OPTION_HEAD_TAGS, '' );
+
+	if ( '' !== trim( $head_tags ) ) {
+		// Printed verbatim on purpose: the owner pastes domain verification tags here.
+		echo $head_tags . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+}
+
+function ihumbak_tracking_body_open(): void {
+	$gtm_id = (string) get_option( IHUMBAK_TRACKING_OPTION_GTM_ID, '' );
+
+	if ( '' === $gtm_id ) {
+		return;
+	}
+
+	printf(
+		'<!-- Google Tag Manager (noscript) -->' . "\n" .
+		'<noscript><iframe src="%s" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>' . "\n" .
+		'<!-- End Google Tag Manager (noscript) -->' . "\n",
+		esc_url( 'https://www.googletagmanager.com/ns.html?id=' . rawurlencode( $gtm_id ) )
+	);
 }
