@@ -9,8 +9,8 @@
  *   `offset: 1` (correct while nothing is sticky, and what the editor preview shows); on the
  *   server the hero post is excluded instead, so a sticky hero does not hide the newest post.
  *
- * Recognised server-side by the `namespace` attribute, like „Z tej kategorii”
- * (same-category-query.php). The editor side (names, isActive) is in assets/editor.js.
+ * Recognised server-side by the `namespace` attribute (query-variations.php), like
+ * „Z tej kategorii” (same-category-query.php). The editor side (names, isActive) is in assets/editor.js.
  */
 
 namespace Ihumbak\SiteBlocks\HomeQueries;
@@ -60,40 +60,5 @@ function latest_query_vars( array $query ): array {
 	return $query;
 }
 
-/** @return callable-string|null Query vars filter of the variation, if the block is one. */
-function filter_for( array $parsed_block ): ?string {
-	if ( 'core/query' !== ( $parsed_block['blockName'] ?? '' ) ) {
-		return null;
-	}
-	return match ( $parsed_block['attrs']['namespace'] ?? '' ) {
-		HERO    => __NAMESPACE__ . '\hero_query_vars',
-		LATEST  => __NAMESPACE__ . '\latest_query_vars',
-		default => null,
-	};
-}
-
-add_filter(
-	'pre_render_block',
-	static function ( $pre_render, array $parsed_block ) {
-		$filter = filter_for( $parsed_block );
-		if ( $filter ) {
-			add_filter( 'query_loop_block_query_vars', $filter );
-		}
-		return $pre_render;
-	},
-	10,
-	2
-);
-
-add_filter(
-	'render_block_core/query',
-	static function ( string $html, array $parsed_block ): string {
-		$filter = filter_for( $parsed_block );
-		if ( $filter ) {
-			remove_filter( 'query_loop_block_query_vars', $filter );
-		}
-		return $html;
-	},
-	10,
-	2
-);
+\Ihumbak\SiteBlocks\QueryVariations\register( HERO, __NAMESPACE__ . '\\hero_query_vars' );
+\Ihumbak\SiteBlocks\QueryVariations\register( LATEST, __NAMESPACE__ . '\\latest_query_vars' );
