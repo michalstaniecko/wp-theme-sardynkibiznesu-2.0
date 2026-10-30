@@ -42,9 +42,21 @@ add_shortcode( 'sb_button', __NAMESPACE__ . '\\sb_button_shortcode' );
 add_shortcode( 'cmsmasters_button', __NAMESPACE__ . '\\cmsmasters_button_shortcode' );
 
 /**
- * Registers the Przycisk variants as block styles of `core/button`.
+ * Registers the Przycisk variants as block styles of `core/button` and the plugin's
+ * minimal CSS (download icon). Colours and outline come from the theme.
  */
 function register_styles(): void {
+	// Loaded only on pages that render a `core/button` (legacy notations included).
+	wp_enqueue_block_style(
+		'core/button',
+		array(
+			'handle' => 'ihumbak-content-elements-button',
+			'src'    => plugins_url( 'assets/button.css', IHUMBAK_CONTENT_ELEMENTS_FILE ),
+			'path'   => dirname( IHUMBAK_CONTENT_ELEMENTS_FILE ) . '/assets/button.css',
+			'ver'    => IHUMBAK_CONTENT_ELEMENTS_VERSION,
+		)
+	);
+
 	foreach ( STYLES as $name => $label ) {
 		register_block_style(
 			'core/button',
