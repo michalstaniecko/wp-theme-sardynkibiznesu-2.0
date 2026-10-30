@@ -1,7 +1,7 @@
 /*
  * Notka and Ramka promocyjna (`core/group`): block styles registered by
  * ihumbak-content-elements. Layer 2 of the .sb-* rule: block style CSS lives in the theme.
- * The legacy `[cmsmasters_notice]` renders the same markup as a Notka, so this file
+ * The legacy notice shortcode of 2.0 renders the same markup as a Notka, so this file
  * styles old and new Notki alike. Scoped by block: `is-style-accent` is also a
  * `core/button` style (core-button.css).
  *
