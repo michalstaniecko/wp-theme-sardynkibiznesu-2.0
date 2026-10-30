@@ -1,6 +1,6 @@
 <?php
 /**
- * Karta produktu (GLOSSARY): a pattern made of core blocks, no block of its own and no
+ * Karta produktu: a pattern made of core blocks, no block of its own and no
  * prices. The card is a `core/group` with one of two block styles registered here;
  * the patterns and the CSS live in the theme (`patterns/product-cards-*.php`,
  * `assets/css/blocks/core-group--product.css`).
@@ -18,8 +18,8 @@ defined( 'ABSPATH' ) || exit;
 
 /** Karta produktu variants of `core/group`: slug => label. */
 const STYLES = array(
-	'product-horizontal' => 'Karta produktu: pozioma',
-	'product-compact'    => 'Karta produktu: kompaktowa',
+	'product-horizontal' => 'Karta pozioma',
+	'product-compact'    => 'Karta kompaktowa',
 );
 
 add_action( 'init', __NAMESPACE__ . '\\register_styles' );
