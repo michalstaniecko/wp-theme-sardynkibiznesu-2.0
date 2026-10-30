@@ -18,3 +18,6 @@ const IHUMBAK_CONTENT_ELEMENTS_FILE    = __FILE__;
 
 require_once __DIR__ . '/includes/button.php';
 require_once __DIR__ . '/includes/group-styles.php';
+require_once __DIR__ . '/includes/badges.php';
+require_once __DIR__ . '/includes/product-card.php';
+require_once __DIR__ . '/includes/podcast.php';
