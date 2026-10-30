@@ -118,10 +118,15 @@ add_action(
 /**
  * `sizes` of a ~680px wide image: the article's and page's featured image never exceeds the 680
  * content column (>= 1024px), below that it spans the viewport minus the root padding (24px per
- * side from 768px, 16px below). Core would say "up to 1200px wide". The front page hero and the
- * featured podcast image are ~680px wide too (7/12 of the 1200 column).
+ * side from 768px, 16px below). Core would say "up to 1200px wide".
  */
 const WIDE_IMAGE_SIZES = '(min-width: 1024px) 680px, (min-width: 768px) calc(100vw - 48px), calc(100vw - 32px)';
+
+/**
+ * `sizes` of the front page hero and the featured podcast image: 7/12 of the 1200 column (minus
+ * the 48px gap) from 1024px, stacked and full width below.
+ */
+const SPLIT_IMAGE_SIZES = '(min-width: 1248px) 672px, (min-width: 1024px) calc((100vw - 96px) * 7 / 12), (min-width: 768px) calc(100vw - 48px), calc(100vw - 32px)';
 
 /**
  * `sizes` of the row card image (.sb-card--row): full width minus root padding
@@ -135,14 +140,22 @@ const CARD_ROW_IMAGE_SIZES = '(max-width: 767px) calc(100vw - 32px), 240px';
  */
 const CARD_COL_IMAGE_SIZES = '(min-width: 1248px) 384px, (min-width: 768px) calc((100vw - 96px) / 3), calc(100vw - 32px)';
 
+/**
+ * `sizes` of the compact card image („Z tej kategorii”, .sb-card--compact): 120px beside the title
+ * below 768px, then a third of the article column (minus two 20px gaps). The column is the viewport
+ * minus root padding, from 1024px also minus the sidebar and its gap, and at most 680 wide (from 1112px).
+ */
+const CARD_COMPACT_IMAGE_SIZES = '(max-width: 767px) 120px, (min-width: 1112px) 214px, (min-width: 1024px) calc((100vw - 472px) / 3), calc((100vw - 88px) / 3)';
+
 /** className of a core/post-featured-image => `sizes` of its image. */
 const FEATURED_IMAGE_SIZES = array(
-	'sb-article__featured' => WIDE_IMAGE_SIZES,
-	'sb-page__featured'    => WIDE_IMAGE_SIZES,
-	'sb-hero__media'       => WIDE_IMAGE_SIZES,
-	'sb-podcast__media'    => WIDE_IMAGE_SIZES,
-	'sb-card__media--row'  => CARD_ROW_IMAGE_SIZES,
-	'sb-card__media--col'  => CARD_COL_IMAGE_SIZES,
+	'sb-article__featured'    => WIDE_IMAGE_SIZES,
+	'sb-page__featured'       => WIDE_IMAGE_SIZES,
+	'sb-hero__media'          => SPLIT_IMAGE_SIZES,
+	'sb-podcast__media'       => SPLIT_IMAGE_SIZES,
+	'sb-card__media--row'     => CARD_ROW_IMAGE_SIZES,
+	'sb-card__media--col'     => CARD_COL_IMAGE_SIZES,
+	'sb-card__media--compact' => CARD_COMPACT_IMAGE_SIZES,
 );
 
 /**

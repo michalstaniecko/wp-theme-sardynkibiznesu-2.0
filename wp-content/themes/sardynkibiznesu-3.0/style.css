@@ -603,7 +603,7 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 		}
 	}
 
-	& .wp-block-post-featured-image {
+	& .sb-article__featured {
 		margin: 0;
 
 		& img {
@@ -1172,8 +1172,14 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	}
 }
 
+/*
+ * The only source of the card image's proportions: the blocks carry no aspectRatio attribute.
+ * 16:9 is the dominant featured image; the other ones show whole, on surface-2. Core always
+ * prints object-fit inline on the image (the block's `scale` defaults to cover), hence !important.
+ */
 .sb-card__media {
-	aspect-ratio: 16 / 10;
+	box-sizing: content-box; /* The ratio excludes the border, so a 16:9 image fills the box exactly. */
+	aspect-ratio: 16 / 9;
 	margin: 0;
 	overflow: hidden;
 	border: 1px solid var(--wp--custom--color--border-card);
@@ -1185,7 +1191,7 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 		display: block;
 		width: 100%;
 		height: 100%;
-		object-fit: cover;
+		object-fit: contain !important;
 	}
 }
 

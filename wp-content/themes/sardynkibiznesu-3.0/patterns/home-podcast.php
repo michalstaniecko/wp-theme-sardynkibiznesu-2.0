@@ -63,7 +63,7 @@ $sb_duration = '{"metadata":{"bindings":{"content":{"source":"core/post-meta","a
 			<!-- wp:post-template -->
 				<!-- wp:group {"className":"sb-card sb-podcast__card sb-podcast__card--featured","layout":{"type":"default"}} -->
 				<div class="wp-block-group sb-card sb-podcast__card sb-podcast__card--featured">
-					<!-- wp:post-featured-image {"aspectRatio":"16/9","sizeSlug":"medium_large","className":"sb-card__media sb-podcast__media"} /-->
+					<!-- wp:post-featured-image {"sizeSlug":"medium_large","className":"sb-card__media sb-podcast__media"} /-->
 
 					<!-- wp:group {"className":"sb-card__body","layout":{"type":"default"}} -->
 					<div class="wp-block-group sb-card__body">
