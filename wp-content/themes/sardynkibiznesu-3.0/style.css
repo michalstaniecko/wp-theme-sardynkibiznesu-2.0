@@ -79,6 +79,122 @@ Text Domain: sardynkibiznesu-3-0
 		min-width: 0;
 	}
 
+	& .sb-article__header {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--wp--preset--spacing--4);
+
+		& > * {
+			margin-block: 0;
+		}
+	}
+
+	& .sb-article__breadcrumbs {
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 500;
+		line-height: var(--wp--custom--line-height--caption);
+		color: var(--wp--preset--color--text-secondary);
+
+		& a {
+			color: var(--wp--preset--color--text-secondary);
+			text-decoration: none;
+
+			&:hover {
+				color: var(--wp--preset--color--brand);
+				text-decoration: underline;
+			}
+		}
+	}
+
+	/* Category badge: brand plakietka. */
+	& .sb-article__category {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--wp--preset--spacing--2);
+
+		& a {
+			display: inline-block;
+			padding: var(--wp--preset--spacing--1) var(--wp--preset--spacing--3);
+			border-radius: var(--wp--preset--border-radius--full);
+			background-color: var(--wp--preset--color--brand-soft);
+			color: var(--wp--preset--color--brand);
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--caption);
+			letter-spacing: var(--wp--custom--letter-spacing--overline);
+			text-decoration: none;
+			text-transform: uppercase;
+
+			&:hover {
+				background-color: var(--wp--custom--color--brand-soft-strong);
+			}
+		}
+	}
+
+	/* Compact author: avatar, name, then date · reading time · comments. */
+	& .sb-article__byline {
+		display: flex;
+		align-items: center;
+		gap: var(--wp--preset--spacing--3);
+
+		& > *,
+		& .sb-article__byline-meta > *,
+		& .sb-article__byline-details > * {
+			margin-block: 0;
+		}
+
+		& .wp-block-avatar img {
+			display: block;
+			border-radius: var(--wp--preset--border-radius--full);
+		}
+
+		& .sb-article__byline-author {
+			font-size: var(--wp--preset--font-size--body-sm);
+			font-weight: 600;
+			line-height: var(--wp--custom--line-height--body-sm);
+
+			& a {
+				color: var(--wp--preset--color--text);
+				text-decoration: none;
+
+				&:hover {
+					color: var(--wp--preset--color--brand);
+				}
+			}
+		}
+
+		& .sb-article__byline-details {
+			display: flex;
+			flex-wrap: wrap;
+			column-gap: var(--wp--preset--spacing--2);
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 500;
+			line-height: var(--wp--custom--line-height--caption);
+			color: var(--wp--preset--color--text-secondary);
+
+			& > * + *::before {
+				content: "·";
+				margin-inline-end: var(--wp--preset--spacing--2);
+			}
+
+			& a {
+				color: var(--wp--preset--color--text-secondary);
+			}
+		}
+	}
+
+	& .wp-block-post-featured-image {
+		margin: 0;
+
+		& img {
+			display: block;
+			width: 100%;
+			height: auto;
+			border-radius: var(--wp--preset--border-radius--lg);
+		}
+	}
+
 	/* Content blocks may ask for wide/full alignment; inside the column they stay within it. */
 	& .sb-article__content :is(.alignwide, .alignfull) {
 		max-width: 100%;
