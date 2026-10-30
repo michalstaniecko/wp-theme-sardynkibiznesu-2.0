@@ -82,6 +82,7 @@ function render_rail( array $headings ): string {
 		'current'  => $items[0]['text'],
 		'progress' => '0%',
 		'open'     => false,
+		'covering' => false,
 	);
 
 	$chevron = '<svg class="ihumbak-toc__chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 15l-6-6-6 6"/></svg>';
@@ -89,7 +90,7 @@ function render_rail( array $headings ): string {
 	return sprintf(
 		'<nav class="ihumbak-toc" aria-label="%1$s" data-wp-interactive="ihumbak/toc" data-wp-context="%2$s"'
 			. ' data-wp-init="callbacks.init" data-wp-on-async-window--scroll="callbacks.spy" data-wp-on-async-window--resize="callbacks.spy"'
-			. ' data-wp-on--keydown="actions.closeOnEscape" data-wp-on-document--click="actions.closeOnOutside" data-wp-class--is-enhanced="state.enhanced" data-wp-class--is-open="context.open">'
+			. ' data-wp-on--keydown="actions.closeOnEscape" data-wp-on-document--click="actions.closeOnOutside" data-wp-class--is-enhanced="state.enhanced" data-wp-class--is-open="context.open" data-wp-class--is-covering="context.covering">'
 			. '<p class="ihumbak-toc__heading">%3$s</p>'
 			. '<div class="ihumbak-toc__progress" hidden data-wp-bind--hidden="!state.enhanced"><span class="ihumbak-toc__progress-bar" data-wp-style--width="context.progress"></span></div>'
 			. '<button class="ihumbak-toc__toggle" type="button" aria-controls="%4$s" aria-expanded="false" hidden data-wp-bind--hidden="!state.enhanced" data-wp-bind--aria-expanded="context.open" data-wp-on--click="actions.toggle">'
