@@ -1,0 +1,367 @@
+#!/usr/bin/env node
+/*
+ * Sprawdzenie wydajności i dostępności (spec #36, decyzja #34, ticket #61).
+ *
+ * Mierzy URL-e z perf-a11y-check.config.json metodą pomiaru bazowego 2.0 (#32):
+ * `npx lighthouse`, mobile = mediana z 3 przebiegów (domyślna emulacja), desktop = 1 przebieg
+ * (--preset=desktop), świeży profil (nowy gość bez zgody), cache serwera rozgrzany przed pomiarem.
+ * Wypisuje tabelę wartość / próg / zmiana / mieści się i kończy kodem 0 (bramki spełnione) albo 1.
+ *
+ * Uruchamiany ręcznie, bez CI. Node tylko przez npx dla Lighthouse, bez zależności.
+ * Nie uruchamiaj wielokrotnie na produkcji.
+ */
+'use strict';
+
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { spawnSync } = require('child_process');
+
+const USAGE = `Użycie:
+  bin/perf-a11y-check <bazowy-url> [opcje]
+  bin/perf-a11y-check --from <katalog-raportów> [opcje]
+
+Opcje:
+  --out <katalog>     gdzie zapisać raporty JSON i summary.md (domyślnie katalog tymczasowy)
+  --from <katalog>    nie uruchamiaj Lighthouse, przelicz zapisane raporty (np. po zmianie progów)
+  --config <plik>     plik progów (domyślnie bin/perf-a11y-check.config.json)
+  --only <k1,k2>      tylko wybrane klucze URL-i z konfiguracji (np. home,404)
+  --runs <n>          liczba przebiegów mobile (domyślnie z konfiguracji: 3)
+  --auth <user:hasło> Basic Auth (staging); nagłówek idzie do wszystkich żądań Lighthouse
+  --help`;
+
+function parseArgs(argv) {
+  const opts = { config: path.join(__dirname, 'perf-a11y-check.config.json') };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    const next = () => {
+      if (i + 1 >= argv.length) throw new Error(`Brak wartości dla ${a}`);
+      return argv[++i];
+    };
+    if (a === '--help' || a === '-h') opts.help = true;
+    else if (a === '--out') opts.out = next();
+    else if (a === '--from') opts.from = next();
+    else if (a === '--config') opts.config = next();
+    else if (a === '--only') opts.only = next().split(',').map((s) => s.trim()).filter(Boolean);
+    else if (a === '--runs') opts.runs = parseInt(next(), 10);
+    else if (a === '--auth') opts.auth = next();
+    else if (a.startsWith('--')) throw new Error(`Nieznana opcja ${a}`);
+    else if (!opts.base) opts.base = a.replace(/\/+$/, '');
+    else throw new Error(`Nadmiarowy argument ${a}`);
+  }
+  return opts;
+}
+
+/* ---------- Pomiar ---------- */
+
+const UA = {
+  mobile: 'Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36',
+  desktop: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
+};
+
+function authHeaders(auth) {
+  return auth ? { Authorization: 'Basic ' + Buffer.from(auth).toString('base64') } : {};
+}
+
+async function warmCache(url, auth) {
+  for (const ua of Object.values(UA)) {
+    for (let i = 0; i < 2; i++) {
+      try {
+        const res = await fetch(url, { headers: { 'User-Agent': ua, ...authHeaders(auth) } });
+        await res.arrayBuffer();
+      } catch (e) {
+        throw new Error(`Rozgrzewanie cache nie powiodło się dla ${url}: ${e.message}`);
+      }
+    }
+  }
+}
+
+function runLighthouse(config, url, file, { desktop, ignoreStatusCode, auth }) {
+  const args = [
+    '-y', `lighthouse@${config.lighthouseVersion}`, url,
+    '--output=json', `--output-path=${file}`, '--quiet', '--locale=pl',
+    '--only-categories=performance,accessibility',
+    '--chrome-flags=--headless=new',
+  ];
+  if (desktop) args.push('--preset=desktop');
+  if (ignoreStatusCode) args.push('--ignore-status-code');
+  if (auth) args.push(`--extra-headers=${JSON.stringify(authHeaders(auth))}`);
+  const res = spawnSync('npx', args, { stdio: ['ignore', 'ignore', 'inherit'] });
+  if (res.status !== 0 || !fs.existsSync(file)) {
+    throw new Error(`Lighthouse zakończył się błędem dla ${url} (kod ${res.status})`);
+  }
+  const lhr = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (lhr.runtimeError) throw new Error(`Lighthouse: ${lhr.runtimeError.code} dla ${url}: ${lhr.runtimeError.message}`);
+  return lhr;
+}
+
+async function measure(config, opts, outDir, urls) {
+  for (const u of urls) {
+    const url = opts.base + u.path;
+    process.stderr.write(`→ ${u.key}: ${url}\n`);
+    await warmCache(url, opts.auth);
+    for (let i = 1; i <= opts.runs; i++) {
+      runLighthouse(config, url, path.join(outDir, `${u.key}-mobile-${i}.json`), { ...u, auth: opts.auth });
+    }
+    runLighthouse(config, url, path.join(outDir, `${u.key}-desktop-1.json`), { ...u, desktop: true, auth: opts.auth });
+  }
+}
+
+function loadReports(dir, key) {
+  const read = (f) => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+  const mobile = fs.readdirSync(dir)
+    .filter((f) => new RegExp(`^${key.replace(/[-]/g, '\\-')}-mobile-\\d+\\.json$`).test(f))
+    .sort()
+    .map(read);
+  const desktopFile = `${key}-desktop-1.json`;
+  const desktop = fs.existsSync(path.join(dir, desktopFile)) ? read(desktopFile) : null;
+  if (!mobile.length) throw new Error(`Brak raportów mobile dla „${key}” w ${dir}`);
+  return { mobile, desktop };
+}
+
+/* ---------- Wyciąganie wartości z raportu ---------- */
+
+const num = (lhr, id) => lhr.audits[id] && lhr.audits[id].numericValue;
+
+function medianRun(runs) {
+  // Mediana z przebiegów mobile: przebieg ze środkową wartością LCP; jego dane idą do tabeli.
+  const sorted = [...runs].sort((a, b) => num(a, 'largest-contentful-paint') - num(b, 'largest-contentful-paint'));
+  return sorted[Math.floor((sorted.length - 1) / 2)];
+}
+
+function matchesAny(text, patterns) {
+  return patterns.some((p) => text.includes(p));
+}
+
+function classifyRequest(req, pageUrl, config) {
+  const r = config.resources;
+  if (req.resourceType === 'Document' && req.url.split('#')[0] === pageUrl) return 'own';
+  let u;
+  try { u = new URL(req.url); } catch { return 'foreign'; }
+  const sameHost = u.host === new URL(pageUrl).host;
+  if (sameHost && matchesAny(u.pathname, r.contentPaths)) return 'content';
+  if (sameHost && matchesAny(u.pathname, r.ownPaths)) return 'own';
+  if (u.protocol === 'data:' || u.protocol === 'blob:') return 'content';
+  return 'foreign';
+}
+
+function classifyNode(node, config) {
+  const a = config.attribution;
+  const text = `${node.selector || ''} ${node.snippet || ''}`;
+  if (matchesAny(text, a.thirdPartySelectors)) return 'cudze';
+  if (matchesAny(text, a.contentSelectors)) return 'treść';
+  return 'motyw/wtyczki';
+}
+
+function collectNodes(items) {
+  const nodes = [];
+  for (const it of items || []) {
+    if (it.node && it.node.type === 'node') nodes.push({ node: it.node, url: it.url });
+    else if (it.url) nodes.push({ node: {}, url: it.url });
+    for (const sub of (it.subItems && it.subItems.items) || []) {
+      if (sub.relatedNode) nodes.push({ node: sub.relatedNode, url: it.url });
+    }
+  }
+  return nodes;
+}
+
+function extract(lhr, config) {
+  const pageUrl = lhr.finalDisplayedUrl || lhr.requestedUrl;
+  const requests = (lhr.audits['network-requests'].details || {}).items || [];
+  const sum = (list) => list.reduce((s, r) => s + (r.transferSize || 0), 0);
+  const own = requests.filter((r) => classifyRequest(r, pageUrl, config) === 'own');
+  const foreign = requests.filter((r) => classifyRequest(r, pageUrl, config) === 'foreign');
+
+  const blocking = ((lhr.audits['render-blocking-insight'] || {}).details || {}).items || [];
+  const ownBlocking = blocking.filter((b) => classifyRequest({ url: b.url }, pageUrl, config) === 'own');
+  const isCss = (u) => /\.css(\?|$)/.test(u);
+  const isJs = (u) => /\.js(\?|$)/.test(u);
+
+  const a11yViolations = [];
+  for (const ref of lhr.categories.accessibility.auditRefs) {
+    const audit = lhr.audits[ref.id];
+    if (!audit || audit.score !== 0 || audit.scoreDisplayMode !== 'binary') continue;
+    const nodes = collectNodes((audit.details || {}).items);
+    if (!nodes.length) a11yViolations.push({ id: ref.id, owner: 'motyw/wtyczki', where: '(bez elementu)' });
+    for (const n of nodes) {
+      a11yViolations.push({ id: ref.id, owner: classifyNode(n.node, config), where: n.node.selector || n.url || '' });
+    }
+  }
+
+  const imageWarnings = [];
+  for (const id of config.imageAudits) {
+    const audit = lhr.audits[id];
+    if (!audit || audit.scoreDisplayMode === 'notApplicable' || audit.score === null || audit.score === 1) continue;
+    const nodes = collectNodes((audit.details || {}).items);
+    if (!nodes.length) imageWarnings.push({ id, owner: 'motyw/wtyczki', where: audit.displayValue || '' });
+    for (const n of nodes) {
+      imageWarnings.push({ id, owner: classifyNode(n.node, config), where: n.url || n.node.selector || '' });
+    }
+  }
+
+  const allow = config.resources.foreignScriptAllowlist;
+  const doc = requests.find((r) => r.resourceType === 'Document') || {};
+
+  return {
+    lcpMs: num(lhr, 'largest-contentful-paint'),
+    fcpMs: num(lhr, 'first-contentful-paint'),
+    tbtMs: num(lhr, 'total-blocking-time'),
+    cls: num(lhr, 'cumulative-layout-shift'),
+    a11yScore: Math.round(lhr.categories.accessibility.score * 100),
+    a11yViolations,
+    ownCssBytes: sum(own.filter((r) => r.resourceType === 'Stylesheet')),
+    ownCssBlocking: ownBlocking.filter((b) => isCss(b.url)).length,
+    ownJsBytes: sum(own.filter((r) => r.resourceType === 'Script')),
+    ownJsBlocking: ownBlocking.filter((b) => isJs(b.url)).length,
+    ownFontFiles: own.filter((r) => r.resourceType === 'Font').length,
+    ownFontBytes: sum(own.filter((r) => r.resourceType === 'Font')),
+    htmlBytes: doc.transferSize || 0,
+    foreignBytes: sum(foreign),
+    foreignScriptsOutside: foreign
+      .filter((r) => r.resourceType === 'Script' && !matchesAny(r.url, allow))
+      .map((r) => r.url),
+    imageWarnings,
+  };
+}
+
+/* ---------- Ocena ---------- */
+
+const s1 = (ms) => (ms / 1000).toFixed(1).replace('.', ',') + ' s';
+const msf = (ms) => Math.round(ms) + ' ms';
+const clsf = (v) => (Math.round(v * 1000) / 1000).toString().replace('.', ',');
+const kb = (b) => Math.round(b / 1024) + ' KB';
+const sign = (d, fmt) => (d < 0 ? '−' + fmt(-d) : '+' + fmt(d));
+
+const METRICS = {
+  lcpMs: { label: 'LCP', fmt: s1, limit: (t) => t.lcpMs, limitFmt: (t) => '≤ ' + s1(t.lcpMs) },
+  fcpMs: { label: 'FCP', fmt: s1 },
+  tbtMs: { label: 'TBT', fmt: msf, limit: (t) => t.tbtMs, limitFmt: (t) => '≤ ' + msf(t.tbtMs) },
+  cls: { label: 'CLS', fmt: clsf, limit: (t) => t.cls, limitFmt: (t) => '≤ ' + clsf(t.cls) },
+};
+
+function rowsFor(key, form, v, base, config, blockingCompare) {
+  const t = config.thresholds;
+  const tol = config.notWorseThan2.tolerance;
+  const rows = [];
+  const row = (label, value, limit, change, ok, note) => rows.push({ key, form, label, value, limit, change, ok, note });
+
+  for (const [id, m] of Object.entries(METRICS)) {
+    const absOk = m.limit ? v[id] <= m.limit(t) : true;
+    let change = '—';
+    let cmpOk = true;
+    if (base && base[id] !== undefined) {
+      change = `${sign(v[id] - base[id], m.fmt)} vs ${m.fmt(base[id])}`;
+      cmpOk = v[id] <= base[id] + (tol[id] || 0);
+    }
+    const limit = m.limit ? m.limitFmt(t) + (base ? ' i ≤ 2.0' : '') : (base ? '≤ 2.0' : '—');
+    row(m.label, m.fmt(v[id]), limit, change, absOk && (cmpOk || !blockingCompare), !cmpOk && !blockingCompare ? 'gorzej niż 2.0 (desktop, nie blokuje)' : '');
+  }
+
+  if (form !== 'mobile') return rows;
+
+  const blockingAxe = v.a11yViolations.filter((x) => x.owner === 'motyw/wtyczki');
+  let a11yChange = '—';
+  let a11yCmpOk = true;
+  if (base && base.a11yScore !== undefined) {
+    a11yChange = `${sign(v.a11yScore - base.a11yScore, (d) => String(d))} vs ${base.a11yScore}`;
+    a11yCmpOk = v.a11yScore >= base.a11yScore - (tol.a11yScore || 0);
+  }
+  // Wynik < 100 nie blokuje, jeśli wszystkie naruszenia pochodzą z treści albo wtyczek zewnętrznych (#34 p. 8).
+  const onlyNonBlocking = v.a11yScore < t.a11yScore && blockingAxe.length === 0;
+  row('A11y', String(v.a11yScore), String(t.a11yScore), a11yChange,
+    (v.a11yScore >= t.a11yScore || onlyNonBlocking) && a11yCmpOk,
+    onlyNonBlocking ? 'poniżej progu tylko przez treść/wtyczki zewnętrzne' : '');
+  row('axe z motywu/wtyczek', String(blockingAxe.length), '0', '—', blockingAxe.length === 0);
+
+  row('CSS własny', kb(v.ownCssBytes), `≤ ${t.ownCssKB} KB`, '—', v.ownCssBytes <= t.ownCssKB * 1024);
+  row('CSS blokujący', String(v.ownCssBlocking), `≤ ${t.ownCssBlockingFiles}`, '—', v.ownCssBlocking <= t.ownCssBlockingFiles);
+  row('JS własny', kb(v.ownJsBytes), `≤ ${t.ownJsKB} KB`, '—', v.ownJsBytes <= t.ownJsKB * 1024);
+  row('JS blokujący', String(v.ownJsBlocking), `≤ ${t.ownJsBlockingFiles}`, '—', v.ownJsBlocking <= t.ownJsBlockingFiles);
+  row('Fonty pliki', String(v.ownFontFiles), `≤ ${t.ownFontFiles}`, '—', v.ownFontFiles <= t.ownFontFiles);
+  row('Fonty', kb(v.ownFontBytes), `≤ ${t.ownFontKB} KB`, '—', v.ownFontBytes <= t.ownFontKB * 1024);
+  row('HTML', kb(v.htmlBytes), `≤ ${t.htmlKB} KB`, '—', v.htmlBytes <= t.htmlKB * 1024);
+  row('Cudze', kb(v.foreignBytes), `≤ ${t.foreignKB} KB (2.0)`, '—', v.foreignBytes <= t.foreignKB * 1024);
+  row('Skrypty cudze spoza listy', String(v.foreignScriptsOutside.length), '0', '—', v.foreignScriptsOutside.length === 0);
+  for (const id of config.imageAudits) {
+    const n = v.imageWarnings.filter((w) => w.id === id && w.owner === 'motyw/wtyczki').length;
+    row(`Obrazy: ${id}`, String(n), '0', '—', n === 0);
+  }
+  return rows;
+}
+
+function evaluate(config, dir, urls) {
+  const rows = [];
+  const details = [];
+  for (const u of urls) {
+    const { mobile, desktop } = loadReports(dir, u.key);
+    const vm = extract(medianRun(mobile), config);
+    rows.push(...rowsFor(u.key, 'mobile', vm, config.baseline.mobile[u.key], config, true));
+    if (desktop) {
+      const vd = extract(desktop, config);
+      rows.push(...rowsFor(u.key, 'desktop', vd, config.baseline.desktop[u.key], config, config.notWorseThan2.desktopBlocking));
+    }
+    for (const x of vm.a11yViolations) details.push(`- ${u.key}: axe \`${x.id}\` [${x.owner}] \`${x.where}\``);
+    for (const x of vm.imageWarnings) details.push(`- ${u.key}: obraz \`${x.id}\` [${x.owner}] ${x.where}`);
+    for (const s of vm.foreignScriptsOutside) details.push(`- ${u.key}: skrypt cudzy spoza listy ${s.split('?')[0]}`);
+  }
+  return { rows, details };
+}
+
+function render({ rows, details }, meta) {
+  const esc = (s) => String(s).replace(/\|/g, '\\|');
+  const lines = [];
+  lines.push(`# Sprawdzenie wydajności i dostępności`, '');
+  lines.push(`Cel: ${meta.target}. Raporty: ${meta.dir}. Mobile: mediana z ${meta.runs} (przebieg o środkowym LCP), desktop: 1 przebieg.`, '');
+  lines.push('| URL | Widok | Sprawdzenie | Wartość | Próg | Zmiana | Mieści się |');
+  lines.push('|---|---|---|---|---|---|---|');
+  for (const r of rows) {
+    lines.push(`| ${r.key} | ${r.form} | ${esc(r.label)} | ${esc(r.value)} | ${esc(r.limit)} | ${esc(r.change)} | ${r.ok ? 'tak' : 'NIE'} |${r.note ? ' ' + r.note : ''}`);
+  }
+  const failed = rows.filter((r) => !r.ok);
+  lines.push('', '## Szczegóły (naruszenia, ostrzeżenia, skrypty)', '');
+  const counts = new Map();
+  for (const d of details) counts.set(d, (counts.get(d) || 0) + 1);
+  lines.push(counts.size ? [...counts].map(([d, n]) => (n > 1 ? `${d} ×${n}` : d)).join('\n') : '- brak');
+  lines.push('', `Niespełnione: ${failed.length ? failed.map((r) => `${r.key}/${r.form}/${r.label}`).join(', ') : 'brak'}`);
+  lines.push(`Bramki: ${failed.length ? 'NIE' : 'TAK'}`);
+  return { text: lines.join('\n') + '\n', ok: failed.length === 0 };
+}
+
+/* ---------- Main ---------- */
+
+async function main() {
+  const opts = parseArgs(process.argv.slice(2));
+  if (opts.help || (!opts.base && !opts.from)) {
+    console.log(USAGE);
+    return opts.help ? 0 : 2;
+  }
+  const config = JSON.parse(fs.readFileSync(opts.config, 'utf8'));
+  opts.runs = opts.runs || config.mobileRuns;
+  let urls = config.urls;
+  if (opts.only) {
+    const unknown = opts.only.filter((k) => !urls.some((u) => u.key === k));
+    if (unknown.length) throw new Error(`Nieznane klucze URL-i: ${unknown.join(', ')}`);
+    urls = urls.filter((u) => opts.only.includes(u.key));
+  }
+
+  let dir = opts.from;
+  if (!dir) {
+    dir = opts.out || fs.mkdtempSync(path.join(os.tmpdir(), 'perf-a11y-check-'));
+    fs.mkdirSync(dir, { recursive: true });
+    await measure(config, opts, dir, urls);
+  }
+
+  const result = render(evaluate(config, dir, urls), {
+    target: opts.base || `zapisane raporty`,
+    dir,
+    runs: opts.from ? 'zapisanych przebiegów' : opts.runs,
+  });
+  fs.writeFileSync(path.join(opts.out || dir, 'summary.md'), result.text);
+  process.stdout.write(result.text);
+  return result.ok ? 0 : 1;
+}
+
+main().then((code) => process.exit(code), (e) => {
+  console.error(`Błąd: ${e.message}`);
+  process.exit(2);
+});

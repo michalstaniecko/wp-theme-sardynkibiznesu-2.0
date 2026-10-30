@@ -1,0 +1,74 @@
+{
+  "_readme": "Progi i listy dla bin/perf-a11y-check (spec #36, decyzja #34). Dostrajamy raz, po pierwszym pomiarze stagingu: zmień liczby tutaj i przelicz zapisane raporty przez --from <katalog>, bez ponownego Lighthouse.",
+  "lighthouseVersion": "12.8.2",
+  "mobileRuns": 3,
+  "urls": [
+    { "key": "home", "path": "/" },
+    { "key": "post-toc", "path": "/dingsy/co-musi-zobaczyc-algorytm-zeby-zrobic-zasiegi/" },
+    { "key": "category", "path": "/kategorie/dingsy/" },
+    { "key": "page", "path": "/polityka-prywatnosci/" },
+    { "key": "page-umowy", "path": "/umowy/" },
+    { "key": "blog", "path": "/blog/" },
+    { "key": "search", "path": "/?s=biznes" },
+    { "key": "404", "path": "/perf-a11y-check-404/", "ignoreStatusCode": true }
+  ],
+  "thresholds": {
+    "lcpMs": 2500,
+    "cls": 0.1,
+    "tbtMs": 200,
+    "a11yScore": 100,
+    "ownCssKB": 60,
+    "ownCssBlockingFiles": 5,
+    "ownJsKB": 40,
+    "ownJsBlockingFiles": 0,
+    "ownFontFiles": 4,
+    "ownFontKB": 120,
+    "htmlKB": 100,
+    "foreignKB": 675
+  },
+  "notWorseThan2": {
+    "_readme": "Tolerancja „nic gorzej niż 2.0”: wartość może być gorsza od bazy najwyżej o tyle. desktopBlocking=false: desktop (1 przebieg) tylko raportuje zmianę.",
+    "tolerance": { "lcpMs": 0, "fcpMs": 0, "tbtMs": 0, "cls": 0, "a11yScore": 0 },
+    "desktopBlocking": false
+  },
+  "baseline": {
+    "_readme": "Pomiar bazowy 2.0 z #32 (produkcja, 2026-10-29, Lighthouse 12.8.2), branch research/pomiar-bazowy-2-0. Mobile = mediana z 3, desktop = 1 przebieg.",
+    "mobile": {
+      "home": { "lcpMs": 6700, "fcpMs": 2200, "tbtMs": 115, "cls": 0, "a11yScore": 92 },
+      "post-toc": { "lcpMs": 7200, "fcpMs": 2600, "tbtMs": 96, "cls": 0, "a11yScore": 89 },
+      "category": { "lcpMs": 6300, "fcpMs": 2400, "tbtMs": 96, "cls": 0, "a11yScore": 89 },
+      "page": { "lcpMs": 5800, "fcpMs": 1600, "tbtMs": 104, "cls": 0, "a11yScore": 89 },
+      "page-umowy": { "lcpMs": 5900, "fcpMs": 1300, "tbtMs": 92, "cls": 0, "a11yScore": 96 }
+    },
+    "desktop": {
+      "home": { "lcpMs": 1400, "fcpMs": 700, "tbtMs": 0, "cls": 0, "a11yScore": 92 },
+      "post-toc": { "lcpMs": 1600, "fcpMs": 800, "tbtMs": 0, "cls": 0, "a11yScore": 89 },
+      "category": { "lcpMs": 1300, "fcpMs": 600, "tbtMs": 0, "cls": 0, "a11yScore": 89 },
+      "page": { "lcpMs": 1300, "fcpMs": 400, "tbtMs": 0, "cls": 0, "a11yScore": 89 },
+      "page-umowy": { "lcpMs": 1200, "fcpMs": 300, "tbtMs": 0, "cls": 0, "a11yScore": 96 }
+    }
+  },
+  "resources": {
+    "_readme": "Zasób własny = ten sam host co badany URL i ścieżka z ownPaths (oraz sam dokument HTML). Ścieżki z contentPaths to treść (bez budżetu). Wszystko inne jest cudze; skrypty cudze muszą pasować do foreignScriptAllowlist (GTM i wtyczki „zostaje”).",
+    "ownPaths": ["/wp-content/themes/", "/wp-content/plugins/ihumbak-", "/wp-includes/"],
+    "contentPaths": ["/wp-content/uploads/"],
+    "foreignScriptAllowlist": [
+      "googletagmanager.com",
+      "google-analytics.com",
+      "cookieyes.com",
+      "/wp-content/plugins/cookie-law-info/",
+      "/wp-content/plugins/convertpro/",
+      "/wp-content/plugins/convertpro-addon/",
+      "/wp-content/plugins/yet-another-stars-rating/",
+      "/wp-content/plugins/spreaker-shortcode/",
+      "/wp-content/plugins/wordpress-seo/",
+      "spreaker.com"
+    ]
+  },
+  "attribution": {
+    "_readme": "Przypisanie naruszeń axe i ostrzeżeń audytów obrazów po selektorze/fragmencie HTML z raportu. Pasuje do thirdPartySelectors → wtyczka zewnętrzna, do contentSelectors → treść; obie grupy nie blokują (lista do poprawy redakcyjnej). Reszta = motyw i wtyczki ihumbak-*, blokuje.",
+    "contentSelectors": [".entry-content", ".wp-block-post-content", ".article__content"],
+    "thirdPartySelectors": ["cky-", "cookie-law-info", "cp-popup", "cp-module", "cp_style", "yasr", "spreaker", "wpdiscuz", "wpdcom"]
+  },
+  "imageAudits": ["lcp-lazy-loaded", "unsized-images", "uses-responsive-images"]
+}
