@@ -1,0 +1,215 @@
+/*
+ * Spis treści, variant "rail" (ihumbak/toc in sidebar-article / sidebar-page), design system TableOfContents.
+ * Layer 3: CSS of our block. The base .ihumbak-toc styles (inline box, numbering) are in style.css.
+ * Without JS: a plain list. With JS (.is-enhanced, store ihumbak/toc): progress bar and scroll-spy;
+ * below 1024px the rail becomes the bottom bar whose button opens the list as a sheet.
+ */
+.ihumbak-toc.ihumbak-toc--rail {
+	margin-block: 0;
+	border: 0;
+	border-radius: 0;
+	background: none;
+
+	& .ihumbak-toc__heading {
+		margin: 0 0 var(--wp--preset--spacing--3);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 600;
+		line-height: 16px;
+		letter-spacing: var(--wp--custom--letter-spacing--overline);
+		text-transform: uppercase;
+		color: var(--wp--preset--color--text-secondary);
+	}
+
+	& .ihumbak-toc__progress {
+		height: 2px;
+		margin-bottom: var(--wp--preset--spacing--4);
+		overflow: hidden;
+		border-radius: 1px;
+		background-color: var(--wp--custom--color--border);
+	}
+
+	& .ihumbak-toc__progress-bar {
+		display: block;
+		width: 0;
+		height: 100%;
+		background-color: var(--sb-toc-active);
+	}
+
+	& .ihumbak-toc__progress[hidden],
+	& .ihumbak-toc__toggle[hidden] {
+		display: none;
+	}
+
+	& .ihumbak-toc__sr {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	/* The list: a left rule per link, brand on the current one. */
+	& .ihumbak-toc__link {
+		padding-left: var(--wp--preset--spacing--4);
+		border-left: 2px solid var(--wp--custom--color--border);
+
+		&:hover {
+			color: var(--wp--preset--color--text);
+			border-left-color: var(--wp--preset--color--text-secondary);
+		}
+
+		&[aria-current="location"] {
+			color: var(--sb-toc-active);
+			border-left-color: var(--sb-toc-active);
+
+			&::before {
+				color: var(--sb-toc-active);
+			}
+		}
+	}
+
+	& .ihumbak-toc__toggle {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.ihumbak-toc.ihumbak-toc--rail {
+		& .ihumbak-toc__progress-bar {
+			transition: width var(--wp--custom--duration--fast) linear;
+		}
+
+		& .ihumbak-toc__link {
+			transition: color var(--wp--custom--duration--fast) var(--wp--custom--easing), border-color var(--wp--custom--duration--fast) var(--wp--custom--easing);
+		}
+
+		& .ihumbak-toc__chevron {
+			transition: transform var(--wp--custom--duration--slow) var(--wp--custom--easing);
+		}
+	}
+}
+
+/* Desktop: the rail stays in view while the article scrolls. The sidebar stretches to the
+   height of the grid row so the sticky rail has room; later sidebar blocks pass under it. */
+@media (min-width: 1024px) {
+	/* Spec #27 pt 5: with the rail beside it, the Spis treści in the content shows only below 1024px. */
+	body:has(.ihumbak-toc--rail) .wp-block-post-content .ihumbak-toc:not(.ihumbak-toc--rail) {
+		display: none;
+	}
+
+	/* sidebar-article: aside > .sb-sidebar > rail; sidebar-page (#57): aside.sb-sidebar > rail. */
+	aside:has(> .sb-sidebar > .ihumbak-toc--rail),
+	aside:has(> .ihumbak-toc--rail) {
+		align-self: stretch;
+	}
+
+	aside > .sb-sidebar:has(> .ihumbak-toc--rail) {
+		height: 100%;
+	}
+
+	.ihumbak-toc.ihumbak-toc--rail {
+		position: sticky;
+		top: calc(var(--wp--custom--layout--header-height) + var(--wp-admin--admin-bar--height, 0px) + var(--wp--preset--spacing--6));
+		z-index: 1;
+		max-height: calc(100vh - var(--wp--custom--layout--header-height) - var(--wp-admin--admin-bar--height, 0px) - var(--wp--preset--spacing--12));
+		overflow: auto;
+		background-color: var(--wp--preset--color--surface);
+	}
+}
+
+/* Mobile and tablet with JS: the bottom bar (step, current heading) and the sheet. */
+@media (max-width: 1023px) {
+	body:has(.ihumbak-toc--rail.is-enhanced) {
+		padding-bottom: 56px;
+	}
+
+	.ihumbak-toc.ihumbak-toc--rail.is-enhanced {
+		position: fixed;
+		inset: auto 0 0;
+		z-index: 90;
+		margin: 0;
+		background-color: var(--wp--preset--color--surface);
+		border-top: 1px solid var(--wp--custom--color--border);
+		box-shadow: var(--wp--preset--shadow--lg);
+
+		& .ihumbak-toc__heading {
+			display: none;
+		}
+
+		& .ihumbak-toc__progress {
+			position: absolute;
+			inset: -1px 0 auto;
+			margin: 0;
+			border-radius: 0;
+			background: none;
+		}
+
+		& .ihumbak-toc__toggle {
+			display: flex;
+			align-items: center;
+			gap: var(--wp--preset--spacing--3);
+			width: 100%;
+			min-height: 56px;
+			padding: var(--wp--preset--spacing--2) var(--wp--preset--spacing--4);
+			font-family: inherit;
+			text-align: left;
+			color: var(--wp--preset--color--text);
+			background: none;
+			border: 0;
+			cursor: pointer;
+
+			&[hidden] {
+				display: none;
+			}
+		}
+
+		& .ihumbak-toc__step {
+			flex: none;
+			font-size: var(--wp--preset--font-size--caption);
+			font-weight: 600;
+			line-height: 18px;
+			font-variant-numeric: tabular-nums;
+			color: var(--sb-toc-active);
+		}
+
+		& .ihumbak-toc__current {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			font-size: var(--wp--preset--font-size--body-sm);
+			font-weight: 600;
+			line-height: 20px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		& .ihumbak-toc__chevron {
+			flex: none;
+			color: var(--wp--preset--color--text-secondary);
+		}
+
+		& .ihumbak-toc__toggle[aria-expanded="true"] .ihumbak-toc__chevron {
+			transform: rotate(180deg);
+		}
+
+		/* The sheet: the same list, under the toggle, only while open. */
+		& > .ihumbak-toc__list {
+			display: none;
+			max-height: 60vh;
+			overflow: auto;
+			overscroll-behavior: contain;
+			padding: var(--wp--preset--spacing--2) var(--wp--preset--spacing--4) var(--wp--preset--spacing--6);
+			border-top: 1px solid var(--wp--custom--color--border);
+		}
+
+		&.is-open > .ihumbak-toc__list {
+			display: block;
+		}
+
+		& .ihumbak-toc__link {
+			align-items: center;
+			min-height: 44px;
+		}
+	}
+}

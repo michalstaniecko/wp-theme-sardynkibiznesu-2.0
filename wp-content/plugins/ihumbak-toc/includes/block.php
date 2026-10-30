@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Values of the block's "variant" attribute; the <nav> gets the class ihumbak-toc--{variant}.
- * "rail" (Kolumna boczna, scroll-spy) is extended by its own ticket.
+ * "rail" (Kolumna boczna) renders through includes/rail.php.
  */
 const VARIANTS = array( 'inline', 'rail' );
 

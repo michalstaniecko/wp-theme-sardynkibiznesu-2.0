@@ -19,6 +19,7 @@
 	"supports": {
 		"autoRegister": true,
 		"html": false,
+		"interactivity": true,
 		"reusable": false,
 		"spacing": { "margin": true }
 	},
