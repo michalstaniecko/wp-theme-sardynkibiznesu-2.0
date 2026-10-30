@@ -38,6 +38,35 @@ add_action(
 	}
 );
 
+/**
+ * Per-block styles (layer 3 of spec #36): block name => file in assets/css/.
+ * Loaded only when the block is on the page, also in the editor. The blocks
+ * themselves come from ihumbak-* plugins.
+ */
+const BLOCK_STYLES = array(
+	'ihumbak/site-header' => 'header',
+	'ihumbak/search-bar'  => 'search-bar',
+	'core/buttons'        => 'buttons-badges',
+);
+
+add_action(
+	'init',
+	static function (): void {
+		$version = wp_get_theme()->get( 'Version' );
+		foreach ( BLOCK_STYLES as $block => $file ) {
+			wp_enqueue_block_style(
+				$block,
+				array(
+					'handle' => "sardynkibiznesu-3-0-{$file}",
+					'src'    => get_theme_file_uri( "assets/css/{$file}.css" ),
+					'path'   => get_theme_file_path( "assets/css/{$file}.css" ),
+					'ver'    => $version,
+				)
+			);
+		}
+	}
+);
+
 add_action(
 	'wp_head',
 	static function (): void {

@@ -1,0 +1,71 @@
+/*
+ * Search bar below the header (ihumbak/search-bar): core/search + popular terms.
+ * Loaded with ihumbak/search-bar (wp_enqueue_block_style). Decisions: #29.
+ */
+.wp-block-ihumbak-search-bar {
+	border-bottom: 1px solid var(--wp--custom--color--border);
+	box-shadow: var(--wp--preset--shadow--md);
+
+	& .wp-block-ihumbak-search-bar__inner {
+		box-sizing: border-box;
+		display: grid;
+		gap: var(--wp--preset--spacing--3);
+		max-width: var(--wp--style--global--wide-size);
+		margin: 0 auto;
+		padding: var(--wp--preset--spacing--5) var(--wp--preset--spacing--6);
+	}
+
+	& .sb-search-bar__form {
+		margin: 0;
+
+		& .wp-block-search__inside-wrapper {
+			gap: var(--wp--preset--spacing--2);
+		}
+
+		/* core/search has no icon inside the field: drawn as a background (Lucide search). */
+		& .wp-block-search__input {
+			min-height: 52px;
+			padding: 0 var(--wp--preset--spacing--4) 0 var(--wp--preset--spacing--12);
+			border: 1px solid var(--wp--custom--color--border-control);
+			border-radius: var(--wp--preset--border-radius--md);
+			font-size: var(--wp--preset--font-size--body);
+			background: no-repeat 16px 50% / 20px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E");
+		}
+
+		& .wp-block-search__button {
+			margin: 0;
+			padding: 0 var(--wp--preset--spacing--5);
+			border-radius: var(--wp--preset--border-radius--md);
+		}
+	}
+
+	& .sb-search-bar__hints.sb-search-bar__hints {
+		align-items: center;
+		gap: var(--wp--preset--spacing--2);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 500;
+		line-height: var(--wp--custom--line-height--caption);
+		color: var(--wp--preset--color--text-secondary);
+
+		& p {
+			margin: 0;
+		}
+	}
+
+	& :focus-visible {
+		outline: 2px solid var(--wp--custom--color--focus);
+		outline-offset: 2px;
+	}
+}
+
+@media (max-width: 1023.98px) {
+	.wp-block-ihumbak-search-bar {
+		& .wp-block-ihumbak-search-bar__inner {
+			padding: var(--wp--preset--spacing--4);
+		}
+
+		& .sb-search-bar__form .wp-block-search__input {
+			min-height: 48px;
+		}
+	}
+}
