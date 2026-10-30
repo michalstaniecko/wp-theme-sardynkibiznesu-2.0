@@ -1,0 +1,35 @@
+/*
+ * Plakietki on `core/buttons` (style `badges`, registered by ihumbak-content-elements):
+ * a row of link pills, e.g. "Popularne" searches in the search bar. Sentence case like
+ * the design system's search hints, not overline. Layer 2 of the .sb-* rule.
+ * Specificity beats the Przycisk variants of core-button.css (outline, accent…).
+ */
+
+.wp-block-buttons.is-style-badges {
+	gap: var(--wp--preset--spacing--2);
+
+	& > .wp-block-button > .wp-block-button__link {
+		min-height: 24px;
+		padding: var(--wp--preset--spacing--1) var(--wp--preset--spacing--3);
+		border: 0;
+		border-radius: var(--wp--preset--border-radius--full);
+		background-color: var(--wp--preset--color--accent-soft);
+		box-shadow: none;
+		color: var(--wp--custom--color--accent-text);
+		font-size: var(--wp--preset--font-size--caption);
+		font-weight: 600;
+		line-height: 16px;
+		letter-spacing: 0;
+		text-transform: none;
+		text-decoration: none;
+
+		&::before {
+			content: none;
+		}
+
+		&:hover {
+			background-color: var(--wp--preset--color--brand-soft);
+			color: var(--wp--preset--color--brand);
+		}
+	}
+}
