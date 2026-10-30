@@ -30,7 +30,7 @@ function readingLine( heading ) {
  */
 function keepLinkInView( nav, index ) {
 	const list = nav.querySelector( ':scope > .ihumbak-toc__list' );
-	const link = list?.querySelectorAll( 'a' )[ index ];
+	const link = list?.querySelectorAll( 'a' )[ Math.max( index, 0 ) ];
 	if ( ! link ) {
 		return;
 	}
