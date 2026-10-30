@@ -26,6 +26,7 @@ const DEFAULT_LABEL = 'Sprawdź zawartość kursu';
 
 add_action( 'init', __NAMESPACE__ . '\\register_styles' );
 add_shortcode( 'sb_button', __NAMESPACE__ . '\\sb_button_shortcode' );
+add_shortcode( 'cmsmasters_button', __NAMESPACE__ . '\\cmsmasters_button_shortcode' );
 
 /**
  * Registers the Przycisk variants as block styles of `core/button`.
@@ -109,4 +110,31 @@ function sb_button_shortcode( $atts ): string {
 	$label = '' !== trim( (string) $a['label'] ) ? (string) $a['label'] : DEFAULT_LABEL;
 
 	return render( esc_html( $label ), (string) $a['url'], 'outline', '', '_blank', (string) $a['rel'] );
+}
+
+/**
+ * `[cmsmasters_button button_link="…" button_target="…" button_text_align="…"]Text[/cmsmasters_button]`
+ * → Przycisk with the download-icon style (2.0 always showed the download icon).
+ * `button_text_align` becomes the justification; `button_target="blank"` opens a new tab
+ * (in content it is always "self", which 2.0 printed literally as a window name).
+ * Typography, colour, icon and animation attributes are ignored, as in 2.0.
+ *
+ * @param array|string $atts    Shortcode attributes.
+ * @param string|null  $content Button text.
+ */
+function cmsmasters_button_shortcode( $atts, $content = null ): string {
+	$a = shortcode_atts(
+		array(
+			'button_link'       => '#',
+			'button_target'     => '',
+			'button_text_align' => '',
+		),
+		$atts,
+		'cmsmasters_button'
+	);
+
+	$target = in_array( $a['button_target'], array( 'blank', '_blank' ), true ) ? '_blank' : '';
+	$text   = trim( wp_kses( (string) $content, 'data' ) );
+
+	return render( $text, (string) $a['button_link'], 'download', (string) $a['button_text_align'], $target );
 }
