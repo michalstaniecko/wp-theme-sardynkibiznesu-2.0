@@ -53,13 +53,15 @@ add_action(
 /**
  * Per-block CSS: `assets/css/blocks/{namespace}-{block}.css` (e.g. `core-button.css`)
  * loads only on pages that render that block, in the front end and the editor.
+ * A `--{part}` suffix splits one block's CSS by component, e.g. `core-group--product.css`
+ * (Karta produktu) next to `core-group.css` (Notka, Ramka promocyjna).
  */
 add_action(
 	'init',
 	static function (): void {
 		foreach ( glob( get_theme_file_path( 'assets/css/blocks/*.css' ) ) as $path ) {
 			$file  = basename( $path, '.css' );
-			$block = preg_replace( '/-/', '/', $file, 1 );
+			$block = preg_replace( '/-/', '/', explode( '--', $file, 2 )[0], 1 );
 			wp_enqueue_block_style(
 				$block,
 				array(
