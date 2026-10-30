@@ -25,6 +25,29 @@ add_action(
 	}
 );
 
+/**
+ * Per-block CSS: `assets/css/blocks/{namespace}-{block}.css` (e.g. `core-button.css`)
+ * loads only on pages that render that block, in the front end and the editor.
+ */
+add_action(
+	'init',
+	static function (): void {
+		foreach ( glob( get_theme_file_path( 'assets/css/blocks/*.css' ) ) as $path ) {
+			$file  = basename( $path, '.css' );
+			$block = preg_replace( '/-/', '/', $file, 1 );
+			wp_enqueue_block_style(
+				$block,
+				array(
+					'handle' => "sardynkibiznesu-3-0-{$file}",
+					'src'    => get_theme_file_uri( "assets/css/blocks/{$file}.css" ),
+					'path'   => $path,
+					'ver'    => wp_get_theme()->get( 'Version' ),
+				)
+			);
+		}
+	}
+);
+
 add_action(
 	'wp_enqueue_scripts',
 	static function (): void {
