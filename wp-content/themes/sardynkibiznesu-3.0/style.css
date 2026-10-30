@@ -292,6 +292,11 @@ Text Domain: sardynkibiznesu-3-0
 
 /* Category chips: core/terms-query rendered as badge links. */
 .sb-chips {
+	/* A category without subcategories renders an empty wrapper. */
+	&:not(:has(li)) {
+		display: none;
+	}
+
 	& .wp-block-term-template {
 		display: flex;
 		flex-wrap: wrap;
@@ -327,6 +332,11 @@ Text Domain: sardynkibiznesu-3-0
 			color: var(--wp--custom--color--text-inverse);
 		}
 	}
+}
+
+/* Slot for sorting (#55) stays invisible while empty. */
+.sb-listing__sort:empty {
+	display: none;
 }
 
 /* Row cards (.sb-card--row) separated by borders (.sb-list). */
