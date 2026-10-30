@@ -1,0 +1,68 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/newsletter-form",
+	"title": "Formularz zapisu",
+	"category": "widgets",
+	"icon": "email-alt",
+	"description": "Zapis do Newslettera (MailerLite). Po zapisie czytelnik trafia na Stronę podziękowania. Działa bez JavaScriptu.",
+	"keywords": [ "newsletter", "mailerlite", "zapis", "formularz" ],
+	"textdomain": "ihumbak-newsletter",
+	"attributes": {
+		"layout": {
+			"type": "string",
+			"enum": [ "section", "stacked", "callout" ],
+			"default": "section"
+		},
+		"fields": {
+			"type": "string",
+			"enum": [ "email", "name-email" ],
+			"default": "name-email"
+		},
+		"groupId": {
+			"type": "string",
+			"default": ""
+		},
+		"submitLabel": {
+			"type": "string",
+			"default": ""
+		},
+		"namePlaceholder": {
+			"type": "string",
+			"default": "Imię"
+		},
+		"emailPlaceholder": {
+			"type": "string",
+			"default": "Adres e-mail"
+		},
+		"aboutUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"aboutLabel": {
+			"type": "string",
+			"default": ""
+		},
+		"thankyouUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"image": {
+			"type": "string",
+			"default": ""
+		},
+		"legacy": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"anchor": false,
+		"spacing": { "margin": true }
+	},
+	"editorScript": "ihumbak-newsletter-editor",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,118 @@
+/*
+ * ihumbak/newsletter-form (Formularz zapisu, spec #36): look of the three layouts.
+ * Structure (rows/columns, hidden labels, honeypot) is the plugin's CSS.
+ * section = Sekcja strony głównej, stacked = under the article, callout = Kolumna boczna.
+ */
+.wp-block-ihumbak-newsletter-form {
+	box-sizing: border-box;
+	padding: var(--wp--preset--spacing--8);
+	border-radius: var(--wp--preset--border-radius--lg);
+	background-color: var(--wp--preset--color--surface-2);
+	color: var(--wp--preset--color--text);
+
+	& > * + * {
+		margin-block-start: var(--wp--preset--spacing--5);
+	}
+
+	& .wp-block-ihumbak-newsletter-form__intro > * {
+		margin-block: 0;
+	}
+
+	& .wp-block-ihumbak-newsletter-form__intro > * + * {
+		margin-block-start: var(--wp--preset--spacing--3);
+	}
+
+	& .wp-block-ihumbak-newsletter-form__intro .wp-block-heading,
+	& .wp-block-ihumbak-newsletter-form__title {
+		font-size: var(--wp--preset--font-size--h-3);
+		font-weight: 700;
+		line-height: var(--wp--custom--line-height--h-3);
+	}
+
+	& .wp-block-ihumbak-newsletter-form__image {
+		border-radius: var(--wp--preset--border-radius--md);
+	}
+
+	& input[type="text"],
+	& input[type="email"] {
+		box-sizing: border-box;
+		height: 52px;
+		padding: 0 var(--wp--preset--spacing--4);
+		border: 1px solid var(--wp--custom--color--border-control);
+		border-radius: var(--wp--preset--border-radius--md);
+		background-color: var(--wp--preset--color--surface);
+		color: var(--wp--preset--color--text);
+		font: inherit;
+		font-size: var(--wp--preset--font-size--body);
+
+		&::placeholder {
+			color: var(--wp--custom--color--text-muted);
+		}
+
+		&:focus {
+			outline: none;
+			border-color: var(--wp--custom--color--accent);
+			box-shadow: 0 0 0 3px var(--wp--preset--color--accent-soft);
+		}
+
+		&[aria-invalid="true"] {
+			border-color: var(--wp--custom--color--danger);
+		}
+	}
+
+	& .wp-block-ihumbak-newsletter-form__submit button {
+		min-height: 52px;
+		margin: 0;
+		cursor: pointer;
+	}
+
+	& .wp-block-ihumbak-newsletter-form__message {
+		color: var(--wp--custom--color--danger);
+		font-weight: 600;
+	}
+
+	& .wp-block-ihumbak-newsletter-form__clause,
+	& .wp-block-ihumbak-newsletter-form__about {
+		color: var(--wp--preset--color--text-secondary);
+		font-size: var(--wp--preset--font-size--caption);
+		line-height: var(--wp--custom--line-height--caption);
+	}
+}
+
+/* Sekcja strony głównej: wide, centered copy. */
+.wp-block-ihumbak-newsletter-form.ihumbak-newsletter-form--section {
+	padding: var(--wp--preset--spacing--12) var(--wp--preset--spacing--8);
+	background-color: var(--wp--preset--color--brand-soft);
+	text-align: center;
+
+	& .wp-block-ihumbak-newsletter-form__form {
+		max-width: 44rem;
+		margin-inline: auto;
+		text-align: start;
+	}
+
+	& .wp-block-ihumbak-newsletter-form__intro .wp-block-heading,
+	& .wp-block-ihumbak-newsletter-form__title {
+		font-size: var(--wp--preset--font-size--h-2);
+		line-height: var(--wp--custom--line-height--h-2);
+	}
+}
+
+/* Kolumna boczna: smaller box. */
+.wp-block-ihumbak-newsletter-form.ihumbak-newsletter-form--callout {
+	padding: var(--wp--preset--spacing--6) var(--wp--preset--spacing--5);
+	background-color: var(--wp--preset--color--accent-soft);
+
+	& .wp-block-ihumbak-newsletter-form__intro .wp-block-heading,
+	& .wp-block-ihumbak-newsletter-form__title {
+		font-size: var(--wp--preset--font-size--h-4);
+		line-height: var(--wp--custom--line-height--h-4);
+	}
+}
+
+@media (max-width: 767px) {
+	.wp-block-ihumbak-newsletter-form,
+	.wp-block-ihumbak-newsletter-form.ihumbak-newsletter-form--section {
+		padding: var(--wp--preset--spacing--6) var(--wp--preset--spacing--5);
+	}
+}
