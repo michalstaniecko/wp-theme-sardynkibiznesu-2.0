@@ -98,7 +98,9 @@
 		display: none;
 	}
 
-	aside:has(> .sb-sidebar > .ihumbak-toc--rail) {
+	/* sidebar-article: aside > .sb-sidebar > rail; sidebar-page (#57): aside.sb-sidebar > rail. */
+	aside:has(> .sb-sidebar > .ihumbak-toc--rail),
+	aside:has(> .ihumbak-toc--rail) {
 		align-self: stretch;
 	}
 
