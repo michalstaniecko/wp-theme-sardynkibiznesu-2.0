@@ -13,6 +13,9 @@ const EXIT_OK = 0;
 const EXIT_BLOCKING = 1;
 const EXIT_USAGE = 2;
 
+/** Content area of a post or page: `.entry-content` in 2.0, `core/post-content` in 3.0. */
+const CONTENT_SELECTOR = '.entry-content, .wp-block-post-content';
+
 main($argv);
 
 function main(array $argv): void
@@ -220,8 +223,8 @@ final class Run
 
     private function compareUrl(string $path, string $kind): void
     {
-        $a = page_facts($this->httpA->fetch($this->opt['a'] . $path), $this->opt['a']);
-        $b = page_facts($this->httpB->fetch($this->opt['b'] . $path), $this->opt['b']);
+        $a = page_facts($this->httpA->fetch($this->opt['a'] . $path), $this->opt['a'], true);
+        $b = page_facts($this->httpB->fetch($this->opt['b'] . $path), $this->opt['b'], false);
         $this->compareSeo($path, $a, $b);
     }
 
@@ -259,6 +262,16 @@ final class Run
         }
         if ($b['graphNonObjects'] > 0) {
             $this->block($path, '@graph tylko obiekty', 'nie-obiekty: ' . $a['graphNonObjects'], 'nie-obiekty: ' . $b['graphNonObjects']);
+        }
+        if ($a['anchors'] !== null) {
+            $missing = array_values(array_diff($a['anchors'], $b['anchors'] ?? []));
+            $added = array_values(array_diff($b['anchors'] ?? [], $a['anchors']));
+            $addedText = $added ? 'nowe w 3.0: ' . implode(', ', $added) : '';
+            if ($missing) {
+                $this->block($path, 'Kotwice', 'brak w 3.0: ' . implode(', ', $missing), $addedText);
+            } elseif ($added) {
+                $this->toReview($path, 'Kotwice', '', $addedText);
+            }
         }
     }
 }
@@ -302,7 +315,7 @@ function neutral(?string $value, string $base): ?string
     return str_replace($origin, '{BASE}', $value);
 }
 
-function page_facts(array $r, string $base): array
+function page_facts(array $r, string $base, bool $emulateV1Anchors): array
 {
     $chain = implode(' → ', array_map(
         fn($c) => $c['status'] . ' ' . neutral($c['url'], $base),
@@ -327,7 +340,44 @@ function page_facts(array $r, string $base): array
     $f['robots'] = $attr('meta[name="robots"]', 'content');
     $f['h1'] = $doc->querySelectorAll('h1')->length;
     [$f['jsonldTypes'], $f['graphNonObjects']] = jsonld_facts($doc);
+    if ($emulateV1Anchors) {
+        emulate_v1_anchors($doc);
+    }
+    $content = $doc->querySelector(CONTENT_SELECTOR);
+    $f['anchors'] = $content ? heading_anchors($content) : null;
     return $f;
+}
+
+/**
+ * In 2.0 the v1 Kotwice are set in the browser by ihumbak-anchor.js, only when
+ * the page has the old Spis treści. This repeats that script on the parsed page:
+ * id = text with whitespace → "-", then everything outside [a-zA-Z0-9-] removed.
+ */
+function emulate_v1_anchors(\Dom\HTMLDocument $doc): void
+{
+    if (!$doc->querySelector('.ihumbak-anchor-menu-wrapper')) {
+        return;
+    }
+    foreach ($doc->querySelectorAll('.ihumbak-anchor') as $el) {
+        $el->setAttribute('id', v1_anchor_id($el->textContent));
+    }
+}
+
+function v1_anchor_id(string $text): string
+{
+    // JavaScript \s: ASCII whitespace plus the Unicode space separators, NBSP and BOM.
+    $id = preg_replace('/[\t\n\x{0B}\f\r \x{A0}\x{1680}\x{2000}-\x{200A}\x{2028}\x{2029}\x{202F}\x{205F}\x{3000}\x{FEFF}]/u', '-', $text);
+    return preg_replace('/[^a-zA-Z0-9\-]/u', '', $id);
+}
+
+/** @return list<string> headings with an id, as "h2#id", in document order */
+function heading_anchors(\Dom\Element $root): array
+{
+    $out = [];
+    foreach ($root->querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]') as $h) {
+        $out[] = strtolower($h->localName) . '#' . $h->getAttribute('id');
+    }
+    return $out;
 }
 
 /** @return array{0:list<string>,1:int} sorted unique @type values and count of non-object @graph items */
