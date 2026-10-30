@@ -25,6 +25,7 @@ class IHumbak_Tax_Calculator {
    * Registers the assets; the calculator and jQuery load only where the shortcode renders.
    * The check against the current post puts the stylesheet in <head> on classic themes,
    * where the shortcode renders after wp_head.
+   * Block themes render the template before wp_head, so render() may enqueue before this runs: WP_Dependencies holds such handles (queued_before_register) and queues them when they are registered here.
    */
   function assets() {
     wp_register_script( 'ihumbak-tax-calculator', plugin_dir_url( __FILE__ ) . 'js/ihumbak-tax-calculator.js', array(
