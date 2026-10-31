@@ -193,6 +193,12 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 			background-color: var(--wp--preset--color--surface);
 		}
 
+		/* Opens inwards at every width: a dropdown opening rightwards can overflow the page even while hidden, and how far depends on the editable menu. */
+		& .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
+			right: 0;
+			left: auto;
+		}
+
 		/* Raised specificity to beat core's padding (0.5em 1em). Border-box keeps the padding inside min-height; longer labels grow the row. */
 		& .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container .wp-block-navigation-item.wp-block-navigation-item > .wp-block-navigation-item__content {
 			box-sizing: border-box;
@@ -243,14 +249,6 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 				width: calc(var(--sb-nav-dropdown-inset) + var(--wp--preset--spacing--1) + 1px);
 			}
 		}
-	}
-}
-
-/* Below 1280px the header reaches the viewport edge: a dropdown opening rightwards would overflow the page even while hidden. */
-@media (min-width: 1024px) and (max-width: 1279.98px) {
-	.sb-nav .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
-		right: 0;
-		left: auto;
 	}
 }
 
