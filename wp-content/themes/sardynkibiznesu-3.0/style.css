@@ -507,6 +507,44 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	max-width: 100%;
 }
 
+/* Tables in content (#79), classic and core/table alike, so here and not in a per-block file: that
+   would not load for classic tables. Old tables set inline sizes (a 735 px width, a 1197 px height),
+   hence the !important. A table that still doesn't fit scrolls in its wrapper (.sb-table-scroll from
+   functions.php, the figure for core/table). Old header rows are bold <td>s; a bold first cell is the
+   only sign of one, so plain first rows stay plain: some hold data. */
+.wp-block-post-content {
+	& :is(.sb-table-scroll, .wp-block-table) {
+		overflow-x: auto;
+
+		&:focus-visible {
+			outline: 2px solid var(--wp--custom--color--focus);
+			outline-offset: 2px;
+		}
+	}
+
+	& table {
+		width: 100%;
+		height: auto !important;
+		border-collapse: collapse;
+		font-size: var(--wp--preset--font-size--body-sm);
+		line-height: var(--wp--custom--line-height--body-sm);
+	}
+
+	& :is(td, th) {
+		width: auto;
+		padding: var(--wp--preset--spacing--2) var(--wp--preset--spacing--3);
+		border: 1px solid var(--wp--custom--color--border);
+	}
+
+	& thead {
+		border-bottom: 0;
+	}
+
+	& :is(th, tr:first-child > td:has(> strong)) {
+		background-color: var(--wp--preset--color--surface-2);
+	}
+}
+
 /* A [caption] nested in an image block: core's `display: table` on the outer figure would grow to
    the inline width. */
 .wp-block-post-content figure:has(> .wp-caption) {

@@ -271,6 +271,66 @@ add_filter(
 );
 
 /**
+ * Tables in content (#79): a wide table scrolls in its own region. Classic tables have no wrapper, so
+ * they get one here (nested tables stay inside the outer one); core/table already scrolls in its figure.
+ * Keyboard users can only scroll a focusable region, and that one needs a name.
+ */
+const TABLE_REGION_ATTRIBUTES = array(
+	'tabindex'   => '0',
+	'role'       => 'region',
+	'aria-label' => 'Tabela',
+);
+
+add_filter(
+	'render_block_core/post-content',
+	static function ( string $html ): string {
+		if ( ! str_contains( $html, '<table' ) ) {
+			return $html;
+		}
+
+		$open  = '<div class="sb-table-scroll"';
+		$open .= ' tabindex="' . TABLE_REGION_ATTRIBUTES['tabindex'] . '"';
+		$open .= ' role="' . TABLE_REGION_ATTRIBUTES['role'] . '"';
+		$open .= ' aria-label="' . TABLE_REGION_ATTRIBUTES['aria-label'] . '">';
+
+		$parts   = preg_split( '~(</?table\b[^>]*>)~i', $html, -1, PREG_SPLIT_DELIM_CAPTURE );
+		$depth   = 0;
+		$wrapped = false;
+		$output  = '';
+		foreach ( $parts as $index => $part ) {
+			if ( 1 === $index % 2 ) {
+				if ( '/' !== $part[1] ) {
+					if ( 0 === $depth++ ) {
+						$wrapped = ! preg_match( '~<figure\b[^>]*\bwp-block-table\b[^>]*>\s*$~i', $parts[ $index - 1 ] );
+						$output .= $wrapped ? $open : '';
+					}
+				} elseif ( 0 === --$depth && $wrapped ) {
+					$part .= '</div>';
+				}
+			}
+			$output .= $part;
+		}
+		// Unbalanced tags (a table in a comment, say) would leave a wrapper open around the page.
+		if ( 0 !== $depth ) {
+			return $html;
+		}
+
+		$figures = new \WP_HTML_Tag_Processor( $output );
+		while ( $figures->next_tag(
+			array(
+				'tag_name'   => 'figure',
+				'class_name' => 'wp-block-table',
+			)
+		) ) {
+			foreach ( TABLE_REGION_ATTRIBUTES as $name => $value ) {
+				$figures->set_attribute( $name, $value );
+			}
+		}
+		return $figures->get_updated_html();
+	}
+);
+
+/**
  * Sekcje strony głównej (#58): slugs of the section patterns `home-{slug}` in their default
  * order. Pattern `home` (offered for a new page) concatenates them into the front page content.
  */
