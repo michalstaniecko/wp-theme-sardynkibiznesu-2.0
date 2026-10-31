@@ -26,6 +26,10 @@ _Avoid_: notice, alert, cmsmasters_notice
 Wyróżnione odesłanie do produktu, darmowego materiału, podcastu lub kontaktu, stawiane w treści albo w kolumnie bocznej. Różni się od Notki, która ostrzega lub zwraca uwagę, a nie zachęca do przejścia dalej.
 _Avoid_: callout, banner, box promocyjny
 
+**Karta produktu**:
+Samodzielna karta odsyłająca do produktu lub darmowego materiału, z tytułem, krótkim opisem i przyciskiem, zwykle ustawiana obok innych kart. Różni się od Ramki promocyjnej tym, że przedstawia jeden produkt w zestawieniu, a nie zachęca do przejścia dalej w toku tekstu.
+_Avoid_: product card, kafelek produktu, karta (bez dookreślenia)
+
 ## Nawigacja w artykule
 
 **Spis treści**:
