@@ -173,3 +173,4 @@ wp-content/plugins/cookie-notice
 /wordpress
 /database
 .playwright-mcp
+db
