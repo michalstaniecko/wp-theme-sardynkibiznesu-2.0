@@ -486,9 +486,21 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	}
 }
 
-/* Article (template `single`): 680 content column + 320 sidebar (part `sidebar-article`), the
-   same .sb-layout grid as pages and lists (main and aside are siblings). Below 1024px the
-   sidebar drops under the content. Layer 4: classes on groups. */
+/* The [caption] shortcode in old posts sets an inline width (the image's own), which would run
+   out of the column. */
+.wp-block-post-content .wp-caption {
+	max-width: 100%;
+}
+
+/* A [caption] nested in an image block: core's `display: table` on the outer figure would grow to
+   the inline width. */
+.wp-block-post-content figure:has(> .wp-caption) {
+	display: block;
+}
+
+/* Article (template `single`): content column filling its track + 320 Kolumna boczna (part
+   `sidebar-article`), the same .sb-layout grid as pages and lists (main and aside are siblings).
+   Below 1024px the Kolumna boczna drops under the content. Layer 4: classes on groups. */
 .sb-article {
 	padding-block: var(--wp--preset--spacing--8) 0;
 
@@ -1054,7 +1066,6 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 
 .sb-layout__main {
 	min-width: 0;
-	max-width: var(--wp--style--global--content-size);
 	display: grid;
 	gap: var(--wp--preset--spacing--10);
 
@@ -1067,10 +1078,6 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	.sb-layout {
 		grid-template-columns: minmax(0, 1fr);
 		gap: var(--wp--preset--spacing--12);
-	}
-
-	.sb-layout__main {
-		max-width: none;
 	}
 }
 
@@ -1862,8 +1869,8 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	}
 }
 
-/* Pages: `page` (680 content + Kolumna boczna `sidebar-page`, grid from .sb-layout) and
-   `page-narrow` (one 680 column, Spis treści inline). Layer 4: classes on groups. */
+/* Pages: `page` (content filling its track + Kolumna boczna `sidebar-page`, grid from .sb-layout)
+   and `page-narrow` (one 680 column, Spis treści inline). Layer 4: classes on groups. */
 .sb-page {
 	padding-block: var(--wp--preset--spacing--8) 0;
 	/* Long URLs and unbroken strings in old pages must not cause horizontal scroll at 320px. */

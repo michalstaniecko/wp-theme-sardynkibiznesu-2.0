@@ -128,6 +128,7 @@ Redaktor wybiera tylko presety motywu. Wyłączone: domyślna paleta, gradienty 
 
 ## Świadome odstępstwa
 
+- **Kolumna główna obok Kolumny bocznej nie ma limitu `content-max`.** Od 1024 px wypełnia swój tor siatki (816 px w układzie 1200 px), także tekst wpisu (#75). `content-max` obowiązuje dalej w `page-narrow`.
 - **`body-lg` = `lead`.** Projekt ma dwa style o tej samej wartości 20/32; w `theme.json` jest jeden slug `lead`. Większa treść wpisu od 1280 px to nadpisanie zmiennych `body`/`lead` na `.wp-block-post-content` w `style.css`.
 - **Tryb ciemny poza `theme.json`.** 3.0 jest tylko jasny; wartości dark zostają w projekcie. Później: jeden blok `@media (prefers-color-scheme: dark)` nadpisujący te same zmienne.
 - **Kolory poza paletą** są w `custom.color`, więc redaktor ich nie wybiera; komponenty używają ich przez `--wp--custom--color--*`.

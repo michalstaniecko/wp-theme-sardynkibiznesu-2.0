@@ -116,11 +116,18 @@ add_action(
 );
 
 /**
- * `sizes` of a ~680px wide image: the article's and page's featured image never exceeds the 680
- * content column (>= 1024px), below that it spans the viewport minus the root padding (24px per
- * side from 768px, 16px below). Core would say "up to 1200px wide".
+ * `sizes` of the article's and page's featured image, which fills the main column. From 1024px the
+ * column is the viewport minus root padding, the Kolumna boczna and its gap (432px), and at most
+ * 816 wide (from 1248px). Below that it spans the viewport minus the root padding (24px per side
+ * from 768px, 16px below). Core would say "up to 1200px wide".
  */
-const WIDE_IMAGE_SIZES = '(min-width: 1024px) 680px, (min-width: 768px) calc(100vw - 48px), calc(100vw - 32px)';
+const MAIN_COLUMN_IMAGE_SIZES = '(min-width: 1248px) 816px, (min-width: 1024px) calc(100vw - 432px), (min-width: 768px) calc(100vw - 48px), calc(100vw - 32px)';
+
+/**
+ * `sizes` of the featured image in `page-narrow`: the 680 content column, reached from 712px
+ * (680 + 16px root padding per side), and the viewport minus the root padding below that.
+ */
+const NARROW_PAGE_IMAGE_SIZES = '(min-width: 712px) 680px, calc(100vw - 32px)';
 
 /**
  * `sizes` of the front page hero and the featured podcast image: 7/12 of the 1200 column (minus
@@ -143,19 +150,24 @@ const CARD_COL_IMAGE_SIZES = '(min-width: 1248px) 384px, (min-width: 768px) calc
 /**
  * `sizes` of the compact card image („Z tej kategorii”, .sb-card--compact): 120px beside the title
  * below 768px, then a third of the article column (minus two 20px gaps). The column is the viewport
- * minus root padding, from 1024px also minus the sidebar and its gap, and at most 680 wide (from 1112px).
+ * minus root padding, from 1024px also minus the Kolumna boczna and its gap, and at most 816 wide
+ * (from 1248px).
  */
-const CARD_COMPACT_IMAGE_SIZES = '(max-width: 767px) 120px, (min-width: 1112px) 214px, (min-width: 1024px) calc((100vw - 472px) / 3), calc((100vw - 88px) / 3)';
+const CARD_COMPACT_IMAGE_SIZES = '(max-width: 767px) 120px, (min-width: 1248px) 259px, (min-width: 1024px) calc((100vw - 472px) / 3), calc((100vw - 88px) / 3)';
 
-/** className of a core/post-featured-image => `sizes` of its image. */
+/**
+ * className of a core/post-featured-image => `sizes` of its image. A block with several of these
+ * classes gets the first one listed here, so modifiers come before their base class.
+ */
 const FEATURED_IMAGE_SIZES = array(
-	'sb-article__featured'    => WIDE_IMAGE_SIZES,
-	'sb-page__featured'       => WIDE_IMAGE_SIZES,
-	'sb-hero__media'          => SPLIT_IMAGE_SIZES,
-	'sb-podcast__media'       => SPLIT_IMAGE_SIZES,
-	'sb-card__media--row'     => CARD_ROW_IMAGE_SIZES,
-	'sb-card__media--col'     => CARD_COL_IMAGE_SIZES,
-	'sb-card__media--compact' => CARD_COMPACT_IMAGE_SIZES,
+	'sb-article__featured'      => MAIN_COLUMN_IMAGE_SIZES,
+	'sb-page__featured--narrow' => NARROW_PAGE_IMAGE_SIZES,
+	'sb-page__featured'         => MAIN_COLUMN_IMAGE_SIZES,
+	'sb-hero__media'            => SPLIT_IMAGE_SIZES,
+	'sb-podcast__media'         => SPLIT_IMAGE_SIZES,
+	'sb-card__media--row'       => CARD_ROW_IMAGE_SIZES,
+	'sb-card__media--col'       => CARD_COL_IMAGE_SIZES,
+	'sb-card__media--compact'   => CARD_COMPACT_IMAGE_SIZES,
 );
 
 /**
@@ -175,7 +187,7 @@ add_filter(
 	'render_block_core/post-featured-image',
 	static function ( string $html, array $block ): string {
 		$classes = explode( ' ', $block['attrs']['className'] ?? '' );
-		$known   = array_values( array_intersect( $classes, array_keys( FEATURED_IMAGE_SIZES ) ) );
+		$known   = array_values( array_intersect( array_keys( FEATURED_IMAGE_SIZES ), $classes ) );
 		if ( ! $known ) {
 			return $html;
 		}
