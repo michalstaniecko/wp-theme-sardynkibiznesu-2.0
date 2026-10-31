@@ -239,6 +239,14 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	}
 }
 
+/* Below 1280px the header reaches the viewport edge: a dropdown opening rightwards would overflow the page even while hidden. */
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+	.sb-nav .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
+		right: 0;
+		left: auto;
+	}
+}
+
 /* ---------- Threshold: the design hides the menu below 1024px, core below 600px ---------- */
 @media (min-width: 600px) and (max-width: 1023.98px) {
 	.sb-nav .wp-block-navigation__responsive-container-open:not(.always-shown) {
