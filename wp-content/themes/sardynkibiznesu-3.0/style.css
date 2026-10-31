@@ -1869,8 +1869,9 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	}
 }
 
-/* Pages: `page` (content filling its track + Kolumna boczna `sidebar-page`, grid from .sb-layout)
-   and `page-narrow` (one 680 column, Spis treści inline). Layer 4: classes on groups. */
+/* Pages: `page` (content filling its track + Kolumna boczna `sidebar-page`, grid from .sb-layout),
+   `page-narrow` (one 680 column, Spis treści inline) and `page-wide` (one 1200 column, for grid
+   pages). Layer 4: classes on groups. */
 .sb-page {
 	padding-block: var(--wp--preset--spacing--8) 0;
 	/* Long URLs and unbroken strings in old pages must not cause horizontal scroll at 320px. */
@@ -1922,7 +1923,8 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 		}
 	}
 
-	/* Content blocks may ask for wide/full alignment; next to the sidebar they stay in the column. */
+	/* Content blocks may ask for wide/full alignment; they stay in the column, so they never leave
+	   the track next to the Kolumna boczna or the 1200 of `page-wide`. */
 	& .sb-page__content :is(.alignwide, .alignfull) {
 		max-width: 100%;
 		margin-inline: 0;
@@ -1936,6 +1938,13 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	& > .ihumbak-toc {
 		margin-block: 0 var(--wp--preset--spacing--6);
 	}
+}
+
+/* Wide page: the template's constrained layout sets the column to `wideSize` (1200), not the
+   default 680. Its content uses the default layout, so blocks fill the column without wide
+   alignment. */
+.sb-page--wide > .sb-page__header {
+	margin-block: 0 var(--wp--preset--spacing--6);
 }
 
 /* „Zacznij od tych wpisów” (pattern start-posts in sidebar-page): grey box, compact cards. */

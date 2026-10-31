@@ -316,7 +316,8 @@
 		}
 	},
 	"customTemplates": [
-		{ "name": "page-narrow", "title": "Strona wąska (bez kolumny bocznej)", "postTypes": [ "page" ] }
+		{ "name": "page-narrow", "title": "Strona wąska (bez kolumny bocznej)", "postTypes": [ "page" ] },
+		{ "name": "page-wide", "title": "Strona szeroka (bez kolumny bocznej)", "postTypes": [ "page" ] }
 	],
 	"templateParts": [
 		{ "name": "header", "title": "Nagłówek", "area": "header" },

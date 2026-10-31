@@ -14,10 +14,12 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * 2.0 page template meta → 3.0 block template. The 18 pages saved with the 2.0 template
- * „Boxed without sidebar” render with `page-narrow`.
+ * „Boxed without sidebar” render with `page-narrow`, and the pages saved with
+ * `listing-with-recommended` (`/start`, `/umowy`) render with `page-wide`.
  */
 const LEGACY_PAGE_TEMPLATES = array(
-	'templates/boxed-without-sidebar.php' => 'page-narrow.php',
+	'templates/boxed-without-sidebar.php'    => 'page-narrow.php',
+	'templates/listing-with-recommended.php' => 'page-wide.php',
 );
 
 add_filter(
