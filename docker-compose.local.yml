@@ -1,5 +1,8 @@
 services:
 
   wordpress:
+    environment:
+      # wp-config.php defines WP_DEBUG from this variable, so WORDPRESS_CONFIG_EXTRA cannot set it.
+      WORDPRESS_DEBUG: "1"
     ports:
       - 80:80
