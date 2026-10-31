@@ -193,12 +193,14 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 			background-color: var(--wp--preset--color--surface);
 		}
 
-		/* Padding comes from core (0.5em 1em) and adds to min-height (content-box); longer labels grow the row. */
-		& .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+		/* Raised specificity to beat core's padding (0.5em 1em). Border-box keeps the padding inside min-height; longer labels grow the row. */
+		& .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container .wp-block-navigation-item.wp-block-navigation-item > .wp-block-navigation-item__content {
+			box-sizing: border-box;
 			display: flex;
 			align-items: center;
 			width: 100%;
 			min-height: 44px;
+			padding: var(--wp--preset--spacing--2) var(--wp--preset--spacing--3);
 			border-radius: var(--wp--preset--border-radius--md);
 			color: var(--wp--preset--color--text);
 			text-decoration: none;
@@ -224,16 +226,21 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 		}
 
 		/* Third level: next to the dropdown, as in the design, but to its left: the menu sits at the right
-		   of the header and two wide dropdowns do not fit on that side. Raised specificity to beat core. */
+		   of the header and two wide dropdowns do not fit on that side. Raised specificity to beat core.
+		   Offsets start at the row, so they include the dropdown's inset: its padding and 1px border. */
 		& .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container .wp-block-navigation__submenu-container.wp-block-navigation__submenu-container {
-			top: calc(-1 * var(--wp--preset--spacing--2));
-			right: calc(100% + var(--wp--preset--spacing--1));
+			--sb-nav-dropdown-inset: calc(var(--wp--preset--spacing--2) + 1px);
+
+			top: calc(-1 * var(--sb-nav-dropdown-inset));
+			right: calc(100% + var(--sb-nav-dropdown-inset) + var(--wp--preset--spacing--1));
 			left: auto;
 
-			/* Core's hover bridge over the gap, moved to the side that faces the dropdown. */
+			/* Core's hover bridge, moved to the side that faces the row and widened to reach it.
+			   It starts inside this menu's 1px border, hence the extra pixel; any gap closes the menu. */
 			&::before {
 				right: auto;
 				left: 100%;
+				width: calc(var(--sb-nav-dropdown-inset) + var(--wp--preset--spacing--1) + 1px);
 			}
 		}
 	}
