@@ -1,0 +1,17 @@
+{
+  "name": "ihumbak-compare-table",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Feature comparison table blocks (editor + frontend assets).",
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "lint:js": "wp-scripts lint-js src webpack.config.js"
+  },
+  "devDependencies": {
+    "@wordpress/icons": "^17.0.0",
+    "@wordpress/scripts": "^30.0.0",
+    "typescript": "^5.9.3"
+  }
+}

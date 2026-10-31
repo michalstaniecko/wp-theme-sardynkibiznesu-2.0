@@ -1,5 +1,6 @@
 let mix = require( 'laravel-mix' )
 let path = require( 'path' )
+let glob = require( 'glob' )
 let tailwindcss = require( 'tailwindcss' )
 require( 'laravel-mix-purgecss' )
 
@@ -20,8 +21,13 @@ mix.js( 'src/js/index.js', `${themePath}/assets/index.js` )
         content: [
             // Theme PHP files
             path.join(__dirname, 'wp-content/themes/sardynkibiznesu-2.0/**/*.php'),
-            // Plugin PHP files
-            path.join(__dirname, 'wp-content/plugins/**/*.php'),
+            // Plugin PHP files. Resolved here rather than by PurgeCSS, whose own
+            // glob.sync() takes no ignore option and would crawl the
+            // node_modules of plugins that have their own toolchain.
+            ...glob.sync(path.join(__dirname, 'wp-content/plugins/**/*.php'), {
+                nodir: true,
+                ignore: '**/node_modules/**',
+            }),
             // JavaScript source
             path.join(__dirname, 'src/js/**/*.js'),
         ],
@@ -302,3 +308,7 @@ mix.webpackConfig({
 
 mix.sass( 'src/scss/admin.scss', `${themePath}/assets/admin.css` )
 mix.js( 'src/js/admin.js', `${themePath}/assets/admin.js` )
+
+// webpack-notifier ships an x86 notifier binary that cannot be spawned on
+// Apple Silicon without Rosetta, which made the build exit with code 2.
+mix.disableNotifications();
