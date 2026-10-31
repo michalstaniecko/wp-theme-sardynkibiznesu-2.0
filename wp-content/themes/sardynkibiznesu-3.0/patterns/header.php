@@ -5,7 +5,7 @@
  * Categories: header
  * Block Types: core/template-part/header
  * Inserter: no
- * Description: Przyklejony nagłówek: logo, menu (hover, poniżej 1024 px nakładka), przycisk wyszukiwania, „Newsletter” i pasek wyszukiwania z popularnymi hasłami.
+ * Description: Przyklejony nagłówek: logo, menu (hover, poniżej 1024 px nakładka), przycisk wyszukiwania i pasek wyszukiwania z popularnymi hasłami.
  *
  * The header part embeds this pattern so that theme asset URLs are resolved in PHP.
  * Blocks ihumbak/site-header, ihumbak/search-toggle and ihumbak/search-bar come from
@@ -33,12 +33,6 @@ $sb_home_url = home_url( '/' );
 	<!-- wp:group {"className":"sb-header__actions","layout":{"type":"flex","flexWrap":"nowrap"}} -->
 	<div class="wp-block-group sb-header__actions">
 		<!-- wp:ihumbak/search-toggle /-->
-
-		<!-- wp:buttons {"className":"sb-header__cta"} -->
-		<div class="wp-block-buttons sb-header__cta"><!-- wp:button -->
-		<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/zapis-na-newsletter/">Newsletter</a></div>
-		<!-- /wp:button --></div>
-		<!-- /wp:buttons -->
 	</div>
 	<!-- /wp:group -->
 </div>

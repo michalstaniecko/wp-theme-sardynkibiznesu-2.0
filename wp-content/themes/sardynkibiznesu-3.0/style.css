@@ -83,12 +83,6 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 		gap: var(--wp--preset--spacing--2);
 	}
 
-	& .sb-header__cta .wp-block-button__link {
-		padding: var(--wp--preset--spacing--2) var(--wp--preset--spacing--4);
-		font-size: var(--wp--preset--font-size--body-sm);
-		line-height: 20px;
-	}
-
 	& :focus-visible {
 		outline: 2px solid var(--wp--custom--color--focus);
 		outline-offset: 2px;
@@ -259,10 +253,6 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 @media (max-width: 1023.98px) {
 	.wp-block-ihumbak-site-header .sb-header__inner.sb-header__inner {
 		padding: 0 var(--wp--preset--spacing--4);
-	}
-
-	.sb-header__actions > .sb-header__cta.sb-header__cta {
-		display: none;
 	}
 
 	/* Menu button after the search icon, as in the design. */
