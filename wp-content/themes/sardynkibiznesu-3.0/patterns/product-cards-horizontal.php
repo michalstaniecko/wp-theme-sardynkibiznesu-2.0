@@ -5,9 +5,10 @@
  * Categories: featured, call-to-action
  * Keywords: karta produktu, polecamy, produkt, sklep, poziome
  * Block Types: core/group
- * Description: Dwie Karty produktu w wariancie poziomym (obraz po lewej): etykieta, kategoria, tytuł, opis i przycisk. Sekcja „Polecamy na start”, strony /start i /umowy.
+ * Description: Dwie Karty produktu w wariancie poziomym (obraz po lewej): etykieta, kategoria, tytuł, opis i przycisk. Sekcja „Polecamy na start”.
  *
- * Karta produktu = core blocks only, no block of its own and no prices (spec #36).
+ * Karta produktu = core blocks only, no block of its own and no price field (a price is
+ * plain text in the Plakietka, see product-cards-grid).
  * The `product-horizontal` group style and the Plakietka paragraph styles are registered
  * by ihumbak-content-elements; their CSS is in assets/css/blocks/. Markup: cards_markup() in
  * ihumbak-content-elements (shared with the Sekcje strony głównej).

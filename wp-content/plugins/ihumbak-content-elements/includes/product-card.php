@@ -1,13 +1,14 @@
 <?php
 /**
- * Karta produktu: a pattern made of core blocks, no block of its own and no
- * prices. The card is a `core/group` with one of two block styles registered here;
+ * Karta produktu: a pattern made of core blocks, no block of its own and no price
+ * field (a price is plain text in the Plakietka). The card is a `core/group` with one
+ * of two block styles registered here;
  * the patterns and the CSS live in the theme (`patterns/product-cards-*.php`,
  * `assets/css/blocks/core-group--product.css`).
  *
  * Card structure the CSS relies on: image (`core/image`, optional), label
- * (`core/paragraph` with a Plakietka style), body (`core/group`: category paragraph,
- * title heading, description paragraph) and `core/buttons`. `cards_markup()` builds that
+ * (`core/paragraph` with a Plakietka style), body (`core/group`: optional category
+ * paragraph, title heading, description paragraph) and `core/buttons`. `cards_markup()` builds that
  * markup for the theme's patterns (ADR-0001: the theme only calls it, guarded by
  * `function_exists()`), `page_url()` resolves the card links.
  *
@@ -45,17 +46,22 @@ function register_styles(): void {
  * Block markup of a grid of Karty produktu (core blocks only, spec #36), shared by the theme
  * patterns product-cards-* and the Sekcje strony głównej „Polecamy na start” / „Darmowe
  * narzędzia”. The card CSS (core-group--product.css) selects children by position, so
- * every card has the same structure: [image,] badge, body (category, H3, text, button).
+ * every card has the same structure: [image,] badge, body ([category,] H3, text, button).
  *
- * @param array<int, array{label: string, label_style: string, category: string, title: string, desc: string, button: string, outline?: bool, url?: string, category_url?: string, image?: string}> $cards
+ * @param array<int, array{label: string, label_style: string, category?: string, title: string, desc: string, button: string, outline?: bool, url?: string, category_url?: string, image?: string}> $cards
  * @param string $variant           `horizontal` (image, 2 columns) or `compact` (no image, 3 columns).
  * @param string $placeholder_image Image URL of a horizontal card without its own `image` (the theme's placeholder).
+ * @param array{columns?: int, min_column_width?: string} $grid_options Overrides the variant's column count and minimum column width.
  */
-function cards_markup( array $cards, string $variant, string $placeholder_image = '' ): string {
+function cards_markup( array $cards, string $variant, string $placeholder_image = '', array $grid_options = array() ): string {
 	$horizontal = 'horizontal' === $variant;
-	$grid       = $horizontal
-		? '{"type":"grid","columnCount":2,"minimumColumnWidth":"22rem"}'
-		: '{"type":"grid","columnCount":3,"minimumColumnWidth":"16rem"}';
+	$grid       = wp_json_encode(
+		array(
+			'type'               => 'grid',
+			'columnCount'        => $grid_options['columns'] ?? ( $horizontal ? 2 : 3 ),
+			'minimumColumnWidth' => $grid_options['min_column_width'] ?? ( $horizontal ? '22rem' : '16rem' ),
+		)
+	);
 	$style      = $horizontal ? 'product-horizontal' : 'product-compact';
 
 	$out = "<!-- wp:group {\"layout\":$grid} -->\n<div class=\"wp-block-group\">\n";
@@ -72,9 +78,12 @@ function cards_markup( array $cards, string $variant, string $placeholder_image 
 				. "\t\t<figure class=\"wp-block-image size-large\"><img src=\"" . esc_url( $card['image'] ?? $placeholder_image ) . "\" alt=\"\"/></figure>\n"
 				. "\t\t<!-- /wp:image -->\n\n";
 		}
+		$category = empty( $card['category'] )
+			? ''
+			: "\t\t\t<!-- wp:paragraph -->\n\t\t\t<p><a href=\"$cat_url\">" . esc_html( $card['category'] ) . "</a></p>\n\t\t\t<!-- /wp:paragraph -->\n\n";
 		$out .= "\t\t<!-- wp:paragraph {\"className\":\"is-style-$label\"} -->\n\t\t<p class=\"is-style-$label\">" . esc_html( $card['label'] ) . "</p>\n\t\t<!-- /wp:paragraph -->\n\n"
 			. "\t\t<!-- wp:group {\"layout\":{\"type\":\"default\"}} -->\n\t\t<div class=\"wp-block-group\">\n"
-			. "\t\t\t<!-- wp:paragraph -->\n\t\t\t<p><a href=\"$cat_url\">" . esc_html( $card['category'] ) . "</a></p>\n\t\t\t<!-- /wp:paragraph -->\n\n"
+			. $category
 			. "\t\t\t<!-- wp:heading {\"level\":3} -->\n\t\t\t<h3 class=\"wp-block-heading\"><a href=\"$url\">" . esc_html( $card['title'] ) . "</a></h3>\n\t\t\t<!-- /wp:heading -->\n\n"
 			. "\t\t\t<!-- wp:paragraph -->\n\t\t\t<p>" . esc_html( $card['desc'] ) . "</p>\n\t\t\t<!-- /wp:paragraph -->\n\n"
 			. "\t\t\t<!-- wp:buttons -->\n\t\t\t<div class=\"wp-block-buttons\">\n"

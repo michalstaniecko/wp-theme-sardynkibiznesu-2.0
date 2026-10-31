@@ -7,7 +7,8 @@
  * Block Types: core/group
  * Description: Trzy Karty produktu w wariancie kompaktowym (bez obrazu): etykieta, kategoria, tytuł, opis i przycisk. Sekcja „Darmowe narzędzia”, wąskie kolumny.
  *
- * Karta produktu = core blocks only, no block of its own and no prices (spec #36).
+ * Karta produktu = core blocks only, no block of its own and no price field (a price is
+ * plain text in the Plakietka, see product-cards-grid).
  * The compact variant has no image (design system: "bez obrazu użyj --compact"); an
  * image added by the editor is hidden by the style's CSS.
  *

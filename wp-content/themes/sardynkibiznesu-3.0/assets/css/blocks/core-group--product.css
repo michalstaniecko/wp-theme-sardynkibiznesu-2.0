@@ -3,7 +3,7 @@
  * registered by ihumbak-content-elements). Layer 2 of the .sb-* rule: block style CSS in
  * the theme, no .sb-* classes. Built from core blocks (patterns/product-cards-*.php):
  *   card > image (core/image), label (paragraph with a Plakietka style),
- *          body (core/group) > category (paragraph before the title), title (heading),
+ *          body (core/group) > optional category (paragraph before the title), title (heading),
  *          description (paragraph after the title), core/buttons.
  * The whole card is clickable: the title link is stretched over the card; the category
  * link and the button stay separate links above it.
@@ -51,7 +51,7 @@
 		z-index: 2;
 	}
 
-	/* Body: category, title, description; the button sits at the bottom. */
+	/* Body: optional category, title, description; the button sits at the bottom. */
 	& > .wp-block-group {
 		display: flex;
 		flex: 1;
@@ -125,12 +125,8 @@
 		color: var(--wp--preset--color--brand);
 	}
 
-	/* Description: body-sm, secondary, at most three lines. */
+	/* Description: body-sm, secondary, shown in full. */
 	& .wp-block-heading + p {
-		display: -webkit-box;
-		overflow: hidden;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 3;
 		margin-top: var(--wp--preset--spacing--1);
 		font-size: var(--wp--preset--font-size--body-sm);
 		line-height: var(--wp--custom--line-height--body-sm);
@@ -153,12 +149,17 @@
 }
 
 /*
- * Pozioma: image 40% on the left. No breakpoint: the image and the body wrap onto two
+ * Pozioma: image 40% on the left. No viewport breakpoint: the image and the body wrap onto two
  * rows by themselves when the card is narrower than ~32rem (one grid column on a phone,
  * or a narrow content column), and the image then goes back to 16:9 on top.
+ *
+ * Two wrapped flex lines would share the spare height of a taller neighbour in the row,
+ * stretching the image. So below the same 32rem the image leaves the flow and the body,
+ * as the only line, takes all the spare height and keeps the button at the bottom.
  */
 .wp-block-group.is-style-product-horizontal {
 	flex-flow: row wrap;
+	container-type: inline-size;
 
 	& > .wp-block-image {
 		flex: 2 1 14rem;
@@ -166,6 +167,17 @@
 
 	& > .wp-block-group {
 		flex: 3 1 18rem;
+	}
+
+	@container (width < 32rem) {
+		& > .wp-block-image {
+			position: absolute;
+			inset: 0 0 auto;
+		}
+
+		& > .wp-block-image ~ .wp-block-group {
+			margin-top: calc(100cqw * 9 / 16);
+		}
 	}
 
 	/* Without an image the label stays in the flow, above the body. */
