@@ -32,7 +32,7 @@
 	/* Image: 16:9, cover. */
 	& > .wp-block-image {
 		position: relative;
-		aspect-ratio: 16 / 9;
+		aspect-ratio: var(--wp--custom--aspect-ratio--media);
 		overflow: hidden;
 		background-color: var(--wp--preset--color--surface-2);
 
@@ -150,25 +150,28 @@
 
 /*
  * Pozioma: image 40% on the left. No viewport breakpoint: the image and the body wrap onto two
- * rows by themselves when the card is narrower than ~32rem (one grid column on a phone,
+ * rows by themselves when the card is narrower than the two flex bases (one grid column on a phone,
  * or a narrow content column), and the image then goes back to 16:9 on top.
  *
  * Two wrapped flex lines would share the spare height of a taller neighbour in the row,
- * stretching the image. So below the same 32rem the image leaves the flow and the body,
+ * stretching the image. So below card-stack-width, their sum, the image leaves the flow and the body,
  * as the only line, takes all the spare height and keeps the button at the bottom.
  */
 .wp-block-group.is-style-product-horizontal {
 	flex-flow: row wrap;
+	box-sizing: border-box;
+	width: 100%; /* The container has no intrinsic width, so a shrink-to-fit parent would collapse it. */
 	container-type: inline-size;
 
 	& > .wp-block-image {
-		flex: 2 1 14rem;
+		flex: 2 1 var(--wp--custom--layout--card-image-basis);
 	}
 
 	& > .wp-block-group {
-		flex: 3 1 18rem;
+		flex: 3 1 var(--wp--custom--layout--card-body-basis);
 	}
 
+	/* Literal card-stack-width: CSS variables do not work in @container (docs/tokens.md). */
 	@container (width < 32rem) {
 		& > .wp-block-image {
 			position: absolute;
@@ -176,7 +179,7 @@
 		}
 
 		& > .wp-block-image ~ .wp-block-group {
-			margin-top: calc(100cqw * 9 / 16);
+			margin-top: calc(100cqw / (var(--wp--custom--aspect-ratio--media)));
 		}
 	}
 

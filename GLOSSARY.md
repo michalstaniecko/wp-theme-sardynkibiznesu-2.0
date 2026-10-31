@@ -27,8 +27,12 @@ Wyróżnione odesłanie do produktu, darmowego materiału, podcastu lub kontaktu
 _Avoid_: callout, banner, box promocyjny
 
 **Karta produktu**:
-Samodzielna karta odsyłająca do produktu lub darmowego materiału, z tytułem, krótkim opisem i przyciskiem, zwykle ustawiana obok innych kart. Różni się od Ramki promocyjnej tym, że przedstawia jeden produkt w zestawieniu, a nie zachęca do przejścia dalej w toku tekstu.
+Samodzielna karta odsyłająca do produktu lub darmowego materiału, z tytułem, krótkim opisem i przyciskiem, zwykle ustawiana obok innych kart. Cena, jeśli jest, stoi w Plakietce. Różni się od Ramki promocyjnej tym, że przedstawia jeden produkt w zestawieniu, a nie zachęca do przejścia dalej w toku tekstu.
 _Avoid_: product card, kafelek produktu, karta (bez dookreślenia)
+
+**Plakietka**:
+Krótki napis wyróżniający element, np. cena lub „Darmowy” na Karcie produktu albo numer odcinka podcastu.
+_Avoid_: badge, etykieta, label
 
 ## Nawigacja w artykule
 
@@ -67,6 +71,10 @@ _Avoid_: sidebar, widgety
 **Ramka autora**:
 Element pod artykułem przedstawiający autora tego artykułu: imię, zdjęcie i krótki opis. Pokazuje zawsze autora czytanego artykułu, nie opis serwisu.
 _Avoid_: author box, blurb autora
+
+**Strona szeroka**:
+Strona bez Kolumny bocznej, której cała treść zajmuje pełną szerokość układu. Służy do stron z siatką, np. Kart produktu.
+_Avoid_: page-wide, szablon szeroki
 
 **Sekcja strony głównej**:
 Samodzielny, edytowalny fragment strony głównej, np. Hero, Najnowsze czy Polecamy. Redakcja może zmieniać ich kolejność i treść.

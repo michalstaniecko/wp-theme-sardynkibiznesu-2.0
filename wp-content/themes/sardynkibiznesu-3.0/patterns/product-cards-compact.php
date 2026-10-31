@@ -5,10 +5,9 @@
  * Categories: featured, call-to-action
  * Keywords: karta produktu, darmowe narzędzia, kalkulator, materiały, kompaktowe
  * Block Types: core/group
- * Description: Trzy Karty produktu w wariancie kompaktowym (bez obrazu): etykieta, kategoria, tytuł, opis i przycisk. Sekcja „Darmowe narzędzia”, wąskie kolumny.
+ * Description: Trzy Karty produktu w wariancie kompaktowym (bez obrazu): Plakietka, kategoria, tytuł, opis i przycisk. Sekcja „Darmowe narzędzia”, wąskie kolumny.
  *
- * Karta produktu = core blocks only, no block of its own and no price field (a price is
- * plain text in the Plakietka, see product-cards-grid).
+ * Karta produktu rules: includes/product-card.php in ihumbak-content-elements.
  * The compact variant has no image (design system: "bez obrazu użyj --compact"); an
  * image added by the editor is hidden by the style's CSS.
  *

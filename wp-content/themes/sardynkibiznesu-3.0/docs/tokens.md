@@ -116,6 +116,10 @@ Fonty: pliki `assets/fonts/montserrat-{400,500,600,700}.woff2`, `@font-face` gen
 | `breakpoint-md` | `settings.custom.layout.breakpoint-md` | `--wp--custom--layout--breakpoint-md` | `768px` (tylko dokumentacja) |
 | `breakpoint-lg` | `settings.custom.layout.breakpoint-lg` | `--wp--custom--layout--breakpoint-lg` | `1024px` (tylko dokumentacja) |
 | `breakpoint-xl` | `settings.custom.layout.breakpoint-xl` | `--wp--custom--layout--breakpoint-xl` | `1280px` (tylko dokumentacja) |
+| `card-image-basis` | `settings.custom.layout.card-image-basis` | `--wp--custom--layout--card-image-basis` | `14rem` (obraz Karty produktu) |
+| `card-body-basis` | `settings.custom.layout.card-body-basis` | `--wp--custom--layout--card-body-basis` | `18rem` (treść Karty produktu) |
+| `card-stack-width` | `settings.custom.layout.card-stack-width` | `--wp--custom--layout--card-stack-width` | `32rem`, suma dwóch powyższych (tylko dokumentacja) |
+| proporcje `media` | `settings.custom.aspect-ratio.media` | `--wp--custom--aspect-ratio--media` | `16 / 9` |
 | `duration-fast` | `settings.custom.duration.fast` | `--wp--custom--duration--fast` | `150ms` (`0ms` przy `prefers-reduced-motion`) |
 | `duration-base` | `settings.custom.duration.base` | `--wp--custom--duration--base` | `200ms` (`0ms` przy `prefers-reduced-motion`) |
 | `duration-slow` | `settings.custom.duration.slow` | `--wp--custom--duration--slow` | `300ms` (`0ms` przy `prefers-reduced-motion`) |
@@ -135,6 +139,8 @@ Redaktor wybiera tylko presety motywu. Wyłączone: domyślna paleta, gradienty 
 - **Style `nav`, `button`, `button-sm`, `overline`, `code`** nie mają slugów; to style komponentów (`styles.elements` / CSS komponentu) zbudowane z powyższych tokenów.
 - **`fluid: false`.** Progi mobilne i ≥1280 są nadpisaniami zmiennych w `@media` w `style.css`, a nie typografią płynną.
 - **Progi 768 / 1024 / 1280** są w `custom.layout` tylko dokumentacyjnie; w media queries wpisane literalnie (zmiennych CSS nie da się użyć w `@media`).
+- **Próg `card-stack-width`** jest w `@container` wpisany literalnie, z tego samego powodu co progi w `@media`. Przy zmianie `card-image-basis` lub `card-body-basis` trzeba go poprawić ręcznie.
+- **Tokeny `card-*` i `aspect-ratio.media`** nie pochodzą z projektu; wynikają z układu Karty produktu i obrazów kart.
 - **Skala odstępów** zawiera tylko kroki z projektu (1–6, 8, 10, 12, 16, 24), bez wypełniania luk.
 - **Nagłówki kolumn stopki** w projekcie mają `mark-gray` (2,2:1 na `surface-inverse`, poniżej WCAG AA); motyw używa `text-muted` (5:1).
 - **Domyślne zmienne core.** WordPress nadal wypisuje w `:root` zmienne domyślnych presetów (np. `--wp--preset--color--vivid-red`) dla zgodności wstecznej, mimo wyłączenia ich w edytorze. Nie są częścią kontraktu i nie wolno ich używać.

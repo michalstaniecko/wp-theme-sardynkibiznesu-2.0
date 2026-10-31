@@ -25,6 +25,22 @@ const STYLES = array(
 	'product-compact'    => 'Karta kompaktowa',
 );
 
+/** Karta produktu variants of cards_markup(): card style, default grid and whether the card has an image. */
+const VARIANTS = array(
+	'horizontal' => array(
+		'style'            => 'product-horizontal',
+		'columns'          => 2,
+		'min_column_width' => '22rem',
+		'image'            => true,
+	),
+	'compact'    => array(
+		'style'            => 'product-compact',
+		'columns'          => 3,
+		'min_column_width' => '16rem',
+		'image'            => false,
+	),
+);
+
 add_action( 'init', __NAMESPACE__ . '\\register_styles' );
 
 /**
@@ -54,15 +70,15 @@ function register_styles(): void {
  * @param array{columns?: int, min_column_width?: string} $grid_options Overrides the variant's column count and minimum column width.
  */
 function cards_markup( array $cards, string $variant, string $placeholder_image = '', array $grid_options = array() ): string {
-	$horizontal = 'horizontal' === $variant;
-	$grid       = wp_json_encode(
+	$config = VARIANTS[ $variant ] ?? VARIANTS['compact'];
+	$grid   = wp_json_encode(
 		array(
 			'type'               => 'grid',
-			'columnCount'        => $grid_options['columns'] ?? ( $horizontal ? 2 : 3 ),
-			'minimumColumnWidth' => $grid_options['min_column_width'] ?? ( $horizontal ? '22rem' : '16rem' ),
+			'columnCount'        => $grid_options['columns'] ?? $config['columns'],
+			'minimumColumnWidth' => $grid_options['min_column_width'] ?? $config['min_column_width'],
 		)
 	);
-	$style      = $horizontal ? 'product-horizontal' : 'product-compact';
+	$style  = $config['style'];
 
 	$out = "<!-- wp:group {\"layout\":$grid} -->\n<div class=\"wp-block-group\">\n";
 	foreach ( $cards as $card ) {
@@ -73,7 +89,7 @@ function cards_markup( array $cards, string $variant, string $placeholder_image 
 			? "\t\t\t\t<!-- wp:button {\"className\":\"is-style-outline\"} -->\n\t\t\t\t<div class=\"wp-block-button is-style-outline\">"
 			: "\t\t\t\t<!-- wp:button -->\n\t\t\t\t<div class=\"wp-block-button\">";
 		$out .= "\t<!-- wp:group {\"className\":\"is-style-$style\",\"layout\":{\"type\":\"default\"}} -->\n\t<div class=\"wp-block-group is-style-$style\">\n";
-		if ( $horizontal ) {
+		if ( $config['image'] ) {
 			$out .= "\t\t<!-- wp:image {\"sizeSlug\":\"large\",\"linkDestination\":\"none\"} -->\n"
 				. "\t\t<figure class=\"wp-block-image size-large\"><img src=\"" . esc_url( $card['image'] ?? $placeholder_image ) . "\" alt=\"\"/></figure>\n"
 				. "\t\t<!-- /wp:image -->\n\n";

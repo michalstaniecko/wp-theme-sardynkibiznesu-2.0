@@ -181,7 +181,13 @@
 				"header-height": "64px",
 				"breakpoint-md": "768px",
 				"breakpoint-lg": "1024px",
-				"breakpoint-xl": "1280px"
+				"breakpoint-xl": "1280px",
+				"card-image-basis": "14rem",
+				"card-body-basis": "18rem",
+				"card-stack-width": "32rem"
+			},
+			"aspect-ratio": {
+				"media": "16 / 9"
 			},
 			"duration": {
 				"fast": "150ms",

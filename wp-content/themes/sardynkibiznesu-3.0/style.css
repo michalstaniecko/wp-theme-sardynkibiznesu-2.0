@@ -1194,7 +1194,7 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
  */
 .sb-card__media {
 	box-sizing: content-box; /* The ratio excludes the border, so a 16:9 image fills the box exactly. */
-	aspect-ratio: 16 / 9;
+	aspect-ratio: var(--wp--custom--aspect-ratio--media);
 	margin: 0;
 	overflow: hidden;
 	border: 1px solid var(--wp--custom--color--border-card);

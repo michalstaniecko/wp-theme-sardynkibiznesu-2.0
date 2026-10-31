@@ -1,7 +1,7 @@
 <?php
 /**
  * Plakietka: a pill label. Two notations, both block styles of core blocks:
- * - `core/paragraph` with a `badge*` style: one label (Karta produktu's etykieta,
+ * - `core/paragraph` with a `badge*` style: one label (on a Karta produktu,
  *   episode number in the Podcast section);
  * - `core/buttons` with the `badges` style: a row of link badges (e.g. "Popularne"
  *   searches in the search bar).

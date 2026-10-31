@@ -7,10 +7,10 @@
  * Block Types: core/group
  * Description: Siatka trzech Kart produktu z obrazem: Plakietka z ceną, tytuł, opis i przycisk, bez kategorii. Na szablon „Strona szeroka”: 3 kolumny na desktopie, 2 na tablecie, 1 na telefonie.
  *
- * Karta produktu = core blocks only, no block of its own and no price field: the price is
- * plain text in the Plakietka (`badge-brand` for a paid product, `badge-success` for
- * „Darmowy”). Markup: cards_markup() in ihumbak-content-elements. The 18rem minimum column
- * width gives 3 columns from 1024 px and 2 on a 768 px tablet.
+ * Karta produktu rules: includes/product-card.php in ihumbak-content-elements. The Plakietka
+ * holds the price: `badge-brand` for a paid product, `badge-success` for „Darmowy”.
+ * The 18rem minimum column width gives 3 columns from 1024 px and 2 on a 768 px tablet. Cards
+ * this narrow keep the `product-horizontal` style but stack, with the image above the text.
  *
  * @package sardynkibiznesu-3.0
  */
