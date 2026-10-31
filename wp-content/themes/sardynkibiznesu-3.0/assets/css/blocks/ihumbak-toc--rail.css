@@ -65,9 +65,7 @@
 			border-left-color: var(--wp--preset--color--text-secondary);
 		}
 
-		/* Same weight as the other links: a bolder label could wrap and move the list. */
 		&[aria-current="location"] {
-			font-weight: 500;
 			color: var(--sb-toc-active);
 			border-left-color: var(--sb-toc-active);
 

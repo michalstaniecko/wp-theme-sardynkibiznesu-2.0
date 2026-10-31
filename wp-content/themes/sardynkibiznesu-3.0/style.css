@@ -1610,7 +1610,6 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 		}
 
 		&[aria-current="location"] {
-			font-weight: 600;
 			color: var(--sb-toc-active);
 		}
 	}
