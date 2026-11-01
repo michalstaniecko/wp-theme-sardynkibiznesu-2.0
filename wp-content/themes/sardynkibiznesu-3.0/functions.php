@@ -3,9 +3,9 @@
  * Sardynki Biznesu 3.0 — presentation layer (ADR-0001).
  *
  * Loads the global and per-block stylesheets, preloads the two most used font weights,
- * tunes image attributes (sizes, lazy loading, fetch priority) of template images, formats
- * the result count of the search view and registers the pattern category of the Sekcje
- * strony głównej. Everything that must survive a theme change (content compatibility with
+ * tunes image attributes (sizes, lazy loading, fetch priority) of template images, skips the
+ * Obrazek wyróżniający of a page that didn't opt in, formats the result count of the search view
+ * and registers the pattern category of the Sekcje strony głównej. Everything that must survive a theme change (content compatibility with
  * 2.0, Karta produktu markup, blocks, shortcodes, meta, settings) lives in the ihumbak-*
  * plugins; patterns call plugin functions only behind `function_exists()`.
  *
@@ -211,6 +211,35 @@ add_filter(
 			$img->set_attribute( 'sizes', $auto . FEATURED_IMAGE_SIZES[ $known[0] ] );
 		}
 		return $img->get_updated_html();
+	},
+	10,
+	2
+);
+
+/**
+ * Meta of the per-page choice to display the Obrazek wyróżniający (#81). Same string as META_SHOW in
+ * ihumbak-content-elements/includes/page-featured-image.php, which owns it (ADR-0001). A missing value
+ * means off. With the plugin inactive the key isn't registered, and the image stays off whatever is saved.
+ */
+const PAGE_SHOW_FEATURED_IMAGE_META = '_sb_page_show_featured_image';
+
+/**
+ * Skips the block with the page's own Obrazek wyróżniający unless the page opted in. This runs before
+ * the block, not on its `render_block_*` output: rendering calls get_the_post_thumbnail(), which would
+ * use up the fetchpriority="high" hint and an eager-loading slot on an image nobody sees (#69).
+ */
+add_filter(
+	'pre_render_block',
+	static function ( ?string $pre_render, array $block ): ?string {
+		if ( 'core/post-featured-image' !== $block['blockName'] ) {
+			return $pre_render;
+		}
+		if ( ! in_array( 'sb-page__featured', explode( ' ', $block['attrs']['className'] ?? '' ), true ) ) {
+			return $pre_render;
+		}
+		$show = registered_meta_key_exists( 'post', PAGE_SHOW_FEATURED_IMAGE_META, 'page' )
+			&& rest_sanitize_boolean( get_post_meta( get_the_ID(), PAGE_SHOW_FEATURED_IMAGE_META, true ) );
+		return $show ? $pre_render : '';
 	},
 	10,
 	2

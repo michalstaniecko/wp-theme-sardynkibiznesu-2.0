@@ -87,6 +87,22 @@ Kilka dni przed oknem. 2.0 działa bez zmian. Wyjątek poza wyglądem stron to K
 
     Bez WP-CLI na serwerze: `*/5 * * * * curl -s -o /dev/null https://sardynkibiznesu.pl/wp-cron.php?doing_wp_cron`.
   - sprawdzenie (strefa czasowa serwera może być inna niż strony, liczy się czas strony): `$WP cron event list --hook=ihumbak_site_blocks_popularity_sync` pokazuje najbliższe uruchomienie o 05:00. Następnego dnia `$WP option get sb_popularity_sync` ma świeże `updated_at`. Ręcznie: `$WP sb popularity sync`.
+- [ ] **Obrazek wyróżniający na stronach** (#81). W 3.0 strona pokazuje go tylko po włączeniu ustawienia, a domyślnie jest wyłączone. Strony na domyślnym szablonie mają obrazek w 2.0, więc muszą go zachować. Strony na `boxed-without-sidebar` obrazka w 2.0 nie miały i zostają bez niego. Ustawienie można zapisać już teraz, bo 2.0 je ignoruje. Lista opublikowanych stron z obrazkiem:
+
+  ```bash
+  $WP db query "SELECT p.ID, p.post_name, COALESCE(NULLIF(t.meta_value, ''), 'default') AS template
+    FROM $($WP db prefix)posts p
+    JOIN $($WP db prefix)postmeta i ON i.post_id = p.ID AND i.meta_key = '_thumbnail_id'
+    LEFT JOIN $($WP db prefix)postmeta t ON t.post_id = p.ID AND t.meta_key = '_wp_page_template'
+    WHERE p.post_type = 'page' AND p.post_status = 'publish'"
+  ```
+
+  Dla każdej strony z szablonem `default` (lokalnie jedna: `/strefa-sardynek/`):
+
+  ```bash
+  $WP post meta update <id> _sb_page_show_featured_image 1
+  ```
+
 - [ ] Reguła Redirection (Narzędzia → Przekierowania → Dodaj nowe), **wyłączona**:
   - źródłowy URL `^/page/(\d+)/?$`, opcja „Regex” włączona;
   - docelowy URL `/blog/page/$1/` (dokładnie tak, ścieżka bez domeny);

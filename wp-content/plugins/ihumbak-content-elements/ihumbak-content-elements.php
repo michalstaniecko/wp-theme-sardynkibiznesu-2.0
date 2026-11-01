@@ -21,4 +21,5 @@ require_once __DIR__ . '/includes/group-styles.php';
 require_once __DIR__ . '/includes/badges.php';
 require_once __DIR__ . '/includes/product-card.php';
 require_once __DIR__ . '/includes/podcast.php';
+require_once __DIR__ . '/includes/page-featured-image.php';
 require_once __DIR__ . '/includes/legacy-page-templates.php';
