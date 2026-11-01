@@ -95,7 +95,11 @@ function headings_for_post( int $post_id ): array {
 	$previous              = $GLOBALS['post'] ?? null;
 	$GLOBALS['post']       = $post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	setup_postdata( $post );
+	// The HTML of this pass is thrown away, so its images must not use up core's fetchpriority="high"
+	// hint and eager-loading slots: the real render would get only lazy images (#81).
+	add_filter( 'pre_wp_get_loading_optimization_attributes', '__return_empty_array' );
 	apply_filters( 'the_content', $post->post_content ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+	remove_filter( 'pre_wp_get_loading_optimization_attributes', '__return_empty_array' );
 	$GLOBALS['post'] = $previous; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	if ( $previous instanceof \WP_Post ) {
 		setup_postdata( $previous );
