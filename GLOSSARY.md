@@ -12,6 +12,10 @@ _Avoid_: treść (bez dookreślenia), content
 Wpis lub strona, która nie jest opublikowana. Przed publikacją może wymagać poprawek, bo zmiana motywu nie gwarantuje, że wyświetli się poprawnie.
 _Avoid_: draft, wersja robocza
 
+**Obrazek wyróżniający**:
+Obraz przypisany do wpisu lub strony, używany m.in. na kartach, w listach i przy udostępnianiu. Na samej stronie wyświetla się tylko wtedy, gdy redakcja tak zdecyduje; we wpisie zawsze.
+_Avoid_: featured image, miniatura, thumbnail
+
 ## Elementy treści
 
 **Przycisk**:
