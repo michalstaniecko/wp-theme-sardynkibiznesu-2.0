@@ -549,6 +549,25 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 	display: block;
 }
 
+/* Breadcrumbs (yoast-seo/breadcrumbs): shared by the templates that show them, so not nested under
+   a view. */
+.sb-breadcrumbs {
+	font-size: var(--wp--preset--font-size--caption);
+	font-weight: 500;
+	line-height: var(--wp--custom--line-height--caption);
+	color: var(--wp--preset--color--text-secondary);
+
+	& a {
+		color: var(--wp--preset--color--text-secondary);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--wp--preset--color--brand);
+			text-decoration: underline;
+		}
+	}
+}
+
 /* Article (template `single`): content column filling its track + 320 Kolumna boczna (part
    `sidebar-article`), the same .sb-layout grid as pages and lists (main and aside are siblings).
    Below 1024px the Kolumna boczna drops under the content. Layer 4: classes on groups. */
@@ -577,23 +596,6 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 
 		& > * {
 			margin-block: 0;
-		}
-	}
-
-	& .sb-article__breadcrumbs {
-		font-size: var(--wp--preset--font-size--caption);
-		font-weight: 500;
-		line-height: var(--wp--custom--line-height--caption);
-		color: var(--wp--preset--color--text-secondary);
-
-		& a {
-			color: var(--wp--preset--color--text-secondary);
-			text-decoration: none;
-
-			&:hover {
-				color: var(--wp--preset--color--brand);
-				text-decoration: underline;
-			}
 		}
 	}
 
@@ -1945,23 +1947,6 @@ header.wp-block-template-part:has(> .wp-block-ihumbak-site-header) {
 
 		& > * {
 			margin-block: 0;
-		}
-	}
-
-	& .sb-page__breadcrumbs {
-		font-size: var(--wp--preset--font-size--caption);
-		font-weight: 500;
-		line-height: var(--wp--custom--line-height--caption);
-		color: var(--wp--preset--color--text-secondary);
-
-		& a {
-			color: var(--wp--preset--color--text-secondary);
-			text-decoration: none;
-
-			&:hover {
-				color: var(--wp--preset--color--brand);
-				text-decoration: underline;
-			}
 		}
 	}
 
