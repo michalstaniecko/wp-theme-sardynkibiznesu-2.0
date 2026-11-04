@@ -1,8 +1,10 @@
-# Przełączenie 2.0 ↔ 3.0
+# Przełączenie 2.0 → 3.0
 
-Runbook okna przełączenia ze spec #36 (ticket #63, plan w #35). Skrypt: `bin/switch-theme`.
+Runbook okna przełączenia ze spec #36 (ticket #63, plan w #35). Skrypt: `bin/switch-theme`. Lista do odhaczania w trakcie migracji: #84.
 
-Zasada: przełączenie **nie zmienia treści w bazie**. Skrypt zmienia tylko motyw, zestawy wtyczek, opcje strony głównej, status dwóch przygotowanych stron, status jednej reguły Redirection i własną opcję stanu `sb_theme_switch`. Dlatego rollback (`bin/switch-theme 2.0`) jest natychmiastowy.
+Zasada: przełączenie **nie zmienia treści w bazie**. Skrypt zmienia tylko motyw, zestawy wtyczek, opcje strony głównej, status dwóch przygotowanych stron, status jednej reguły Redirection i własną opcję stanu `sb_theme_switch`.
+
+**Bez rollbacku** (decyzja właściciela, #35): jak zaczynamy, kończymy, nawet jeśli w trakcie wyjdą problemy. Naprawiamy je nowymi paczkami. Tylko przy totalnym blokerze przywracamy kopię zapasową (p. 4).
 
 Ścieżki jak w [paczki-i-staging.md](paczki-i-staging.md):
 
@@ -26,7 +28,6 @@ Działa na serwerze, przez SSH. Wgraj `bin/switch-theme` do `~/bin/` (`chmod +x`
 
 ```bash
 ~/bin/switch-theme 3.0 --path $SITE --front-page <id> --blog-page <id> [--dry-run] [--yes]
-~/bin/switch-theme 2.0 --path $SITE [--dry-run] [--yes]
 ~/bin/switch-theme status --path $SITE
 ```
 
@@ -36,28 +37,24 @@ Zawsze najpierw `--dry-run`: wykonuje tylko kontrole i wypisuje zmiany, nic nie 
 
 - pod `--path` nie ma WordPressa albo brakuje motywu `sardynkibiznesu-2.0` / `sardynkibiznesu-3.0`;
 - wtyczka Redirection nie jest aktywna, reguły `^/page/(\d+)/?$` nie ma, jest więcej niż jedna albo jej cel to nie `301 /blog/page/$1/`;
-- kierunek `3.0`:
-  - serwis jest już na 3.0 albo powrót na 2.0 jest niedokończony;
-  - aktywny motyw to nie `sardynkibiznesu-2.0`;
-  - brakuje którejś wtyczki zestawu 3.0;
-  - `ihumbak-tax-calculator` nie jest zainstalowana albo nie jest aktywna;
-  - `--front-page` / `--blog-page` to nie strony, to ta sama strona, strona jest w koszu;
-  - strona `/blog/` ma rodzica albo slug inny niż `blog`, albo slug `blog` jest zajęty przez inną treść;
-- kierunek `2.0`: nie było przełączenia na 3.0 (brak opcji `sb_theme_switch`).
+- serwis jest już przełączony na 3.0;
+- aktywny motyw to nie `sardynkibiznesu-2.0` (i nie ma niedokończonego przełączenia);
+- brakuje którejś wtyczki zestawu 3.0;
+- `ihumbak-tax-calculator` nie jest zainstalowana albo nie jest aktywna;
+- `--front-page` / `--blog-page` to nie strony, to ta sama strona, strona jest w koszu;
+- strona `/blog/` ma rodzica albo slug inny niż `blog`, albo slug `blog` jest zajęty przez inną treść.
 
-**Kierunek `3.0`:**
+**Kroki:**
 
-0. Zapisuje stan sprzed przełączenia w opcji `sb_theme_switch`: czas przełączenia (GMT), motyw, `show_on_front` / `page_on_front` / `page_for_posts`, statusy obu stron, status reguły i to, które wtyczki z obu zestawów były aktywne.
+0. Zapisuje w opcji `sb_theme_switch` czas przełączenia (GMT) i ID obu stron. Służy tylko do wznowienia przerwanego przebiegu.
 1. Wyłącza aktywne wtyczki zestawu 2.0: `ihumbak-newsletter-form`, `ihumbak-anchor`, `ihumbak-anchor-2`, `ihumbak-analytics`, `ihumbak-shortcodes` oraz `spreaker-shortcode`, bo Odtwarzacz podcastu obsługuje teraz `ihumbak-content-elements` (#83), a dwie aktywne implementacje tego samego tagu nie mogą działać razem.
-2. Włącza zestaw 3.0: `ihumbak-content-elements`, `ihumbak-toc`, `ihumbak-newsletter`, `ihumbak-site-blocks`, `ihumbak-tracking`. Szóstej wtyczki z paczek, `ihumbak-tax-calculator`, skrypt nie przełącza w żadnym kierunku: działa pod 2.0 i 3.0 (`/kalkulator-vat/`), więc ma być aktywna już przed oknem.
+2. Włącza zestaw 3.0: `ihumbak-content-elements`, `ihumbak-toc`, `ihumbak-newsletter`, `ihumbak-site-blocks`, `ihumbak-tracking`. Szóstej wtyczki z paczek, `ihumbak-tax-calculator`, skrypt nie przełącza: działa pod 2.0 i 3.0 (`/kalkulator-vat/`), więc ma być aktywna już przed oknem.
 3. Włącza motyw `sardynkibiznesu-3.0`, ustawia `show_on_front=page`, `page_on_front`, `page_for_posts`, publikuje obie strony i włącza regułę Redirection `/page/N/` → `/blog/page/N/`.
 4. Czyści cache LiteSpeed (`wp litespeed-purge all`).
 
-**Kierunek `2.0`** odwraca każdy krok do stanu zapisanego w opcji: status reguły, opcje strony głównej, statusy stron (z powrotem szkice), motyw 2.0, wyłącza wtyczki 3.0, włącza te wtyczki 2.0, które były aktywne przed przełączeniem (`ihumbak-analytics` na produkcji nie jest aktywna, więc zostaje wyłączona), czyści cache. Na koniec wypisuje **wpisy zmienione od przełączenia, które zawierają bloki `ihumbak/*`**: ID, typ, status, datę zmiany, tytuł i link do edycji. Strony główna i `/blog/` nie są na liście, bo wracają do szkiców.
+**`status`** tylko czyta: pokazuje motyw i stan przełączenia.
 
-**`status`** tylko czyta: pokazuje motyw i stan przełączenia, a po przełączeniu na 3.0 tę samą listę wpisów z blokami `ihumbak/*`. Przydaje się w cotygodniowym przeglądzie (p. 6).
-
-**Przerwany przebieg** (błąd, zerwane SSH): uruchom to samo polecenie jeszcze raz. Skrypt widzi niedokończony stan, wznawia i nie nadpisuje stanu sprzed przełączenia. Kroki są powtarzalne. Wznowienie `3.0` wymaga tych samych `--front-page` / `--blog-page`.
+**Przerwany przebieg** (błąd, zerwane SSH): uruchom to samo polecenie jeszcze raz. Skrypt widzi niedokończony stan i wznawia. Kroki są powtarzalne. Wznowienie wymaga tych samych `--front-page` / `--blog-page`.
 
 **Purge LiteSpeed** z WP-CLI prosi serwer WWW o wyczyszczenie przez HTTP. Gdy to się nie uda, skrypt wypisuje `UWAGA` i kończy przełączenie. Wtedy wyczyść cache ręcznie: wp-admin → LiteSpeed Cache → Toolbox → Purge All.
 
@@ -68,6 +65,8 @@ Zawsze najpierw `--dry-run`: wykonuje tylko kontrole i wypisuje zmiany, nic nie 
 Kilka dni przed oknem. 2.0 działa bez zmian. Wyjątek poza wyglądem stron to Karty produktu: wyszukiwarka i mapa witryny (p. 2.1).
 
 - [ ] Etap A zakończony: 2.0 na WP 7.1.3 i PHP 8.4, po 1–2 tygodniach obserwacji.
+- [ ] **Kopia zapasowa hostingu** sprawdzona: data ostatniej kopii, sposób i czas przywrócenia zapisane w #84. To, obok PK0, jedyna droga powrotu (p. 4).
+- [ ] Wtyczki spoza obu zestawów wyłączone, jeśli są aktywne: `ihumbak-wpgraphql` (wywołuje `get_field()` bez sprawdzania, a ACF znika razem z motywem 2.0, więc pod 3.0 rzuci fatal error), `ihumbak-cookies`, `ihumbak-semantic-search` (w 3.0 nieużywane, #17).
 - [ ] Paczki 3.0 zainstalowane, nieaktywne ([paczki-i-staging.md](paczki-i-staging.md), p. 1–3). Wyjątek: `ihumbak-tax-calculator` zostaje aktywna, bo działa też pod 2.0.
 - [ ] Site Editor w podglądzie motywu: `/wp-admin/site-editor.php?wp_theme_preview=sardynkibiznesu-3.0`. Części szablonów, menu `wp_navigation`, Sekcje strony głównej.
 - [ ] Strona główna i `/blog/` jako **szkice** (typ strona). `/blog/`: slug `blog` (panel „Odnośnik” w edytorze), bez rodzica. Zanotuj oba ID:
@@ -118,8 +117,8 @@ Kilka dni przed oknem. 2.0 działa bez zmian. Wyjątek poza wyglądem stron to K
   - [ ] PK1 i PK2 na stagingu (komparator SEO, `bin/perf-a11y-check`, ręczne scenariusze a11y): wszystko przechodzi;
   - [ ] Convert Pro (płatna, poza repo, lokalnie nie do zmierzenia; #39, #68): `bin/perf-a11y-check` z włączoną wtyczką, wynik per URL. `/wp-includes/` liczy się jako zasób własny, więc jQuery dociągnięte przez wtyczkę wraca do budżetu JS (≤ 40 KB, 0 blokujących);
   - [ ] Wpis z komentarzami przy pełnym zestawie produkcyjnym, w tym Convert Pro (#70): jeśli Convert Pro ładuje jQuery, wpDiscuz nie pobiera go drugi raz, a komentarze (lista, dodanie, odpowiedź, głosowanie, „załaduj więcej”, wejście na `#comment-N`) działają jak przed leniwym ładowaniem;
-  - [ ] `switch-theme 2.0`: 2.0 wraca, lista wpisów się wypisuje;
-  - [ ] `switch-theme 3.0` jeszcze raz (drugie przełączenie po rollbacku też działa).
+  - [ ] przerwany przebieg: `switch-theme 3.0` przerwany w trakcie (Ctrl+C po kroku 1) i uruchomiony ponownie kończy przełączenie;
+  - [ ] kolejna próba zaczyna się od świeżego `bin/staging-refresh` (skrypt nie ma kierunku powrotnego).
 - [ ] Ostatnie `bin/staging-refresh` i bramki tuż przed oknem.
 - [ ] Termin: dzień roboczy, rano. Deweloper i właściciel dostępni przez cały dzień.
 
@@ -178,7 +177,7 @@ $WP post meta list <id> --fields=meta_key,meta_value --format=csv | grep -E '^ca
 - wyszukiwarka serwisu znajduje obie strony po tekście Kart produktu i pokazuje go jako wypis;
 - w mapie witryny i schema: nowa data modyfikacji, obrazy Kart produktu w `page-sitemap.xml`, pierwszy obraz jako `primaryImageOfPage`.
 
-To prawdziwe opisy produktów, więc nie blokuje to przełączenia, a po rollbacku zostaje bez szkody. Dlatego krok robimy tuż przed `bin/staging-refresh`, a nie wiele tygodni przed oknem.
+To prawdziwe opisy produktów, więc nie blokuje to przełączenia. Dlatego krok robimy tuż przed `bin/staging-refresh`, a nie wiele tygodni przed oknem.
 
 **Między wpisaniem a przełączeniem** zmiana ceny, opisu lub linku wymaga poprawki w dwóch miejscach: w polach ACF (to widać w 2.0) i w Karcie produktu w `post_content` (to widać w 3.0).
 
@@ -203,52 +202,38 @@ Bez trybu konserwacji. Bez zamrażania treści poza samym oknem (redaktorzy nie 
    ~/bin/switch-theme 3.0 --path $SITE --front-page <id> --blog-page <id>
    ```
 
-3. Ręczna przeróbka 7 bloków FAQ/akordeonu na `core/accordion` / `core/details`.
-4. Publikacja przygotowanej wersji GTM.
-5. **PK1, smoke test** (w oknie prywatnym, bez logowania, potem zalogowany):
+3. **LiteSpeed Cache** (#34): Guest Mode i Guest Optimization wyłączone, łączenie CSS/JS i opóźnianie JS wyłączone, cache stron włączony; potem Purge All.
+4. Ręczna przeróbka 7 bloków FAQ/akordeonu na `core/accordion` / `core/details`.
+5. Publikacja przygotowanej wersji GTM.
+6. **PK1, smoke test** (w oknie prywatnym, bez logowania, potem zalogowany):
    - [ ] każdy typ widoku zwraca 200 i wygląda poprawnie: strona główna, `/blog/` i `/blog/page/2/`, wpis, strona, kategoria, tag, autor, wyszukiwarka, 404 (status 404), `/feed/`;
    - [ ] `/page/2/` → 301 na `/blog/page/2/`;
    - [ ] `/start` i `/umowy`: Karty produktu jak w kontroli z p. 2.1;
    - [ ] wpisy ze starymi elementami: Przycisk w 3 zapisach, Notka, spis treści, YASR, Spreaker;
    - [ ] zapis do Newslettera na prawdziwym adresie: komunikat, Strona podziękowania, kontakt w MailerLite;
    - [ ] logowanie i edycja wpisu (zapis, podgląd).
-6. **PK2:** komparator SEO (`bin/komparator-seo`, [docs/komparator-seo.md](../komparator-seo.md)) i `bin/perf-a11y-check https://sardynkibiznesu.pl` na produkcji.
-7. Ponowny skan CookieYes i konfiguracja kategorii ciasteczek.
-8. Zgłoszenie sitemap w Search Console.
+7. **PK2:** komparator SEO (`bin/komparator-seo`, [docs/komparator-seo.md](../komparator-seo.md)) i `bin/perf-a11y-check https://sardynkibiznesu.pl` na produkcji.
+8. Ponowny skan CookieYes i konfiguracja kategorii ciasteczek.
+9. Zgłoszenie sitemap w Search Console.
 
-**Role:** deweloper robi PK0, skrypt, bramki automatyczne, a11y i test Newslettera. Właściciel robi przegląd wizualny, kontrole kont (GTM, Meta, Ads, CookieYes) i daje „go” po PK2.
+**Role:** deweloper robi PK0, skrypt, bramki automatyczne, a11y i test Newslettera. Właściciel robi przegląd wizualny, kontrole kont (GTM, Meta, Ads, CookieYes) i odbiera wynik PK2.
 
-## 4. Rollback natychmiastowy
+## 4. Gdy coś pójdzie źle
 
-Bez dyskusji, gdy po przełączeniu wystąpi którekolwiek:
+Nie wracamy na 2.0. Każdy problem po przełączeniu, także 5xx, niedziałający Newsletter czy różnice SEO, naprawiamy poprawką i nową paczką ([paczki-i-staging.md](paczki-i-staging.md) p. 3–4). Przyczynę opisujemy w issue.
 
-- 5xx albo biały ekran na którymkolwiek typie widoku;
-- niedziałający zapis do Newslettera;
-- blokujące różnice komparatora SEO na produkcji (status, tytuł, canonical, robots, Kotwice, H1) na więcej niż pojedynczych URL-ach;
-- brak możliwości logowania lub edycji.
+**Totalny bloker** (serwis nie działa i nie da się go naprawić w rozsądnym czasie): przywrócenie kopii zapasowej, wspólna decyzja dewelopera i właściciela.
 
-```bash
-~/bin/switch-theme 2.0 --path $SITE --dry-run
-~/bin/switch-theme 2.0 --path $SITE
-$WP litespeed-purge all
-```
+- Zrzut PK0 (baza i `wp-content`), jeśli od przełączenia minęło niewiele czasu:
 
-Skrypt włącza z powrotem `spreaker-shortcode` razem z resztą zestawu 2.0, jeśli była aktywna przed przełączeniem.
+  ```bash
+  $WP db import ~/backup/pk0-<data>.sql
+  tar -xzf ~/backup/pk0-wp-content-<data>.tar.gz -C $SITE
+  $WP litespeed-purge all
+  ```
 
-Po rollbacku:
-
-- [ ] `/`, wpis i `/page/2/` zwracają 200 w wyglądzie 2.0;
-- [ ] wpisy z listy skryptu poprawione ręcznie (bloki `ihumbak/*` w 2.0 się nie renderują);
-- [ ] wersja GTM cofnięta do poprzedniej;
-- [ ] przyczyna opisana w issue, poprawka nową paczką, ponowna próba na stagingu i nowe okno.
-
-Przerobione bloki FAQ zostają jako core: w 2.0 działają, tylko bez stylu.
-
-Karty produktu `/start` i `/umowy` zostają w `post_content` i nie trzeba ich ruszać: 2.0 znów buduje te strony z pól ACF, a wersji z `post_content` na tych stronach nie widać (p. 2.1). Są z bloków core, więc nie ma ich na liście wpisów z blokami `ihumbak/*`.
-
-Zrzut PK0 to ostatnia deska ratunku, nie zwykły rollback: przywrócenie bazy cofa treści i komentarze z czasu po przełączeniu.
-
-**Naprawa na bieżąco** (nowa paczka, [paczki-i-staging.md](paczki-i-staging.md) p. 3–4, bez rollbacku): błędy wizualne, pojedyncze URL-e, Lighthouse gorszy niż na stagingu, tracking.
+- Kopia hostingu, gdy PK0 nie wystarcza (sposób przywrócenia sprawdzony w p. 2).
+- Przywrócenie cofa treści, komentarze i zapisy z czasu po kopii. Wersję GTM cofamy do poprzedniej.
 
 ## 5. Po każdej aktualizacji WP
 
@@ -259,21 +244,21 @@ Zrzut PK0 to ostatnia deska ratunku, nie zwykły rollback: przywrócenie bazy co
   - [ ] `ihumbak/search-toggle` / `search-bar`;
   - [ ] Spis treści w wariancie `rail`.
 
-## 6. Okres rollbacku: 30 dni
+## 6. Monitoring: 30 dni
 
-- 2.0, stare wtyczki i ich zipy zostają na serwerze. `bin/switch-theme 2.0` działa przez cały okres.
 - Treści: bez zakazów redakcyjnych.
 - **Co tydzień** (zapisz wynik w issue #36):
   - [ ] Search Console: 404 i błędy indeksowania, strony wykluczone, Core Web Vitals;
-  - [ ] GA4: sesje organiczne wobec tego samego okresu sprzed przełączenia;
-  - [ ] `~/bin/switch-theme status --path $SITE`: ile wpisów trzeba by poprawić po rollbacku.
-- Decyzję o późnym rollbacku podejmuje właściciel.
+  - [ ] GA4: sesje organiczne wobec tego samego okresu sprzed przełączenia.
+- Spadki naprawiamy na bieżąco nowymi paczkami.
 
-## 7. Porządki po 30 dniach
+## 7. Porządki od razu po udanym oknie
 
-- Repo, jeden commit: motyw `sardynkibiznesu-2.0`, toolchain 2.0, `deploy.yml` / `rollback.yml`, wtyczki `ihumbak-newsletter-form`, `ihumbak-anchor*`, `ihumbak-analytics`, aktualizacja `CLAUDE.md` i skilli.
+Gdy PK1 i PK2 przeszły (#66):
+
+- Repo, jeden commit: motyw `sardynkibiznesu-2.0`, toolchain 2.0, `deploy.yml` / `rollback.yml`, wtyczki `ihumbak-newsletter-form`, `ihumbak-anchor*`, `ihumbak-analytics`, aktualizacja `CLAUDE.md` i skilli. Kod 2.0 zostaje w historii gita.
 - Serwer: usunięcie tych katalogów i zipów 2.0.
-- Baza bez zmian. Opcja `sb_theme_switch` może zostać albo zostać usunięta (`$WP option delete sb_theme_switch`), gdy rollback nie wchodzi już w grę.
+- Baza bez zmian. Opcję `sb_theme_switch` można usunąć (`$WP option delete sb_theme_switch`).
 
 ## Sprawdzenie lokalne (bez serwera)
 

@@ -34,7 +34,7 @@ bin/build-packages v3.0.1 ihumbak-toc   # tylko wybrane katalogi
 
 ## 2. Wgranie przez SFTP
 
-Cały katalog `dist/<tag>/` trafia do `~/deploy/<tag>/` na serwerze, poza webrootem (nie do `public_html`). Poprzednich katalogów nie usuwamy: są paczkami do rollbacku.
+Cały katalog `dist/<tag>/` trafia do `~/deploy/<tag>/` na serwerze, poza webrootem (nie do `public_html`). Poprzednich katalogów nie usuwamy: służą do cofnięcia paczki.
 
 Na serwerze (SSH) sprawdź, czy pliki doszły w całości:
 
@@ -58,15 +58,15 @@ $WP plugin install ~/deploy/v3.0.0/ihumbak-toc-v3.0.0.zip --force
 - Ponowna instalacja nie zmienia stanu: aktywny motyw lub wtyczka zostaje aktywna, nieaktywna zostaje nieaktywna.
 - Po instalacji: `$WP theme list` / `$WP plugin list` pokazują nową wersję. Gdy LiteSpeed jest aktywny, `$WP litespeed-purge all`.
 
-## 4. Rollback kodu
+## 4. Cofnięcie paczki
 
-Rollback kodu to ponowna instalacja poprzedniej paczki tym samym poleceniem:
+Cofnięcie paczki (np. gdy nowa wersja wtyczki psuje stronę) to ponowna instalacja poprzedniej paczki tym samym poleceniem:
 
 ```bash
 $WP plugin install ~/deploy/v3.0.0/ihumbak-toc-v3.0.0.zip --force
 ```
 
-Baza się nie zmienia. Rollback przełączenia (motyw 3.0 → 2.0) to osobny skrypt przełączenia `bin/switch-theme 2.0`, nie ta procedura (zob. [przelaczenie-3-0.md](przelaczenie-3-0.md)).
+Baza się nie zmienia. Powrotu z motywu 3.0 na 2.0 nie ma (zob. [przelaczenie-3-0.md](przelaczenie-3-0.md), p. 4).
 
 ## 5. Odświeżenie stagingu
 
