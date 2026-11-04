@@ -13,7 +13,7 @@ services:
       # Read by wp_get_environment_type(); ihumbak-tracking prints nothing outside production.
       WP_ENVIRONMENT_TYPE: ${WP_ENVIRONMENT_TYPE:-local}
     volumes:
-      - ./wordpress:/var/www/html:rw
+      #- ./wordpress:/var/www/html:rw
       - ./wp-config.php:/var/www/html/wp-config.php
       - ./wp-content/themes:/var/www/html/wp-content/themes
       - ./wp-content/uploads:/var/www/html/wp-content/uploads
