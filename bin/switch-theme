@@ -201,8 +201,12 @@ for id in "$front" "$blog"; do
 	esac
 done
 [[ $(wp_db post get "$blog" --field=post_parent) == 0 ]] || die "strona $blog ma rodzica, /blog/ musi być na najwyższym poziomie"
-[[ $(wp_db post get "$blog" --field=post_name) == "$BLOG_SLUG" ]] ||
-	die "strona $blog ma slug '$(wp_db post get "$blog" --field=post_name)', a nie '$BLOG_SLUG' (ustaw go w edytorze)"
+# A draft or pending page keeps post_name empty until it is published (the editor only
+# shows a slug suggested from the title); publishing then sets sanitize_title( title ).
+blog_slug=$(php_db '$p = get_post( (int) $args[0] );
+echo "" !== $p->post_name ? $p->post_name : ( in_array( $p->post_status, array( "draft", "pending" ), true ) ? sanitize_title( $p->post_title ) : "" );' "$blog")
+[[ $blog_slug == "$BLOG_SLUG" ]] ||
+	die "strona $blog ma slug '$blog_slug', a nie '$BLOG_SLUG' (ustaw go w edytorze)"
 unique=$(php_db 'echo wp_unique_post_slug( $args[1], (int) $args[0], "publish", "page", 0 );' "$blog" "$BLOG_SLUG")
 [[ $unique == "$BLOG_SLUG" ]] || die "slug '$BLOG_SLUG' jest zajęty przez inną treść (WordPress nadałby '$unique')"
 
