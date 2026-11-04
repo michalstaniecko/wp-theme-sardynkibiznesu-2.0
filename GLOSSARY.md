@@ -38,6 +38,10 @@ _Avoid_: product card, kafelek produktu, karta (bez dookreślenia)
 Krótki napis wyróżniający element, np. cena lub „Darmowy” na Karcie produktu albo numer odcinka podcastu.
 _Avoid_: badge, etykieta, label
 
+**Odtwarzacz podcastu**:
+Osadzony w treści wpisu odtwarzacz jednego odcinka albo całego programu podcastu, dostarczany przez Spreaker. Redakcja wkleja go w miejscu, gdzie czytelnik ma odsłuchać odcinek; nie jest to Ramka promocyjna, która tylko odsyła do podcastu.
+_Avoid_: spreaker, player, embed, iframe
+
 ## Nawigacja w artykule
 
 **Spis treści**:
