@@ -23,7 +23,9 @@ set -euo pipefail
 
 THEME_20=sardynkibiznesu-2.0
 THEME_30=sardynkibiznesu-3.0
-PLUGINS_20=(ihumbak-newsletter-form ihumbak-anchor ihumbak-anchor-2 ihumbak-analytics ihumbak-shortcodes)
+# spreaker-shortcode is not ours, but ihumbak-content-elements now handles [spreaker] (#83):
+# two active handlers of the same tag must not run together.
+PLUGINS_20=(ihumbak-newsletter-form ihumbak-anchor ihumbak-anchor-2 ihumbak-analytics ihumbak-shortcodes spreaker-shortcode)
 PLUGINS_30=(ihumbak-content-elements ihumbak-toc ihumbak-newsletter ihumbak-site-blocks ihumbak-tracking)
 # Part of the 3.0 packages, but active under both themes: required, never toggled.
 PLUGIN_BOTH=ihumbak-tax-calculator

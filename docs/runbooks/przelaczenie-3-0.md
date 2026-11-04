@@ -48,7 +48,7 @@ Zawsze najpierw `--dry-run`: wykonuje tylko kontrole i wypisuje zmiany, nic nie 
 **Kierunek `3.0`:**
 
 0. Zapisuje stan sprzed przełączenia w opcji `sb_theme_switch`: czas przełączenia (GMT), motyw, `show_on_front` / `page_on_front` / `page_for_posts`, statusy obu stron, status reguły i to, które wtyczki z obu zestawów były aktywne.
-1. Wyłącza aktywne wtyczki zestawu 2.0: `ihumbak-newsletter-form`, `ihumbak-anchor`, `ihumbak-anchor-2`, `ihumbak-analytics`, `ihumbak-shortcodes`.
+1. Wyłącza aktywne wtyczki zestawu 2.0: `ihumbak-newsletter-form`, `ihumbak-anchor`, `ihumbak-anchor-2`, `ihumbak-analytics`, `ihumbak-shortcodes` oraz `spreaker-shortcode`, bo Odtwarzacz podcastu obsługuje teraz `ihumbak-content-elements` (#83), a dwie aktywne implementacje tego samego tagu nie mogą działać razem.
 2. Włącza zestaw 3.0: `ihumbak-content-elements`, `ihumbak-toc`, `ihumbak-newsletter`, `ihumbak-site-blocks`, `ihumbak-tracking`. Szóstej wtyczki z paczek, `ihumbak-tax-calculator`, skrypt nie przełącza w żadnym kierunku: działa pod 2.0 i 3.0 (`/kalkulator-vat/`), więc ma być aktywna już przed oknem.
 3. Włącza motyw `sardynkibiznesu-3.0`, ustawia `show_on_front=page`, `page_on_front`, `page_for_posts`, publikuje obie strony i włącza regułę Redirection `/page/N/` → `/blog/page/N/`.
 4. Czyści cache LiteSpeed (`wp litespeed-purge all`).
@@ -203,25 +203,18 @@ Bez trybu konserwacji. Bez zamrażania treści poza samym oknem (redaktorzy nie 
    ~/bin/switch-theme 3.0 --path $SITE --front-page <id> --blog-page <id>
    ```
 
-3. Wyłączenie wtyczki `spreaker-shortcode`, bo Odtwarzacz podcastu obsługuje teraz `ihumbak-content-elements` (#83). Skrypt jej nie przełącza. Dwie aktywne implementacje tego samego tagu nie mogą zostać na produkcji:
-
-   ```bash
-   $WP plugin deactivate spreaker-shortcode
-   $WP litespeed-purge all
-   ```
-
-4. Ręczna przeróbka 7 bloków FAQ/akordeonu na `core/accordion` / `core/details`.
-5. Publikacja przygotowanej wersji GTM.
-6. **PK1, smoke test** (w oknie prywatnym, bez logowania, potem zalogowany):
+3. Ręczna przeróbka 7 bloków FAQ/akordeonu na `core/accordion` / `core/details`.
+4. Publikacja przygotowanej wersji GTM.
+5. **PK1, smoke test** (w oknie prywatnym, bez logowania, potem zalogowany):
    - [ ] każdy typ widoku zwraca 200 i wygląda poprawnie: strona główna, `/blog/` i `/blog/page/2/`, wpis, strona, kategoria, tag, autor, wyszukiwarka, 404 (status 404), `/feed/`;
    - [ ] `/page/2/` → 301 na `/blog/page/2/`;
    - [ ] `/start` i `/umowy`: Karty produktu jak w kontroli z p. 2.1;
    - [ ] wpisy ze starymi elementami: Przycisk w 3 zapisach, Notka, spis treści, YASR, Spreaker;
    - [ ] zapis do Newslettera na prawdziwym adresie: komunikat, Strona podziękowania, kontakt w MailerLite;
    - [ ] logowanie i edycja wpisu (zapis, podgląd).
-7. **PK2:** komparator SEO (`bin/komparator-seo`, [docs/komparator-seo.md](../komparator-seo.md)) i `bin/perf-a11y-check https://sardynkibiznesu.pl` na produkcji.
-8. Ponowny skan CookieYes i konfiguracja kategorii ciasteczek.
-9. Zgłoszenie sitemap w Search Console.
+6. **PK2:** komparator SEO (`bin/komparator-seo`, [docs/komparator-seo.md](../komparator-seo.md)) i `bin/perf-a11y-check https://sardynkibiznesu.pl` na produkcji.
+7. Ponowny skan CookieYes i konfiguracja kategorii ciasteczek.
+8. Zgłoszenie sitemap w Search Console.
 
 **Role:** deweloper robi PK0, skrypt, bramki automatyczne, a11y i test Newslettera. Właściciel robi przegląd wizualny, kontrole kont (GTM, Meta, Ads, CookieYes) i daje „go” po PK2.
 
@@ -237,11 +230,10 @@ Bez dyskusji, gdy po przełączeniu wystąpi którekolwiek:
 ```bash
 ~/bin/switch-theme 2.0 --path $SITE --dry-run
 ~/bin/switch-theme 2.0 --path $SITE
-$WP plugin activate spreaker-shortcode
 $WP litespeed-purge all
 ```
 
-Skrypt wyłącza `ihumbak-content-elements`, a `spreaker-shortcode` nie włącza. Bez `plugin activate` wpisy z podcastem pokażą pod 2.0 surowy tekst `[spreaker …]`.
+Skrypt włącza z powrotem `spreaker-shortcode` razem z resztą zestawu 2.0, jeśli była aktywna przed przełączeniem.
 
 Po rollbacku:
 
