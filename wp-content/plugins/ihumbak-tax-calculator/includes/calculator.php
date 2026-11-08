@@ -76,7 +76,7 @@ function render_calculator( array $args = array() ): string {
 
 	ob_start();
 	?>
-	<div class="ihumbak-tax-calculator" id="<?php echo esc_attr( $id ); ?>" data-ihumbak-tax-calculator data-messages="<?php echo esc_attr( wp_json_encode( messages(), JSON_UNESCAPED_UNICODE ) ); ?>">
+	<div class="ihumbak-tax-calculator" id="<?php echo esc_attr( $id ); ?>" data-ihumbak-tax-calculator data-toc-skip data-messages="<?php echo esc_attr( wp_json_encode( messages(), JSON_UNESCAPED_UNICODE ) ); ?>">
 		<div class="ihumbak-tax-calculator__intro">
 			<p><?php esc_html_e( 'Kalkulator pozwala obliczyć kwotę VAT oraz cenę netto i brutto.', 'ihumbak-tax-calculator' ); ?></p>
 			<ol class="ihumbak-tax-calculator__steps">
