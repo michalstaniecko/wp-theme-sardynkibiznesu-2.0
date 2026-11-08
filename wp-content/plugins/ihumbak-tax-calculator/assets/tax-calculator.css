@@ -1,0 +1,442 @@
+/*
+ * Kalkulator VAT ([ihumbak_tax_calculator]): structure and look.
+ *
+ * Theme 3.0 tokens are mapped once on the root to --sb-tax-calculator-* with the light
+ * values from themes/sardynkibiznesu-3.0/docs/tokens.md as fallbacks (ADR-0001), so the
+ * calculator looks the same under theme 2.0, which has no such tokens. The rules below use
+ * only --sb-tax-calculator-*.
+ *
+ * Every property the layout relies on is set explicitly on the plugin's own classes, because
+ * theme 2.0 (Bootstrap 5 reboot + its SCSS) and theme 3.0 style fieldset, legend, label,
+ * input, button, headings, lists and paragraphs globally.
+ *
+ * Native nesting, no @layer, no build step. Breakpoint: 768px (breakpoint-md).
+ */
+.ihumbak-tax-calculator {
+	/* colours */
+	--sb-tax-calculator-text:            var(--wp--preset--color--text, #222222);
+	--sb-tax-calculator-text-secondary:  var(--wp--preset--color--text-secondary, #666666);
+	--sb-tax-calculator-surface:         var(--wp--preset--color--surface, #ffffff);
+	--sb-tax-calculator-surface-2:       var(--wp--preset--color--surface-2, #f8f8f8);
+	--sb-tax-calculator-brand:           var(--wp--preset--color--brand, #cc0000);
+	--sb-tax-calculator-brand-hover:     var(--wp--custom--color--brand-hover, #a80000);
+	--sb-tax-calculator-brand-soft:      var(--wp--preset--color--brand-soft, #fef2f2);   /* checked segment bg */
+	--sb-tax-calculator-on-brand:        var(--wp--custom--color--on-brand, #ffffff);
+	--sb-tax-calculator-accent:          var(--wp--custom--color--accent, #0097b2);         /* input focus border */
+	--sb-tax-calculator-accent-soft:     var(--wp--preset--color--accent-soft, #ebf7fa);   /* input focus ring */
+	--sb-tax-calculator-focus:           var(--wp--custom--color--focus, #0097b2);          /* focus-visible outline */
+	--sb-tax-calculator-border:          var(--wp--custom--color--border, #e1e1e1);
+	--sb-tax-calculator-border-control:  var(--wp--custom--color--border-control, #8a8a8a);
+	--sb-tax-calculator-danger:          var(--wp--custom--color--danger, #b91c1c);
+	/* typography */
+	--sb-tax-calculator-font-caption:    var(--wp--preset--font-size--caption, 12px);
+	--sb-tax-calculator-lh-caption:      var(--wp--custom--line-height--caption, 18px);
+	--sb-tax-calculator-font-body-sm:    var(--wp--preset--font-size--body-sm, 14px);
+	--sb-tax-calculator-lh-body-sm:      var(--wp--custom--line-height--body-sm, 22px);
+	--sb-tax-calculator-font-body:       var(--wp--preset--font-size--body, 16px);
+	--sb-tax-calculator-font-h4:         var(--wp--preset--font-size--h-4, 18px);
+	--sb-tax-calculator-lh-h4:           var(--wp--custom--line-height--h-4, 26px);
+	--sb-tax-calculator-font-h3:         var(--wp--preset--font-size--h-3, 22px);   /* "Wynik" heading */
+	--sb-tax-calculator-lh-h3:           var(--wp--custom--line-height--h-3, 30px);
+	/* spacing */
+	--sb-tax-calculator-space-1:         var(--wp--preset--spacing--1, 4px);
+	--sb-tax-calculator-space-2:         var(--wp--preset--spacing--2, 8px);
+	--sb-tax-calculator-space-3:         var(--wp--preset--spacing--3, 12px);
+	--sb-tax-calculator-space-4:         var(--wp--preset--spacing--4, 16px);
+	--sb-tax-calculator-space-5:         var(--wp--preset--spacing--5, 20px);
+	--sb-tax-calculator-space-6:         var(--wp--preset--spacing--6, 24px);
+	--sb-tax-calculator-space-8:         var(--wp--preset--spacing--8, 32px);
+	/* shape, elevation, motion, layout */
+	--sb-tax-calculator-radius-md:       var(--wp--preset--border-radius--md, 8px);
+	--sb-tax-calculator-radius-lg:       var(--wp--preset--border-radius--lg, 12px);
+	--sb-tax-calculator-shadow-xs:       var(--wp--preset--shadow--xs, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+	--sb-tax-calculator-shadow-sm:       var(--wp--preset--shadow--sm, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1));
+	--sb-tax-calculator-duration:        var(--wp--custom--duration--fast, 150ms);
+	--sb-tax-calculator-easing:          var(--wp--custom--easing, cubic-bezier(0.2, 0, 0, 1));
+	--sb-tax-calculator-max-width:       var(--wp--style--global--content-size, 680px);
+
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	gap: var(--sb-tax-calculator-space-6);
+	max-width: var(--sb-tax-calculator-max-width);
+	padding: var(--sb-tax-calculator-space-6) var(--sb-tax-calculator-space-5);
+	border-radius: var(--sb-tax-calculator-radius-lg);
+	background-color: var(--sb-tax-calculator-surface-2);
+	color: var(--sb-tax-calculator-text);
+	font-size: var(--sb-tax-calculator-font-body);
+	text-align: start;
+
+	@media (min-width: 768px) {
+		padding: var(--sb-tax-calculator-space-8);
+	}
+
+	& *,
+	& *::before,
+	& *::after {
+		box-sizing: border-box;
+	}
+
+	& p,
+	& ol,
+	& dl,
+	& dt,
+	& dd {
+		margin: 0;
+	}
+
+	/* Intro: one sentence and three numbered steps. */
+	& .ihumbak-tax-calculator__intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--sb-tax-calculator-space-2);
+		font-size: var(--sb-tax-calculator-font-body);
+		line-height: 1.6;
+
+		& p,
+		& li {
+			font-size: inherit;
+			line-height: inherit;
+			color: var(--sb-tax-calculator-text);
+		}
+	}
+
+	& .ihumbak-tax-calculator__steps {
+		display: flex;
+		flex-direction: column;
+		gap: var(--sb-tax-calculator-space-1);
+		margin: 0;
+		padding: 0 0 0 var(--sb-tax-calculator-space-6);
+		color: inherit;
+		font-size: inherit;
+		line-height: inherit;
+		list-style: decimal;
+
+		& li {
+			margin: 0;
+			padding: 0;
+		}
+	}
+
+	& .ihumbak-tax-calculator__noscript {
+		padding: var(--sb-tax-calculator-space-4);
+		border-left: 4px solid var(--sb-tax-calculator-brand);
+		border-radius: var(--sb-tax-calculator-radius-md);
+		background-color: var(--sb-tax-calculator-surface);
+		color: var(--sb-tax-calculator-text);
+		font-size: var(--sb-tax-calculator-font-body-sm);
+		line-height: var(--sb-tax-calculator-lh-body-sm);
+	}
+
+	/* Form: fields stacked. */
+	& .ihumbak-tax-calculator__form {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: var(--sb-tax-calculator-space-5);
+		margin: 0;
+	}
+
+	& .ihumbak-tax-calculator__field {
+		display: block;
+		min-width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	& .ihumbak-tax-calculator__label {
+		display: block;
+		float: none;
+		width: auto;
+		max-width: 100%;
+		margin: 0 0 var(--sb-tax-calculator-space-2);
+		padding: 0;
+		color: var(--sb-tax-calculator-text);
+		font-size: var(--sb-tax-calculator-font-body-sm);
+		font-weight: 600;
+		line-height: var(--sb-tax-calculator-lh-body-sm);
+	}
+
+	/* Amount field with the "zł" suffix inside. */
+	& .ihumbak-tax-calculator__control {
+		position: relative;
+	}
+
+	& .ihumbak-tax-calculator__input {
+		display: block;
+		width: 100%;
+		height: 52px;
+		margin: 0;
+		padding: 0 calc(var(--sb-tax-calculator-space-4) * 2 + 1.5em) 0 var(--sb-tax-calculator-space-4);
+		border: 1px solid var(--sb-tax-calculator-border-control);
+		border-radius: var(--sb-tax-calculator-radius-md);
+		background-color: var(--sb-tax-calculator-surface);
+		box-shadow: none;
+		color: var(--sb-tax-calculator-text);
+		font: inherit;
+		font-size: var(--sb-tax-calculator-font-body);
+		line-height: normal;
+		font-variant-numeric: tabular-nums;
+		appearance: none;
+
+		&:focus {
+			outline: none;
+			border-color: var(--sb-tax-calculator-accent);
+			box-shadow: 0 0 0 3px var(--sb-tax-calculator-accent-soft);
+		}
+
+		&[aria-invalid="true"] {
+			border-color: var(--sb-tax-calculator-danger);
+		}
+	}
+
+	& .ihumbak-tax-calculator__suffix {
+		position: absolute;
+		top: 50%;
+		right: var(--sb-tax-calculator-space-4);
+		transform: translateY(-50%);
+		color: var(--sb-tax-calculator-text-secondary);
+		font-size: var(--sb-tax-calculator-font-body);
+		line-height: 1;
+		pointer-events: none;
+	}
+
+	& .ihumbak-tax-calculator__hint,
+	& .ihumbak-tax-calculator__error {
+		margin: var(--sb-tax-calculator-space-1) 0 0;
+		font-size: var(--sb-tax-calculator-font-caption);
+		font-weight: 400;
+		line-height: var(--sb-tax-calculator-lh-caption);
+	}
+
+	& .ihumbak-tax-calculator__hint {
+		color: var(--sb-tax-calculator-text-secondary);
+	}
+
+	& .ihumbak-tax-calculator__error {
+		color: var(--sb-tax-calculator-danger);
+		font-weight: 600;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	/* Mode and rate: native radios styled as a segmented switch. */
+	& .ihumbak-tax-calculator__choices {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sb-tax-calculator-space-2);
+	}
+
+	& .ihumbak-tax-calculator__choice {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--sb-tax-calculator-space-2);
+		min-height: 44px;
+		margin: 0;
+		padding: var(--sb-tax-calculator-space-2) var(--sb-tax-calculator-space-4);
+		border: 1px solid var(--sb-tax-calculator-border-control);
+		border-radius: var(--sb-tax-calculator-radius-md);
+		background-color: var(--sb-tax-calculator-surface);
+		color: var(--sb-tax-calculator-text);
+		font-size: var(--sb-tax-calculator-font-body-sm);
+		font-weight: 400;
+		line-height: var(--sb-tax-calculator-lh-body-sm);
+		cursor: pointer;
+
+		&:has(:checked) {
+			border-color: var(--sb-tax-calculator-brand);
+			background-color: var(--sb-tax-calculator-brand-soft);
+			color: var(--sb-tax-calculator-text);
+			font-weight: 600;
+		}
+
+		&:has(:focus-visible) {
+			outline: 2px solid var(--sb-tax-calculator-focus);
+			outline-offset: 2px;
+		}
+
+		& input[type="radio"] {
+			flex: none;
+			width: 1em;
+			height: 1em;
+			margin: 0;
+			padding: 0;
+			border: 0;
+			background: none;
+			box-shadow: none;
+			accent-color: var(--sb-tax-calculator-brand);
+			vertical-align: middle;
+			appearance: auto;
+			cursor: pointer;
+
+			&:focus-visible {
+				outline: none;
+			}
+		}
+	}
+
+	/* Below 768px the segments share the row equally (three rates fit at 320px), the button spans it too. */
+	@media (max-width: 767px) {
+		& .ihumbak-tax-calculator__form .ihumbak-tax-calculator__submit {
+			align-self: stretch;
+		}
+
+		& .ihumbak-tax-calculator__choices {
+			display: grid;
+			grid-auto-columns: minmax(0, 1fr);
+			grid-auto-flow: column;
+		}
+
+		& .ihumbak-tax-calculator__choices .ihumbak-tax-calculator__choice {
+			justify-content: center;
+			padding-inline: var(--sb-tax-calculator-space-2);
+		}
+	}
+
+	/*
+	 * Mirrors styles.elements.button in themes/sardynkibiznesu-3.0/theme.json — keep in sync
+	 * (no .wp-element-button: core defaults would apply under 2.0).
+	 */
+	& .ihumbak-tax-calculator__submit {
+		align-self: flex-start;
+		min-height: 44px;
+		margin: 0;
+		padding: var(--sb-tax-calculator-space-3) var(--sb-tax-calculator-space-5);
+		border: 1px solid var(--sb-tax-calculator-brand);
+		border-radius: var(--sb-tax-calculator-radius-md);
+		background-color: var(--sb-tax-calculator-brand);
+		box-shadow: var(--sb-tax-calculator-shadow-xs);
+		color: var(--sb-tax-calculator-on-brand);
+		font: inherit;
+		font-size: var(--sb-tax-calculator-font-body-sm);
+		font-weight: 600;
+		line-height: 20px;
+		letter-spacing: normal;
+		text-transform: none;
+		text-decoration: none;
+		cursor: pointer;
+		appearance: none;
+
+		&:hover:not([disabled]) {
+			border-color: var(--sb-tax-calculator-brand-hover);
+			background-color: var(--sb-tax-calculator-brand-hover);
+			box-shadow: var(--sb-tax-calculator-shadow-sm);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--sb-tax-calculator-focus);
+			outline-offset: 2px;
+		}
+
+		/* Disabled only without JavaScript; keeps full contrast. */
+		&[disabled] {
+			opacity: 1;
+			cursor: not-allowed;
+		}
+	}
+
+	/* Results: always visible, "—" until the first calculation. */
+	& .ihumbak-tax-calculator__results {
+		display: block;
+		margin: 0;
+		padding: var(--sb-tax-calculator-space-5);
+		border: 1px solid var(--sb-tax-calculator-border);
+		border-radius: var(--sb-tax-calculator-radius-md);
+		background-color: var(--sb-tax-calculator-surface);
+	}
+
+	& .ihumbak-tax-calculator__title {
+		margin: 0 0 var(--sb-tax-calculator-space-3);
+		padding: 0;
+		color: var(--sb-tax-calculator-text);
+		font-size: var(--sb-tax-calculator-font-h3);
+		font-weight: 700;
+		line-height: var(--sb-tax-calculator-lh-h3);
+		letter-spacing: normal;
+		text-transform: none;
+	}
+
+	& .ihumbak-tax-calculator__list {
+		display: block;
+		margin: 0;
+		padding: 0;
+	}
+
+	& .ihumbak-tax-calculator__row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: baseline;
+		gap: var(--sb-tax-calculator-space-3);
+		padding: var(--sb-tax-calculator-space-3) 0;
+		border-top: 1px solid var(--sb-tax-calculator-border);
+		/* h4 size for every row (body grows to 20px in post content at 1280px+); Brutto adds weight. */
+		font-size: var(--sb-tax-calculator-font-h4);
+		line-height: var(--sb-tax-calculator-lh-h4);
+
+		&:first-child {
+			border-top: 0;
+			padding-top: 0;
+		}
+
+		&:last-child {
+			padding-bottom: 0;
+		}
+	}
+
+	& .ihumbak-tax-calculator__term,
+	& .ihumbak-tax-calculator__value {
+		margin: 0;
+		padding: 0;
+		color: var(--sb-tax-calculator-text);
+		font-size: inherit;
+		font-weight: 400;
+		line-height: inherit;
+	}
+
+	& .ihumbak-tax-calculator__value {
+		text-align: end;
+		font-variant-numeric: tabular-nums;
+		overflow-wrap: anywhere;
+
+		& output {
+			display: inline;
+			font: inherit;
+			color: inherit;
+		}
+	}
+
+	& .ihumbak-tax-calculator__rate {
+		color: var(--sb-tax-calculator-text-secondary);
+	}
+
+	& .ihumbak-tax-calculator__row--total .ihumbak-tax-calculator__term,
+	& .ihumbak-tax-calculator__row--total .ihumbak-tax-calculator__value {
+		font-weight: 700;
+	}
+
+	/* Visually hidden, still announced (the plugin's own pattern, not a theme class). */
+	& .ihumbak-tax-calculator__status {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		& .ihumbak-tax-calculator__input,
+		& .ihumbak-tax-calculator__choice,
+		& .ihumbak-tax-calculator__submit {
+			transition-property: border-color, background-color, box-shadow, color;
+			transition-duration: var(--sb-tax-calculator-duration);
+			transition-timing-function: var(--sb-tax-calculator-easing);
+		}
+	}
+}
