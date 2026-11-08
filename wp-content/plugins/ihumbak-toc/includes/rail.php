@@ -34,7 +34,7 @@ add_action(
  * @param string $wrapper_attributes Attributes for the <nav>, e.g. get_block_wrapper_attributes().
  */
 function rail_for_post( int $post_id, string $wrapper_attributes = '' ): string {
-	if ( ! $post_id ) {
+	if ( ! $post_id || is_toc_hidden( $post_id ) ) {
 		return '';
 	}
 

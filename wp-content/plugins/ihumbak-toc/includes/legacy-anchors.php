@@ -16,6 +16,7 @@
 
 namespace Ihumbak\Toc\V1;
 
+use function Ihumbak\Toc\is_toc_hidden;
 use function Ihumbak\Toc\render_toc;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -138,7 +139,8 @@ function finish_content( $content ) {
 	}
 
 	if ( $has_menu ) {
-		$toc = render_toc( $headings );
+		// Ids above still follow the menu (2.0 jQuery), so Kotwice stay the same when it is hidden.
+		$toc = is_toc_hidden( (int) get_the_ID() ) ? '' : render_toc( $headings );
 		// A menu shortcode alone in a paragraph must not leave <p><nav></nav></p> behind.
 		$content = (string) preg_replace( '#<p>\s*' . preg_quote( MENU_PLACEHOLDER, '#' ) . '\s*</p>#i', MENU_PLACEHOLDER, $content );
 		$content = str_replace( MENU_PLACEHOLDER, $toc, $content );

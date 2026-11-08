@@ -52,7 +52,7 @@ function render_shortcode(): string {
  *                                   so a template-placed list never doubles it.
  */
 function toc_for_post( int $post_id, string $wrapper_attributes = '', bool $unless_in_content = false ): string {
-	if ( ! $post_id ) {
+	if ( ! $post_id || is_toc_hidden( $post_id ) ) {
 		return '';
 	}
 
