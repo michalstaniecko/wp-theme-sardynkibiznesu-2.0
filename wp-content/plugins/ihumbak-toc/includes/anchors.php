@@ -12,6 +12,9 @@
  * Headings that are not core/heading blocks (classic posts, HTML blocks, dynamic blocks) get
  * the same ids at render time.
  *
+ * A heading carrying SKIP_ATTRIBUTE (data-toc-skip), or inside an element carrying it, is
+ * left alone: no Kotwica, not in the Spis treści, not in the rail (e.g. the tax calculator's "Wynik").
+ *
  * The Spis treści is built from the rendered content: the block and the shortcode leave a
  * placeholder, and a the_content pass after the v1 one (priority 25) gives headings their ids
  * and swaps each placeholder for the list.
@@ -26,6 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 const PLACEHOLDER_PREFIX = '<!-- ihumbak-toc:toc ';
 const PLACEHOLDER_SUFFIX = ' -->';
 const FALLBACK_ID        = 'naglowek';
+const SKIP_ATTRIBUTE     = 'data-toc-skip';
 
 add_shortcode( 'ihumbak_anchor_toc', __NAMESPACE__ . '\render_shortcode' );
 add_filter( 'the_content', __NAMESPACE__ . '\finish_content', 30 );
@@ -221,14 +225,18 @@ function add_wrapper_attributes( string $toc, string $attributes ): string {
 /**
  * h2 and h3 of an HTML fragment, in document order.
  *
- * @return array{headings: array<int, array{level: int, id: string, text: string, skip: bool, block: bool}>, ids: array<string, true>}
- *         "skip": a v1 Kotwica (left to the v1 pass); "block": the first tag of a core/heading block.
+ * @return array{headings: array<int, array{level: int, id: string, text: string, skip: bool, excluded: bool, block: bool}>, ids: array<string, true>}
+ *         "skip": a v1 Kotwica (left to the v1 pass); "excluded": under SKIP_ATTRIBUTE;
+ *         "block": the first tag of a core/heading block.
  */
 function scan_headings( string $html ): array {
 	$headings = array();
 	$ids      = array();
 	$current  = null;
 	$after_heading_comment = false;
+	// The element carrying SKIP_ATTRIBUTE that is open, and how deep its tag is nested in itself.
+	$skip_tag   = null;
+	$skip_depth = 0;
 
 	$p = new \WP_HTML_Tag_Processor( $html );
 	while ( $p->next_token() ) {
@@ -242,6 +250,14 @@ function scan_headings( string $html ): array {
 					$ids[ $id ] = true;
 				}
 			}
+			if ( null !== $skip_tag ) {
+				if ( $tag === $skip_tag ) {
+					$skip_depth += $p->is_tag_closer() ? -1 : 1;
+				}
+			} elseif ( ! $p->is_tag_closer() && null !== $p->get_attribute( SKIP_ATTRIBUTE ) && ! \WP_HTML_Processor::is_void( $tag ) ) {
+				$skip_tag   = $tag;
+				$skip_depth = 1;
+			}
 			if ( 'H2' === $tag || 'H3' === $tag ) {
 				if ( ! $p->is_tag_closer() && null === $current ) {
 					$id      = $p->get_attribute( 'id' );
@@ -250,8 +266,9 @@ function scan_headings( string $html ): array {
 						'level' => 'H2' === $tag ? 2 : 3,
 						'id'    => is_string( $id ) ? $id : '',
 						'text'  => '',
-						'skip'  => (bool) $p->has_class( V1\ANCHOR_CLASS ),
-						'block' => $after_heading_comment,
+						'skip'     => (bool) $p->has_class( V1\ANCHOR_CLASS ),
+						'excluded' => null !== $skip_tag,
+						'block'    => $after_heading_comment,
 					);
 				} elseif ( $p->is_tag_closer() && null !== $current && $tag === $current['tag'] ) {
 					$current['text'] = trim( (string) preg_replace( '/\s+/u', ' ', $current['text'] ) );
@@ -259,6 +276,9 @@ function scan_headings( string $html ): array {
 					$headings[] = $current;
 					$current    = null;
 				}
+			}
+			if ( null !== $skip_tag && $skip_depth < 1 ) {
+				$skip_tag = null;
 			}
 			$after_heading_comment = false;
 		} elseif ( '#text' === $type ) {
@@ -315,6 +335,9 @@ function add_heading_ids( string $html, array &$headings = array(), bool $only_b
 	$new      = array();
 	$headings = array();
 	foreach ( $scan['headings'] as $i => $heading ) {
+		if ( $heading['excluded'] ) {
+			continue;
+		}
 		if ( '' === $heading['id'] && ! $heading['skip'] ) {
 			// Raw content: a heading still holding a shortcode gets its text only at render.
 			if ( ! $only_block || ( $heading['block'] && ! str_contains( $heading['text'], '[' ) ) ) {

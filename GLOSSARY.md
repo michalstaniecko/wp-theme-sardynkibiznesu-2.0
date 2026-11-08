@@ -45,7 +45,7 @@ _Avoid_: spreaker, player, embed, iframe
 ## Nawigacja w artykule
 
 **Spis treści**:
-Lista nagłówków artykułu z odnośnikami do nich, wstawiona przez redaktora w wybranym miejscu treści. W starych artykułach obejmuje tylko nagłówki oznaczone przez autora, w nowych wszystkie nagłówki drugiego i trzeciego poziomu.
+Lista nagłówków artykułu z odnośnikami do nich, wstawiona przez redaktora w wybranym miejscu treści. W starych artykułach obejmuje tylko nagłówki oznaczone przez autora, w nowych wszystkie nagłówki drugiego i trzeciego poziomu. Pomija nagłówki narzędzi osadzonych w treści (np. kalkulatora), oznaczonych atrybutem `data-toc-skip`.
 _Avoid_: TOC, menu kotwic, anchor menu
 
 **Kotwica**:

@@ -18,6 +18,7 @@ namespace Ihumbak\Toc\V1;
 
 use function Ihumbak\Toc\is_toc_hidden;
 use function Ihumbak\Toc\render_toc;
+use const Ihumbak\Toc\SKIP_ATTRIBUTE;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -108,7 +109,8 @@ function finish_content( $content ) {
 		'#<(h([1-6]))(' . ANCHOR_ATTRS . ')>(.*?)</\1\s*>(\s*<(h[1-6])(?:\s[^>]*)?>' . INLINE_JUNK . '</\6>)?#isu',
 		static function ( array $m ) use ( $has_menu, &$headings ): string {
 			$tag = new \WP_HTML_Tag_Processor( '<' . $m[1] . $m[3] . '>' );
-			if ( ! $tag->next_tag() || ! $tag->has_class( ANCHOR_CLASS ) ) {
+			// A Kotwica marked data-toc-skip keeps no id and stays out of the menu.
+			if ( ! $tag->next_tag() || ! $tag->has_class( ANCHOR_CLASS ) || null !== $tag->get_attribute( SKIP_ATTRIBUTE ) ) {
 				return $m[0];
 			}
 
