@@ -14,6 +14,11 @@
  *
  * A heading carrying SKIP_ATTRIBUTE (data-toc-skip), or inside an element carrying it, is
  * left alone: no Kotwica, not in the Spis treści, not in the rail (e.g. the tax calculator's "Wynik").
+ * The attribute counts only on the heading itself or on an element of SKIP_CONTAINERS (non-void,
+ * end tag required) that is not written self-closing and has its matching end tag in the
+ * fragment; anywhere else (p, li, svg, an unclosed div …) it is ignored, so an implicitly
+ * closed element can never swallow the rest of the page. The v1 pass (legacy-anchors.php)
+ * honours it only on the Kotwica heading itself.
  *
  * The Spis treści is built from the rendered content: the block and the shortcode leave a
  * placeholder, and a the_content pass after the v1 one (priority 25) gives headings their ids
@@ -30,6 +35,9 @@ const PLACEHOLDER_PREFIX = '<!-- ihumbak-toc:toc ';
 const PLACEHOLDER_SUFFIX = ' -->';
 const FALLBACK_ID        = 'naglowek';
 const SKIP_ATTRIBUTE     = 'data-toc-skip';
+// Elements whose SKIP_ATTRIBUTE excludes the headings inside them: their end tag is required,
+// so the region ends exactly at the matching closer.
+const SKIP_CONTAINERS = array( 'DIV', 'SECTION', 'ASIDE', 'FIGURE', 'FORM', 'ARTICLE', 'NAV' );
 
 add_shortcode( 'ihumbak_anchor_toc', __NAMESPACE__ . '\render_shortcode' );
 add_filter( 'the_content', __NAMESPACE__ . '\finish_content', 30 );
@@ -234,9 +242,12 @@ function scan_headings( string $html ): array {
 	$ids      = array();
 	$current  = null;
 	$after_heading_comment = false;
+	// Tag tokens (by ordinal) that open a skip region: SKIP_CONTAINERS with a matching closer.
+	$skip_openers = skip_openers( $html );
 	// The element carrying SKIP_ATTRIBUTE that is open, and how deep its tag is nested in itself.
 	$skip_tag   = null;
 	$skip_depth = 0;
+	$tag_index  = -1;
 
 	$p = new \WP_HTML_Tag_Processor( $html );
 	while ( $p->next_token() ) {
@@ -244,6 +255,7 @@ function scan_headings( string $html ): array {
 
 		if ( '#tag' === $type ) {
 			$tag = $p->get_tag();
+			++$tag_index;
 			if ( ! $p->is_tag_closer() ) {
 				$id = $p->get_attribute( 'id' );
 				if ( is_string( $id ) && '' !== $id ) {
@@ -254,7 +266,7 @@ function scan_headings( string $html ): array {
 				if ( $tag === $skip_tag ) {
 					$skip_depth += $p->is_tag_closer() ? -1 : 1;
 				}
-			} elseif ( ! $p->is_tag_closer() && null !== $p->get_attribute( SKIP_ATTRIBUTE ) && ! \WP_HTML_Processor::is_void( $tag ) ) {
+			} elseif ( isset( $skip_openers[ $tag_index ] ) ) {
 				$skip_tag   = $tag;
 				$skip_depth = 1;
 			}
@@ -267,7 +279,7 @@ function scan_headings( string $html ): array {
 						'id'    => is_string( $id ) ? $id : '',
 						'text'  => '',
 						'skip'     => (bool) $p->has_class( V1\ANCHOR_CLASS ),
-						'excluded' => null !== $skip_tag,
+						'excluded' => null !== $skip_tag || null !== $p->get_attribute( SKIP_ATTRIBUTE ),
 						'block'    => $after_heading_comment,
 					);
 				} elseif ( $p->is_tag_closer() && null !== $current && $tag === $current['tag'] ) {
@@ -299,6 +311,48 @@ function scan_headings( string $html ): array {
 		'headings' => $headings,
 		'ids'      => $ids,
 	);
+}
+
+/**
+ * Ordinals of the tag tokens of $html that open a SKIP_ATTRIBUTE region (counting every tag
+ * token, openers and closers, from 0).
+ *
+ * Only an element of SKIP_CONTAINERS, not written self-closing, whose matching end tag is in
+ * the fragment: an element left unclosed is treated as if it had no attribute, so it never
+ * hides the headings after it.
+ *
+ * @return array<int, true>
+ */
+function skip_openers( string $html ): array {
+	if ( false === stripos( $html, SKIP_ATTRIBUTE ) ) {
+		return array();
+	}
+
+	$openers = array();
+	$open    = array_fill_keys( SKIP_CONTAINERS, array() ); // Per tag: ordinals of open elements.
+	$index   = -1;
+
+	$p = new \WP_HTML_Tag_Processor( $html );
+	while ( $p->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
+		++$index;
+		$tag = $p->get_tag();
+		if ( ! isset( $open[ $tag ] ) ) {
+			continue;
+		}
+		if ( ! $p->is_tag_closer() ) {
+			$open[ $tag ][] = $index;
+			if ( null !== $p->get_attribute( SKIP_ATTRIBUTE ) && ! $p->has_self_closing_flag() ) {
+				$openers[ $index ] = false;
+			}
+		} elseif ( array() !== $open[ $tag ] ) {
+			$opener = array_pop( $open[ $tag ] );
+			if ( isset( $openers[ $opener ] ) ) {
+				$openers[ $opener ] = true;
+			}
+		}
+	}
+
+	return array_fill_keys( array_keys( array_filter( $openers ) ), true );
 }
 
 /**

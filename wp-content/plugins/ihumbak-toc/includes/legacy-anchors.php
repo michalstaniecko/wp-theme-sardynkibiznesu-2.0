@@ -109,7 +109,9 @@ function finish_content( $content ) {
 		'#<(h([1-6]))(' . ANCHOR_ATTRS . ')>(.*?)</\1\s*>(\s*<(h[1-6])(?:\s[^>]*)?>' . INLINE_JUNK . '</\6>)?#isu',
 		static function ( array $m ) use ( $has_menu, &$headings ): string {
 			$tag = new \WP_HTML_Tag_Processor( '<' . $m[1] . $m[3] . '>' );
-			// A Kotwica marked data-toc-skip keeps no id and stays out of the menu.
+			// A Kotwica marked data-toc-skip keeps no id and stays out of the menu. Only the attribute
+			// on the heading itself counts here (this pass is a regex over headings), unlike the
+			// container regions honoured by anchors.php's scan_headings().
 			if ( ! $tag->next_tag() || ! $tag->has_class( ANCHOR_CLASS ) || null !== $tag->get_attribute( SKIP_ATTRIBUTE ) ) {
 				return $m[0];
 			}
