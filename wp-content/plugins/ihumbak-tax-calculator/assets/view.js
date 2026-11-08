@@ -21,6 +21,7 @@ function init( root ) {
 	try {
 		messages = JSON.parse( root.dataset.messages );
 	} catch {
+		// No texts to show: leave this instance inert, its "Oblicz" stays disabled as rendered.
 		return;
 	}
 
@@ -40,6 +41,7 @@ function init( root ) {
 
 	const showError = ( code ) => {
 		error.textContent = messages[ code ] ?? messages.format;
+		error.dataset.code = code;
 		error.hidden = false;
 		input.setAttribute( 'aria-invalid', 'true' );
 		input.setAttribute( 'aria-describedby', `${ hint.id } ${ error.id }` );
@@ -47,6 +49,7 @@ function init( root ) {
 
 	const clearError = () => {
 		error.textContent = '';
+		delete error.dataset.code;
 		error.hidden = true;
 		input.removeAttribute( 'aria-invalid' );
 		input.setAttribute( 'aria-describedby', hint.id );
@@ -94,8 +97,15 @@ function init( root ) {
 	} );
 
 	input.addEventListener( 'input', () => {
-		if ( validateLive && parseAmount( input.value ).ok ) {
+		if ( ! validateLive ) {
+			return;
+		}
+		const parsed = parseAmount( input.value );
+		if ( parsed.ok ) {
 			clearError();
+		} else if ( ! error.hidden && error.dataset.code !== parsed.error ) {
+			// Still invalid, but for another reason: say the new one.
+			showError( parsed.error );
 		}
 	} );
 

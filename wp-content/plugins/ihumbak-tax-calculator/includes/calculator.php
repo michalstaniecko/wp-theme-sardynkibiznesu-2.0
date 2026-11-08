@@ -59,6 +59,8 @@ function messages(): array {
 /**
  * The calculator markup. Every id and radio group name carries the instance number,
  * so several calculators on one page work independently.
+ *
+ * @param array $args Unused; reserved for the future block wrapper.
  */
 function render_calculator( array $args = array() ): string {
 	static $instance = 0;

@@ -34,6 +34,7 @@
 	--sb-tax-calculator-font-body-sm:    var(--wp--preset--font-size--body-sm, 14px);
 	--sb-tax-calculator-lh-body-sm:      var(--wp--custom--line-height--body-sm, 22px);
 	--sb-tax-calculator-font-body:       var(--wp--preset--font-size--body, 16px);
+	--sb-tax-calculator-lh-body:         var(--wp--custom--line-height--body, 26px);
 	--sb-tax-calculator-font-h4:         var(--wp--preset--font-size--h-4, 18px);
 	--sb-tax-calculator-lh-h4:           var(--wp--custom--line-height--h-4, 26px);
 	--sb-tax-calculator-font-h3:         var(--wp--preset--font-size--h-3, 22px);   /* "Wynik" heading */
@@ -91,7 +92,7 @@
 		flex-direction: column;
 		gap: var(--sb-tax-calculator-space-2);
 		font-size: var(--sb-tax-calculator-font-body);
-		line-height: 1.6;
+		line-height: var(--sb-tax-calculator-lh-body);
 
 		& p,
 		& li {
