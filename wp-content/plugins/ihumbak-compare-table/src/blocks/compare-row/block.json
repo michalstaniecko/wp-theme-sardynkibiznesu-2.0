@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/compare-row",
+	"title": "Feature row",
+	"category": "widgets",
+	"icon": "table-row-after",
+	"description": "A feature with one value per service.",
+	"parent": [
+		"ihumbak/compare-section"
+	],
+	"textdomain": "ihumbak-compare-table",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"description": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"customClassName": false
+	},
+	"editorScript": "file:./index.js"
+}

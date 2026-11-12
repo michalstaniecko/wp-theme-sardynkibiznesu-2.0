@@ -1,0 +1,40 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "ihumbak/compare-table",
+	"title": "Compare table",
+	"category": "widgets",
+	"icon": "editor-table",
+	"description": "Feature comparison table for up to four services, with collapsible sections and tooltips.",
+	"keywords": [
+		"comparison",
+		"pricing",
+		"plans",
+		"features"
+	],
+	"textdomain": "ihumbak-compare-table",
+	"attributes": {
+		"caption": {
+			"type": "string",
+			"default": ""
+		},
+		"featureColumnLabel": {
+			"type": "string",
+			"default": ""
+		},
+		"stickyHeader": {
+			"type": "boolean",
+			"default": true
+		},
+		"headingLevel": {
+			"type": "number",
+			"default": 3
+		}
+	},
+	"supports": {
+		"html": false
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "ihumbak-compare-table-editor",
+	"viewScript": "ihumbak-compare-table-view"
+}
